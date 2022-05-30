@@ -51,9 +51,14 @@ Section 1 Overview
 
 Section 1 introduces you to Discrete Probability. Section 1 is divided into three parts:
 
-        Introduction to Discrete Probability
-        Combinations and Permutations
-        Addition Rule and Monty Hall
+[][*        Introduction to Discrete Probability*]
+            *A discrete probability distribution counts occurrences that have countable or finite outcomes.*
+[][*        Combinations and Permutations*]
+            *When the order doesn't matter, it is a Combination. When the order does matter it is a Permutation*]
+[][*        Addition Rule and Monty Hall*]
+            *https://www.varsitytutors.com/hotmath/hotmath_help/topics/addition-rule-of-probability*
+            *https://www.mathgoodies.com/lessons/vol6/addition_rules*
+            *Google Monty Hall problem*
 
 After completing Section 1, you will be able to:
 
@@ -66,6 +71,7 @@ After completing Section 1, you will be able to:
 There are 3 assignments that use the DataCamp platform for you to practice your coding skills. There are also some quick probability calculations for you to perform directly on the edX platform as well, and there is a longer set of problems at the end of section 1.
 
 This section corresponds to the following section of the course textbook.
+https://rafalab.github.io/dsbook/probability.html#discrete-probability
 
 We encourage you to use R to interactively test out your answers and further your learning.
 
@@ -75,6 +81,58 @@ We encourage you to use R to interactively test out your answers and further you
 
 
 
+## Course  /  Section 1: Discrete Probability  /  1.1 Introduction to Discrete Probability
+
+
+# Discrete Probability
+
+
+We start by covering some basic principles related to categorical data.  This subset of probability is referred to as [][*discrete probability*].  ***It will help us understand the probability theory we will later introduce for numeric and continuous data, which is more common in data science applications***.  Discrete probability is more useful in card games and we use these as examples.  The word probability is used in everyday language.  For example, Google's auto complete of, what are the chances of, gives us getting pregnant, having twins, and rain tomorrow.  Answering questions about probability is often hard, if not impossible.  Here, we discuss a mathematical definition of probability that does permit us to give precise answers to certain questions.  
+
+For example, if I have two red beads and three blue beads inside an urn and I pick one at random, what is the probability of picking a red one?  Our intuition tells us that the answer is 2/5, or 40%.  A precise definition can be given by noting that ***there are five possible outcomes of which two satisfy the condition necessary for the event "pick a red bead."***  Because each of the five outcomes has the same chance of occurring, we conclude that the probability is 0.4 for red and 0.6 for blue.  
+
+[][*A more tangible way to think about the probability of an event is as a proportion of times the event occurs when we repeat the experiment over and over independently and under the same conditions*].  Before we continue, let's introduce some notation.  We use the notation probability of A to denote the probability of an event A happening.  We use the very general term event to refer to things that can happen when something happens by chance.  
+
+For example, in our previous example, the event was picking a red bead.  In a political poll, in which we call 100 likely voters
+at random, an example of an event is calling 48 Democrats and 52 Republicans.  [][***In data science applications, we will often deal with continuous variables*].  In these cases, events will often be things like, ***is this person taller than 6 feet?***  In this case, we write events in a more mathematical form.  For example, x greater than 6.  We'll see more of these examples later.  Here, we focus on categorical data and discrete probability.
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on discrete probability External link.
+https://rafalab.github.io/dsbook/probability.html#discrete-probability
+
+
+[][Key points]
+
+    The probability of an event is the proportion of times the event occurs when we repeat the experiment independently under the same conditions.
+    Pr(A) = probability of event A
+    An event is defined as an outcome that can occur when when something happens by chance.
+    We can determine probabilities related to discrete variables (picking a red bead, choosing 48 Democrats and 52 Republicans from 100 likely voters) and continuous variables (height over 6 feet).
+
+
+
+![](C:/Users/JJ/Pictures/discrete probability.png)
+
+![](C:/Users/JJ/Pictures/googles auto complete of what are the chance of ....png)
+
+![](C:/Users/JJ/Pictures/having rains tomorrow.png)
+
+![](C:/Users/JJ/Pictures/picking beads rnadomly from a urn.png)
+
+![](C:/Users/JJ/Pictures/a precise definition giving that there are 5 possible outcomes of which 2 satisfy the condition necessary.png)
+
+![](C:/Users/JJ/Pictures/A more tangible way to think about the probability of an event is as a condition of times the events occurs.png)
+
+![](C:/Users/JJ/Pictures/paobability of a notation.png)
+
+![](C:/Users/JJ/Pictures/term event to refering things can happen when something happens by chance.png)
+
+![in data science we will often deal with continuous variables.png](C:/Users/JJ/Pictures/in data science we will often deal with continuous variables.png)
+
+![](C:/Users/JJ/Pictures/events sample in data science dealing with continuous variable.png)
+
+![](C:/Users/JJ/Pictures/then we write it in a more mathematical form.png)
 
 
 
@@ -83,52 +141,90 @@ We encourage you to use R to interactively test out your answers and further you
 
 
 
+# Monte Carlo Simulations
+
+
+Computers provide a way to actually perform the simple random experiments, such as the one we did before.  Pick a bead at random from a bag or an urn with 3 blue beads and 2 red ones.  [][*Random number generators*] permit us to mimic the process of picking at random.  An example in R is the sample() function.  We demonstrate its use showing you some code.  First, use the rep() function to generate the urn.  We create an urn with 2 red and 3 blues.  You can see when we type beads we see this.  Now, we can use a sample() function to pick one at random.  If we type sample beads comma 1, in this case, we get a blue.  This line of code produces one random outcome.  Now, we want to repeat this experiment over and over.  
+
+However, it is, of course, impossible to repeat forever.  Instead, we repeat the experiment a large enough number of times to make the results practically equivalent to doing it over and over forever.  [][*This is an example of a Monte Carlo simulation*].  Note that much of what mathematical and theoretical statisticians study--something we do not cover in this course--relates to providing rigorous definitions of practically equivalent, as well as studying how close a large number of experiment gets us to what happens in the limit, the limit meaning if we did it forever.  [][********Later in this module, we provide a practical approach to deciding what is large enough********].  
+
+To perform our first Monte Carlo simulation, we use the replicate() function.  This permits us to repeat the same task any number of times we want.  Here, we repeat the random event 10,000 times.  We set B to be 10,000, then we use the replicate function to sample from the beads 10,000 times.  We can now see if, in fact, our definition
+is in agreement with this Monte Carlo simulation approximation.
+We can use table, for example, to see the distribution.
+And then we can use prop.table to give us the proportions.
+And we see that, in fact, the Monte Carlo simulation
+gives a very good approximation with 0.5962 for blue and 0.4038 for red.
+We didn't get exactly 0.6 and exactly 0.4,
+but statistical theory tells us that, if we make B large enough,
+we can get as close as we want to those numbers.
+We just covered a simple and not very useful
+example of Monte Carlo simulations.
+But we will use Monte Carlo simulation to estimate probabilities
+in cases in which it is harder to compute the exact ones.
+Before we go into more complex examples, we still
+use simple ones to demonstrate the computing tools available in R.
+Let's start by noting that we don't actually
+have to use replicate in this particular example.
+This is because the function sample has an argument that
+permits us to pick more than one element from the urn.
+However, by default, this selection occurs without replacement.
+After a bead is selected, it is not put back in the urn.
+Note what happens when we ask to randomly select 5 beads.
+Let's do it over and over again.
+Let's do it three times.
+This results in a rearrangement that always has three blue and two
+red beads.
+If we asked for six beads, then we get an error.
+It tells us you don't have enough beads in here to get six.
+This is because it's doing it without replacement.
+However, this function, the sample function,
+can be used directly-- again, without the replicate--
+to repeat the same experiment of picking 1 out
+of 5 beads over and over under the same conditions.
+To do this, we sample with replacement.
+After we pick the bead we put it back in the urn.
+We can tell sample to do this by changing the replace argument which
+defaults to false to true.
+We do it like this.
+And when we do this, we see that we get very similar answers to what
+we got using the replicate function.
+
+
+```{r}
+beads = rep(c("red", "blue"), times = c(2, 3) )
+
+
+sample(beads, 100, replace = T)
+```
 
 
 
+![](C:/Users/JJ/Pictures/computer provides us the random number enerators.png)
+
+![](C:/Users/JJ/Pictures/sample function in r helps us apply a random experiment.png)
+
+![](C:/Users/JJ/Pictures/use rep function to create a urn includes 2 red and 3 blue.png)
 
 
+![](C:/Users/JJ/Pictures/and now we can produce 1 random outcome.png)
 
+![](C:/Users/JJ/Pictures/monte carlo simulation.png)
 
+![](C:/Users/JJ/Pictures/replicate function premits us to repeat same task any number of time we want.png)
 
+![](C:/Users/JJ/Pictures/now we repeat the random event 10 thousand times and check the outcome.png)
 
+![](C:/Users/JJ/Pictures/we can use table function to see the distribution.png)
 
+![](C:/Users/JJ/Pictures/and use the prop.table function to see the proportions.png)
 
+![](C:/Users/JJ/Pictures/default sample function repeat offers us without replacement experiment.png)
 
+![](C:/Users/JJ/Pictures/sample one by one and we get this, without replacement.png)
 
+![](C:/Users/JJ/Pictures/and now we don't have enough beads in urn.png)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+![](C:/Users/JJ/Pictures/now check what happens on your own what happends if we change default replace arg from FALSE to T.png)
 
 
 
