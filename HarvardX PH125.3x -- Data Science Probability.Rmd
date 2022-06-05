@@ -346,73 +346,46 @@ We say that two events are independent if the outcome of one does not affect the
 
 [][*The first outcome affects the second*].  To see an extreme case of non-independent events, consider an example of drawing five beads at random, without replacement, from an urn.  Three are blue, two are red.  I'm going to generate data like this using the sample() function and assign it to x.  You can't see the outcomes.  Now, if I ask you to guess the color of the first bead, what do you guess?  Since there's more blue beads, there's actually a 0.6 chance of seeing blue.  That's probably what you guess.  **But now I'm going to show you the outcomes of the other four**.  The second, third, fourth, and fifth outcomes you can see here.  You can see that the three blue beads have already come out.  This affects the probability of the first.  They are not independent.  So would you still guess blue?  Of course not.  Now you know that the probability of red is 1.  
 
-These events are not independent.  The probabilities change once you see the other outcomes.  When events are not independent, conditional probabilities are useful and necessary to make correct calculations.  We already saw an example of a conditional probability.  We computed the probability that a second dealt card is a King, given that the first was a King.
-In probability, we use the following notation.
-We use this dash like this as a shorthand
-for given that or conditional on, these are synonyms.
-Note that, when two events, say A and B, are independent,
-we have the following equation.
-The probability of A given B is equal to the probability of A.
-It doesn't matter what B is.
-The probability A is unchanged.
-This is the mathematical way of saying it.
-And in fact, this can be considered the mathematical definition
-of independence.
-All right now, if we want to know the probability of two events, say A and B,
-occurring, we can use the multiplication rule.
-So the probability of A and B is equal to the probability of A multiplied
-by the probability of B, given that A already happened.
-Let's use blackjack as an example.
-In blackjack, you get assigned to random cards, without replacement.
-Then you can ask for more.
-The goal is to get closer to 21 than the dealer, without going over.
-Face cards are worth 10 points, so is the 10
-card, that's worth 10 points too.
-And aces are worth either 11 or 1.
-So if you get an ace and a face card, you win automatically.
-So, in blackjack, to calculate the chances of getting 21
-in the following way, first we get an ace.
-And then we get a face card or a 10.
-We compute the probability of the first being an ace.
-And then multiply by the probability of a face card or a 10,
-given that the first card was an ace.
-The calculation is 1 over 13 chance of getting an ace, times chance
-of getting a card with value 10, given that we already
-saw an ace, which is 16 out of 51.
-We've already taken one card out.
-This is approximately 2%.
-The multiplicative rule also applies to more than two events.
-We can use induction to expand for more than two.
-So the probability of A and B and C is equal to the probability of A times
-our probability of B, given that A happen, times the probability of C,
-that A and B happen.
-When we have independent events, the multiplication rule becomes simpler.
-We simply multiply of three probabilities.
-But we have to be very careful when we use
-the multiplicative rule in practice.
-We're assuming independence.
-And this can result in very different and incorrect probability calculations
-when we don't actually have independence.
-This can have dire consequences.
-For example, in a trial, if an expert doesn't really know the multiplication
-rule and how to use it.
-So let's use an example.
-This is loosely based on something that actually happened.
-Imagine a court case in which the suspect was described
-to have a mustache and a beard.
-And the prosecution brings in an expert to argue that because 1 in 10 men
-have beards, and 1 in 5 men has mustaches, using the multiplication
-rule, this means that only 2% of men have both beards
-and mustaches, 1/10 times 1/5.
-2% is a pretty unlikely event.
-However, to multiply like this, we need to assume independence.
-And in this case, it's clearly not true.
-The conditional probability of a man having a mustache, conditional on them
-having a beard, is quite high.
-It's about 95%.
-So the correct calculation actually gives us a much higher probability.
-It's 9%, so there's definitely reasonable doubt.
+These events are not independent.  The probabilities change once you see the other outcomes.  When events are not independent, conditional probabilities are useful and necessary to make correct calculations.  We already saw an example of a conditional probability.  We computed the probability that a second dealt card is a King, given that the first was a King.  In probability, we use the following notation.  We use this dash like this as a shorthand for given that or conditional on, these are synonyms.  Note that, [][*when two events, say A and B, are independent, we have the following equation.  The probability of A given B is equal to the probability of A*].  It doesn't matter what B is.  The probability A is unchanged.  This is the mathematical way of saying it.  And in fact, this can be considered the mathematical definition of independence.  
 
+All right now, if we want to know the probability of two events, say A and B, occurring, we can use the multiplication rule.  **So the probability of A and B is equal to the probability of A multiplied by the probability of B, given that A already happened**.  Let's use blackjack as an example.  In blackjack, you get assigned to random cards, without replacement.  Then you can ask for more.  The goal is to get closer to 21 than the dealer, without going over.  Face cards are worth 10 points, so is the 10 card, that's worth 10 points too.  And aces are worth either 11 or 1.  So if you get an ace and a face card, you win automatically.  
+
+So, in blackjack, to calculate the chances of getting 21 in the following way, first we get an ace.  And then we get a face card or a 10.  We compute the probability of the first being an ace.  And then multiply by the probability of a face card or a 10, given that the first card was an ace.  The calculation is 1 over 13 chance of getting an ace, times chance of getting a card with value 10, given that we already saw an ace, which is 16 out of 51.  We've already taken one card out.  This is approximately 2%.  The multiplicative rule also applies to more than two events.  We can use induction to expand for more than two.  So the probability of A and B and C is equal to the probability of A times our probability of B, given that A happen, times the probability of C, that A and B happen.  
+
+When we have independent events, the multiplication rule becomes simpler.  We simply multiply of three probabilities.  But we have to be very careful when we use the multiplicative rule in practice.  We're assuming independence.  And this can result in very different and incorrect probability calculations when we don't actually have independence.  This can have dire consequences.  For example, in a trial, if an expert doesn't really know the multiplication rule and how to use it.  So let's use an example.  This is loosely based on something that actually happened.  Imagine a court case in which the suspect was described to have a mustache and a beard.  And the prosecution brings in an expert to argue that because 1 in 10 men have beards, and 1 in 5 men has mustaches, using the multiplication rule, this means that only 2% of men have both beards and mustaches, 1/10 times 1/5.  2% is a pretty unlikely event.  However, to multiply like this, we need to assume independence.  And in this case, it's clearly not true.  The conditional probability of a man having a mustache, conditional on them having a beard, is quite high.  It's about 95%.  So the correct calculation actually gives us a much higher probability.  It's 9%, so there's definitely reasonable doubt.  
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on independence, conditional probability and the multiplication rule.
+https://rafalab.github.io/dsbook/probability.html#independence
+
+
+
+[][Key points]
+
+    Conditional probabilities compute the probability that an event occurs given information about dependent events. For example, the probability of drawing a second king given that the first draw is a king is:
+    
+[][       Pr(Card 2 is kind | Card 1 is king) = 3/51]
+    
+[][       If two events A and B are independent, Pr(A|B) = Pr(A)]
+    .
+    To determine the probability of multiple events occurring, we use the multiplication rule.
+
+Equations
+
+
+The **multiplication rule for independent events** is:
+
+[][       Pr(A and B and C) = Pr(A) x Pr(B) x Pr(c)]
+
+The multiplication rule for dependent events considers the conditional probability of both events occurring:
+
+[][       Pr(A and B) = Pr(A) x Pr(B|A)]
+
+We can expand the multiplication rule for dependent events to more than 2 events:
+
+[][       Pr(A and B and C) = Pr(A) x Pr(B|A) x Pr(C| A and B)]
 
 
 
@@ -461,6 +434,138 @@ It's 9%, so there's definitely reasonable doubt.
 
 
 
+# Assessment: Introduction to Discrete Probability
+
+
+
+Assessment due Jun 15, 2022 10:43 AWST
+
+
+## Probability of cyan
+1/1 point (graded)
+
+One ball will be drawn at random from a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls.
+What is the probability that the ball will be cyan?
+correct
+
+Loading
+You have used 1 of 5 attempts Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+Correct (1/1 point)
+
+
+## Probability of not cyan
+1/1 point (graded)
+
+One ball will be drawn at random from a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls.
+What is the probability that the ball will not be cyan?
+correct
+
+Loading
+You have used 1 of 5 attempts Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+Correct (1/1 point)
+
+
+## Sampling without replacement
+1/1 point (graded)
+
+Instead of taking just one draw, consider taking two draws. You take the second draw without returning the first draw to the box. We call this sampling without replacement.
+What is the probability that the first draw is cyan and that the second draw is not cyan?
+
+Provide at least 3 significant digits.
+correct
+
+Loading
+You have used 1 of 5 attempts Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+Correct (1/1 point)
+
+
+## Sampling with replacement
+1/1 point (graded)
+
+Now repeat the experiment, but this time, after taking the first draw and recording the color, return it back to the box and shake the box. We call this sampling with replacement.
+What is the probability that the first draw is cyan and that the second draw is not cyan?
+correct
+
+Loading
+You have used 1 of 5 attempts Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+Correct (1/1 point)
+
+Have a question about these assessments? Search the discussion forum BEFORE posting below.
+
+Some reminders:
+
+    Please be specific in the title and body of your post regarding which question you're asking about to facilitate answering your question.
+    Posting snippets of code is okay, but posting full code solutions is not.
+    If you do post snippets of code, please format it as code for readability. If you're not sure how to do this, there are instructions in a pinned post in the discussion forum.
+
+Discussion: Assessment: Introduction to discrete probability'
+Topic: Section 1 / Assessment: Introduction to discrete probability
+
+
+
+
+
+
+a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls. 
+
+# What is the probability that the first draw is cyan and that the second draw is not cyan?
+
+Pr(A) Cyan
+
+Pr(B) not Cyan
+
+
+Pr(A and B) = Pr(A) x Pr(B|A)
+            = 3/15 x 12/14
+            = 1/5 x 6/7
+            = 6/35
+
+
+3/15 x 12/15
+1/5 x 4/5
+4/25
+
+
+
+
+
+
+
+
+
+# Introduction to DataCamp
+
+
+DataCamp
+
+You are about the take the first DataCamp assessment. In this course we will be using the DataCamp platform for some assessments. DataCamp provides an R console and and a script editor right here on your browser. Here we give a brief DataCamp tutorial. If you are already familiar with DataCamp you can skip this section and proceed to the next section
+
+To start a DataCamp assessment, you will click on the button that says [][Click here to start the assessment], which looks like this: *Click here to start the assessment* picture of start the assessment button. You will see a button like this one in the next section: [][*Assessment: Introduction to Discrete Probability*].
+
+The DataCamp interface has four panels. They are:
+
+    The Information Panel: General information about the assessment.
+    The Instructions Panel: Exercise instructions. The multiple choice questions appear here when applicable.
+    The Editor: Here is where you type and edit your answers in the form of an R script. Example code also appears here. The editor also includes reminders of the instructions.  Note that # denotes comments. These are not run as code, instead, they tell others what your code is about! 
+    R console: This is where R commands get executed. You can send commands from the editor to the console but you can also type in commands directly to test out code.
+
+Here is a screenshot of what DataCamp looks like:
+
+Image of DataCamp Platform
+
+![](C:/Users/JJ/Pictures/datacamp interface.png)
+
+There are two ways to send commands from the editor to the console:
+
+1) If you hit the  Submit Answer button, the entire code in the editor gets executed and your answer is evaluated. Remember, after you click Submit Answer in an assessment, your code will be evaluated. If you do not take the hint, you get unlimited tries.
+
+2) If your cursor is on the editor and you hit command-return on a Mac or control-return on Windows, that line gets executed in the console. You do not submit an answer when you do this. This is a good way to test your script before you submit.
+
+Tip: DataCamp suggests useful keyboard shortcuts after most exercises.
+
+![](C:/Users/JJ/Pictures/datacamp exercise pannel.png)
+
+After submit answer on the platform
 
 
 
@@ -471,6 +576,188 @@ It's 9%, so there's definitely reasonable doubt.
 
 
 
+# DataCamp Assessment: Introduction to Discrete Probability
+
+
+
+Assessment due Jun 15, 2022 10:43 AWST
+
+This assessment covers the basics of discrete probability. There are two parts to this assessment: the first part is a set of questions on the edX platform, and the second part is a set of coding questions on the DataCamp platform.
+
+In this assessment, you will learn about the fundamentals of discrete probability through looking at examples of sampling from an urn with and without replacement.
+
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+
+**Assessment: Introduction to discrete probability (External resource) (4.5 points possible)**
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
+https://courses.edx.org/courses/course-v1:HarvardX+PH125.3x+1T2022/xblock/block-v1:HarvardX+PH125.3x+1T2022+type@lti_consumer+block@f8d6dedea9284f2bb67b368dc05d0a38/handler/lti_launch_handler
+You must be logged in to DataCamp to view your lab scores. To log in, simply click on one of the launch links above (even if you're not planning to work on a lab right now, but just want to view your scores). Then, refresh this page to view your scores.
+
+ 
+
+Have a question about this assessment? Search the discussion forum to see if someone else has asked or answered your question BEFORE posting below.
+
+Some reminders:
+
+    Please be specific in the title and body of your post regarding which question you're asking about to facilitate answering your question.
+    Posting snippets of code is okay, but posting full code solutions is not.
+    If you do post snippets of code, please format it as code for readability. If you're not sure how to do this, there are instructions in a pinned post in the general discussion forum.
+
+Discussion: DataCamp Assessment: Introduction to discrete probability
+Topic: Section 1 / DataCamp Assessment: Introduction to discrete probability
+
+
+
+## Exercise 1. Probability of cyan - generalized
+
+In the edX exercises for this section, we calculated some probabilities by hand. Now we'll calculate those probabilities using R.
+
+One ball will be drawn at random from a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls.
+
+What is the probability that the ball will be cyan?
+Instructions
+70 XP
+
+    Define a variable p as the probability of choosing a cyan ball from the box.
+    Print the value of p.
+
+Hint
+
+    Calculate the proportion of balls in the box that are cyan and assign that value to the variable p.
+    To print the contents of a variable, write the variable name in a new line of code.
+
+```{r}
+cyan <- 3
+magenta <- 5
+yellow <- 7
+
+# Assign a variable `p` as the probability of choosing a cyan ball from the box
+#p <- rep(c("cyan", "magenta", "yellow"), times=c(3, 5, 7))
+p <- cyan/(cyan + magenta + yellow)
+
+# Print the variable `p` to the console
+p
+```
+
+
+
+## Exercise 2. Probability of not cyan - generalized
+
+We defined the variable p as the probability of choosing a cyan ball from a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls.
+
+What is the probability that the ball you draw from the box will NOT be cyan?
+Instructions
+100 XP
+
+    Using the probability of choosing a cyan ball, p, calculate the probability of choosing any other ball.
+
+```{r}
+# `p` is defined as the probability of choosing a cyan ball from a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls.
+# Using variable `p`, calculate the probability of choosing any ball that is not cyan from the box
+
+1-p
+```
+
+
+## Exercise 3. Sampling without replacement - generalized
+
+Instead of taking just one draw, consider taking two draws. You take the second draw without returning the first draw to the box. We call this sampling without replacement.
+
+What is the probability that the first draw is cyan and that the second draw is not cyan?
+Instructions
+100 XP
+
+    Calculate the conditional probability p_2 of choosing a ball that is not cyan after one cyan ball has been removed from the box.
+    Calculate the joint probability of both choosing a cyan ball on the first draw and a ball that is not cyan on the second draw using p_1 and p_2.
+
+```{r}
+cyan <- 3
+magenta <- 5
+yellow <- 7
+
+# The variable `p_1` is the probability of choosing a cyan ball from the box on the first draw.
+p_1 <- cyan / (cyan + magenta + yellow)
+
+# Assign a variable `p_2` as the probability of not choosing a cyan ball on the second draw without replacement.
+
+# Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
+
+
+
+# The variable `p_1` is the probability of choosing a cyan ball from the box on the first draw.
+p_1 <- cyan / (cyan + magenta + yellow)
+p_1
+
+# Assign a variable `p_2` as the probability of not choosing a cyan ball on the second draw without replacement.
+p_2 <- (magenta + yellow)/(cyan + magenta + yellow - 1)
+p_2
+
+# Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
+p_1 * p_2
+```
+
+
+## Exercise 4. Sampling with replacement - generalized
+
+Now repeat the experiment, but this time, after taking the first draw and recording the color, return it back to the box and shake the box. We call this sampling with replacement.
+
+What is the probability that the first draw is cyan and that the second draw is not cyan?
+Instructions
+100 XP
+
+    Calculate the probability p_2 of choosing a ball that is not cyan on the second draw, with replacement.
+    Next, use p_1 and p_2 to calculate the probability of choosing a cyan ball on the first draw and a ball that is not cyan on the second draw (after replacing the first ball).
+
+```{r}
+cyan <- 3
+magenta <- 5
+yellow <- 7
+
+# The variable 'p_1' is the probability of choosing a cyan ball from the box on the first draw.
+p_1 <- cyan / (cyan + magenta + yellow)
+
+# Assign a variable 'p_2' as the probability of not choosing a cyan ball on the second draw with replacement.
+p_2 <- 1- p_1
+
+# Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
+p_1 * p_2
+
+```
+```{r}
+# Solution =====================================================================================================================
+cyan <- 3
+magenta <- 5
+yellow <- 7
+
+# The variable 'p_1' is the probability of choosing a cyan ball from the box on the first draw.
+p_1 <- cyan / (cyan + magenta + yellow)
+
+# Assign a variable 'p_2' as the probability of not choosing a cyan ball on the second draw with replacement.
+p_2 <- 1 - (cyan) / (cyan + magenta + yellow)
+
+# Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
+p_1 * p_2
+```
+
+
+
+## End of Assessment: Introduction to Discrete Probability
+
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
+
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
+
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
+
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
 
 
 
@@ -478,30 +765,10 @@ It's 9%, so there's definitely reasonable doubt.
 
 
 
+## Course  /  Section 1: Discrete Probability  /  1.2 Combinations and Permutations
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Combinations and Permutations
 
 
 
