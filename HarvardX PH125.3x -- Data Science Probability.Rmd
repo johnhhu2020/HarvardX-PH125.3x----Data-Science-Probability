@@ -427,6 +427,33 @@ We can expand the multiplication rule for dependent events to more than 2 events
 
 
 
+# Question from last video about beard and mustaches?
+
+question posted 2 days ago by john_hhu2020
+
+Sorry I don't get it, I thought it was 95%, since the instructor mentioned below in the video:
+
+    Pr(mustache | beard) = 0.95
+
+I don't know how does this comes out (this answer or the answer on the book, since it mentioned this: "1/10×95/100=0.095" under this hypothesis: "Say the conditional probability of a man having a mustache conditional on him having a beard is .95"). Say if we applies the multiplicative rule here:
+
+    Pr(m and B) = Pr(m) x Pr(b|m)
+
+and since we have 10 sample, Pr(m) = 1/5, Pr(b) = 1/10, then what is the probability of Pr(b|m)? And whats the difference between Pr(b and m) and Pr(b|m), as I cant image the situation of these.
+
+The question is: in this case, what is the difference between Pr(b and m) and Pr(b|m) ???
+This post is visible to everyone.
+0 responses
+
+    john_hhu2020
+
+    less than a minute ago
+
+# =================================================================================================================================
+I see, so the conditionally probability means a situation change: both Numerator and Denominator was changed due to the first event have happened.
+Thus the Pr(mustache | beard) must be given, and only then we can calculate the Pr(mustache and beard), and this Pr(mustache and beard) means the probability of guy met both conditions in the first condition - the Numerator and Denominator haven't changed. Anyone willing to help please write something, especially the instructor
+
+
 
 
 
@@ -765,87 +792,483 @@ Possible Answers
 
 
 
+
+
 ## Course  /  Section 1: Discrete Probability  /  1.2 Combinations and Permutations
 
 
 # Combinations and Permutations
 
 
+In our very first example, we imagine an urn with 5 beads--3 blue, 2 red.  To review, to compute the probability distribution of 1 draw, we simply listed out all the possibilities-- there were 5--and then for each event, we counted how many of these possibilities were associated with that event.  So for example, for the blue beads the probability is 0.6.  **For more complicated examples, however, these computations are not necessarily straightforward**.  [][*For example, what does the probability that if I draw 5 cards without replacement, I get all cards of the same suit, what is called a flush in poker?*]  
 
+Discrete probability teaches us how to make these computations using mathematics.  Here we focus on how to use R code.  So we're going to use card games as examples.  So let's start by constructing a deck of cards using R.  For this, we will use the function [][expand.grid()] and the function [][Paste()].  We *use Paste to create strings by joining smaller strings*.  For example, if we have the number and the suit for a card, in 2 different variables we can create the card name using Paste like this.  It also works on pairs of vectors.  It performs the operation element-wise.  So if we type this line of code, we get the following result.  *The function expand.grid gives us all the combinations of 2 lists* ([][*the outcome of expand.grid function is a data.frame, be careful with this*]).  So for example, if you have blue and black pants and white, gray, and plaid shirt, all your combinations can be computed using the expand.grid function like this.  You can see all 6 combinations.  
 
+So here's how we generate a deck of cards.  We define the four suits, we define the 13 numbers, and then we create the deck using expand.grid and then pasting together the 2 columns that expand.grid creates.  Now that we have a deck constructed, we can now start answering questions about probability.  Let's start by doing something simple.  *Let's double-check that the probability of a king in the first card is 1 in 13 with R code*.  We simply [][*compute the proportion of possible outcomes that satisfy our condition*].  So we create a vector that contains the four ways we can get a king.  That's going to be the kings variable.  And then we simply check what proportion of the deck is one of these cards and we get the answer that we expect--0.076 dot dot dot, which is 1 in 13.  
 
+Now, ******how about the conditional probability of the second card being a king, given that the first was a king?******  Earlier we deduced that if 1 king is already out, then there's 51 left.  So the probability is 3 in 51.  But let's confirm by listing out all possible outcomes.  To do this, we're going to use [][the combinations() and permutations() functions that are available from the gtools package].  The permutations function computes for any list of size n all the different ways we can select R items.  So here's an example--here all the ways we can choose 2 numbers from the list 1, 2, 3, 4, 5.  *Notice that the order matters with the permutations() function*.  So 3, 1 is different than 1, 3, So it appears in our permutations.  Also notice that 1, 1; 2, 2; and 3, 3 don't appear, because once we pick a number, it can't appear again (no replacement).  Optionally for this function permutations, we can add a vector.  So for example, if you want to see 5 random 7-digit phone numbers out of all possible phone numbers, you could type code like this.  Here we're defining a vector of digits that goes from 0 to 9 rather than 1 through 10.  So these four lines of code generate all phone numbers, picks 5 at random, and then shows them to you.  
 
+***To compute all possible ways that we can choose 2 cards when the order matters***, we simply type the following piece of code.  [][**Here we use permutations() function.  There's 52 cards, we're going to choose 2, and we're going to select them out of the vector that includes our card names, which we called deck earlier**].  This is going to be a matrix with 2 dimensions, 2 columns, and in this case, it's going to have 2,652 rows (*possibilities*).  Those are all the permutations.  Now, we're going to define the first card and the second card by grabbing the first and second columns using this simple piece of code.  And now we can, *for example, check how many cases have a first card that is a king--that's 204*.  [][***And now to find the conditional probability, we ask what fraction of these 204 have also a king in the second card***].  So this case we type the following piece of code.  We add all the cases that have king in the first, king in the second,  and divide by the cases that have a king in the first.  
+# ======================================== Read it, Read it, Read it ================================================================================
 
+And now we get the answer 0.058 dot dot dot, which is exactly 3 out of 51, which we had already deduced.  Note that the code we just saw is equivalent to this piece of code where we compute the proportions instead of the totals.  And this also gives us the answer that we want, 3 out of 51.  This is an R version of the multiplication rule, which tells us the probability of B, given A, is equal to proportion of A and B, or the probability of A and B, divided by the proportion of A or the probability of A.  [][*Now, what if the order does not matter?*]  For example, in blackjack, if you get an ace and a face card or a 10, it's called a natural 21, and you win automatically.  If we want to compute the probability of this happening, we want to enumerate the combinations, not permutations,  since the order doesn't matter.  So if we get an A and a king, king and an A, it's still a 21.  We don't want to count that twice.  So **notice the difference between the permutations functions**, which lists all permutations, and the combination function, where order does not matter.  
 
+This means that 2, 1 doesn't appear because 1, 2 already appeared.  Similarly, 3, 1 and 3, 2 don't appear.  So to compute the probability of a natural 21 in blackjack, we can do this.  We can define a vector that includes all the aces, a vector that includes all the face cards, then we generate all the combinations of picking 2 cards out of 52, and then we simply count.  [][*How often do we get aces and a face card?*]  And we get the answer 0.048 dot, dot, dot.  Now, notice that in the previous piece of code we assumed that the aces come first.  This is only because we know the way that combination generates and enumerates possibilities.  But if we want to be safe, we can instead type this code, which considers both possibilities.  We get the same answer, and again, this is because we know how combinations works and how it lists the possibilities.  
 
+Instead of using combinations to deduce the exact probability of a natural 21, **we can also use a Monte Carlo to estimate this probability**.  In this case, we draw two cards over and over and keep track of how many 21's we get.  We can use the function sample to draw a card without a replacement like this.  Here's 1 hand.  We didn't get a 21 there.  And then check if 1 card is an ace and the other is a face card or a 10.  Now we simply repeat this over and over and we get a very good approximation--in this case, 0.0488.
 
 
 
+[][Textbook link]
 
+Here is a link to the textbook section on combinations and permutations External link.
+https://rafalab.github.io/dsbook/probability.html#combinations-and-permutations
 
 
+[][Key points]
 
+    paste() joins two strings and inserts a space in between.
+    expand.grid() gives the combinations of 2 vectors or lists.
+    permutations(n,r) from the gtools package lists the different ways that r items can be selected from a set of n options when order matters.
+    combinations(n,r) from the gtools package lists the different ways that r items can be selected from a set of n options when order does not matter.
 
+Code: Introducing paste() and expand.grid()
 
+# joining strings with paste
+number <- "Three"
+suit <- "Hearts"
+paste(number, suit)
 
+# joining vectors element-wise with paste
+paste(letters[1:5], as.character(1:5))
 
+# generating combinations of 2 vectors with expand.grid
+expand.grid(pants = c("blue", "black"), shirt = c("white", "grey", "plaid"))
 
+Code: Generating a deck of cards
 
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
+deck <- expand.grid(number = numbers, suit = suits)
+deck <- paste(deck$number, deck$suit)
 
+# probability of drawing a king
+kings <- paste("King", suits)
+mean(deck %in% kings)
 
+Code: Permutations and combinations
 
+Correction: The code shown does not generate all 7 digit phone numbers because phone numbers can have repeated digits. It generates all possible 7 digit numbers without repeats.
 
+library(gtools)
+permutations(5,2)    # ways to choose 2 numbers in order from 1:5
+all_phone_numbers <- permutations(10, 7, v = 0:9)
+n <- nrow(all_phone_numbers)
+index <- sample(n, 5)
+all_phone_numbers[index,]
 
+permutations(3,2)    # order matters
+combinations(3,2)    # order does not matter
 
+Code: Probability of drawing a second king given that one king is drawn
 
+hands <- permutations(52,2, v = deck)
+first_card <- hands[,1]
+second_card <- hands[,2]
+sum(first_card %in% kings)
 
+sum(first_card %in% kings & second_card %in% kings) / sum(first_card %in% kings)
 
+Code: Probability of a natural 21 in blackjack
 
+aces <- paste("Ace", suits)
+facecard <- c("King", "Queen", "Jack", "Ten")
+facecard <- expand.grid(number = facecard, suit = suits)
+facecard <- paste(facecard$number, facecard$suit)
 
+hands <- combinations(52, 2, v=deck) # all possible hands
 
+# probability of a natural 21 given that the ace is listed first in `combinations`
+mean(hands[,1] %in% aces & hands[,2] %in% facecard)
 
+# probability of a natural 21 checking for both ace first and ace second
+mean((hands[,1] %in% aces & hands[,2] %in% facecard)|(hands[,2] %in% aces & hands[,1] %in% facecard))
 
+Code: Monte Carlo simulation of natural 21 in blackjack
 
+Note that your exact values will differ because the process is random and the seed is not set.
 
+# code for one hand of blackjack
+hand <- sample(deck, 2)
+hand
 
+# code for B=10,000 hands of blackjack
+B <- 10000
+results <- replicate(B, {
+    hand <- sample(deck, 2)
+    (hand[1] %in% aces & hand[2] %in% facecard) | (hand[2] %in% aces & hand[1] %in% facecard)
+})
+mean(results)
 
 
 
 
+```{r}
+number <- "Three"
+suit <- "Hearts"
 
+paste(number, suit)
 
 
 
+paste(letters[1:5], as.character(1:5))
+```
 
+```{r}
+expand.grid(pants = c("blue", "black"), shirt = c("white", "gray", "plaid"))
+```
 
+# This is cool, we can image what we want and applying our thought into code, R or Python, no difference
+# ===================================================================================================================================
+```{r}
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
 
 
+deck <- expand.grid(suit = suits, number = numbers)
+length(deck[, 1])
+head(deck)
 
+deck <- paste(deck$suit, deck$number)
+length(deck)
 
 
+deck
+```
 
+```{r}
+kings <- paste(suits, "King")
 
+kings
 
 
+mean(deck %in% kings)
 
+#mean(length(kings)/length(deck))
 
 
+# this is how I think calculating probability of second card being king given that the first card is already a king
+# ============================================================================================================================
+mean((length(kings)-1)/(length(deck)-1))
+```
 
+```{r}
+library(gtools)
 
 
+head(permutations(5, 2))
+length(permutations(52, 2)[, 1])    # Dont forget after permutation or combinations, you'll have two dimensional df =================================
+length(combinations(52, 2)[, 1])
 
+data.frame(permutations(52, 2, v = deck))
 
 
+all_phone_numbers <- permutations(10, 7, v=0:9)
+n <- nrow(all_phone_numbers)
 
+index <- sample(n, 5)
 
+all_phone_numbers[index,]
+```
 
+```{r}
+library(gtools)
 
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
 
 
+deck <- expand.grid(suit = suits, number = numbers)
+deck <- paste(deck$suit, deck$number)
+deck
 
 
+hands <- permutations(52, 2, v = deck)     # ===========================================================================
 
+length(hands[, 1])
 
+
+n = nrow(hands)
+
+index <- sample(n, 6)      # ===========================================================================================
+
+hands[index, ]
+
+
+first_card <- hands[, 1]
+second_card <- hands[, 2]
+
+head(second_card)
+
+length(unique(first_card))
+
+
+
+# first_card %in% kings      # Thank God I tried this code, and find the causation of wrong code
+sum(first_card %in% kings)
+
+
+sum(first_card %in% kings & second_card %in% kings)/sum(first_card %in% kings)
+```
+
+![Yes, this image has to be here](C:/Users/JJ/Pictures/20220608_225119.jpg)
+
+```{r}
+combinations(3, 2)
+
+permutations(3, 2)
+```
+
+```{r}
+suits
+
+
+aces <- paste("Ace", suits)
+aces
+
+facedcard <- c("Ten", "Jack", "Queen", "King")
+facedcard_combine <- expand.grid(faces = facedcard, suit = suits)
+
+facedcard_combine <- paste(facedcard_combine$faces, facedcard_combine$suit)
+
+
+facedcard_combine
+
+
+
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
+
+
+deck <- expand.grid(suit = suits, number = numbers)
+deck <- paste(deck$number, deck$suit)
+
+
+all_hands <- permutations(52, 2, v = deck)      # ==================================================================================
+head(all_hands)                                 # First finish this approach, and Notice in Blackjack the natural 21 means card not order
+
+
+
+# I'll apply the conditional probability equations here: Pr(A and B) = Pr(A) * Pr(B|A)
+natural21 <- mean(all_hands[, 1] %in% aces) * sum(all_hands[, 1] %in% aces & all_hands[, 2] %in% facedcard_combine)/sum(all_hands[, 1] %in% aces)
+natural21
+```
+
+```{r}
+suits <- c("Clubs", "Diamonds", "Hearts", "Spades")
+
+aces <- paste("Ace", suits)
+aces
+
+
+facedcard <- c("Ten", "Jack", "Queen", "King")
+
+facedcard_combine <- expand.grid(faces = facedcard, suit = suits)
+
+facedcard_combine <- paste(facedcard_combine$faces, facedcard_combine$suit)
+facedcard_combine
+
+
+
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
+
+
+deck <- expand.grid(suit = suits, number = numbers)
+deck <- paste(deck$number, deck$suit)
+
+
+
+
+hands <- combinations(52, 2, v = deck)
+length(hands)
+
+
+mean(hands[, 1] %in% aces & hands[, 2] %in% facedcard_combine)
+mean(hands[, 1] %in% aces & hands[, 2] %in% facedcard_combine) + mean(hands[, 1] %in% facedcard_combine & hands[, 2] %in% aces)
+# ===============================================================================================================================
+# Here we should notice how the combination function works
+
+mean((hands[, 1] %in% aces & hands[, 2] %in% facedcard_combine) | (hands[, 1] %in% facedcard_combine & hands[, 2] %in% aces))
+```
+
+```{r}
+hands <- sample(deck, 2)
+
+hands
+
+
+
+
+B <- 100000
+result <- replicate(B, {
+  hand <- sample(deck, 2)
+  (hand[1] %in% aces & hand[2] %in% facedcard_combine) | 
+    hand[2] %in% aces & hand[1] %in% facedcard_combine})
+
+mean(result)
+```
+
+
+
+
+
+
+![](C:/Users/JJ/Pictures/our very first example is 5 beads in a urn.png)
+
+![](C:/Users/JJ/Pictures/here is the probability of randomly picking a blue beads from the urn.png)
+
+![](C:/Users/JJ/Pictures/r function expand.grid.png)
+
+![](C:/Users/JJ/Pictures/r function paste.png)
+
+![](C:/Users/JJ/Pictures/we use paste function to create strings be joining smaller strings.png)
+
+![](C:/Users/JJ/Pictures/the paste function performs the operation elements wise.png)
+
+![](C:/Users/JJ/Pictures/expand.grid gives us all the combination of two lists.png)
+
+![](C:/Users/JJ/Pictures/using what we just leant r functions, expand.grid and paste to generate a deck of cards.png)
+
+![now, how about the second card being a king, given that the first card is king ??? Think about it](C:/Users/JJ/Pictures/this is the first king probability.png)
+
+![Note: these functions are available in gtools package](C:/Users/JJ/Pictures/we are going to use the combinations function and permutations function.png)
+
+![](C:/Users/JJ/Pictures/what does a permutations function does.png)
+
+![Notice: here the order maters, and once we pick a number, it cant appear again](C:/Users/JJ/Pictures/here we list all the way we can choose 2 numbers from the list 1 2 3 4 5.png)
+
+![](C:/Users/JJ/Pictures/we can add vector for this permutations function.png)
+
+![](C:/Users/JJ/Pictures/a sample permutations.png)
+
+![](C:/Users/JJ/Pictures/and we will define grabbing first card and the second card using this code.png)
+
+![](C:/Users/JJ/Pictures/check how many cases have first card as king, but I failed running this code.png)
+
+![](C:/Users/JJ/Pictures/notice how we calculate the conditional probability.png)
+
+![](C:/Users/JJ/Pictures/using proportions will also gives us the answers.png)
+
+![](C:/Users/JJ/Pictures/multiplication rule equation.png)
+
+![](C:/Users/JJ/Pictures/combinations.png)
+
+![](C:/Users/JJ/Pictures/here is the permutations function.png)
+
+![](C:/Users/JJ/Pictures/and here is the outcome from a combination function.png)
+
+![](C:/Users/JJ/Pictures/compute the natural 21 in blackjack.png)
+
+![But be careful how combination function wroks, as this code seems counterintuitive](C:/Users/JJ/Pictures/using thie piece of code to compute the probability of natural 21, where aces or faced card order doesn't matter.png)
+
+![](C:/Users/JJ/Pictures/we get the same answer, and this is because combinations function works and how it list the probabilities.png)
+
+![](C:/Users/JJ/Pictures/use the sample function to simulation draw a card without replacement with default replace vector.png)
+
+![](C:/Users/JJ/Pictures/here we sue monte carlo simulation with this code to draw two card from the deck without replacement.png)
+
+![](C:/Users/JJ/Pictures/and we can repeat this over and over and then we get a very good approximation of probability.png)
+
+
+
+
+
+
+
+
+
+# The Birthday Problem
+
+
+Suppose you're in a classroom with 50 people.  If we assume this is a randomly selected group, what is the chance that at least two people have the same birthday?  Although it is somewhat advanced, we can actually deduce this mathematically, and we do this later, but now, we're going to use Monte Carlo simulations.  For simplicity, we assumed that nobody was born on February 29th.  This actually doesn't change the answer much.  
+
+All right, first, note that birthdays can be represented as numbers between 1 and 365.  So a sample of 50 random birthdays can be obtained simply using the sample function, like this.  To check if, in this particular set of 50 people we have at least two with the same birthday, we can use the function duplicated, which returns true whenever an element of a vector has already appeared in that vector.  So here's an example.  If I type duplicated 1, 2, 3, 1, 4, 3, 5, , we get true's for the 1 and the 3 the second time they appear.  So to check if two birthdays were the same, we simply use any and duplicated functions, like this.  And in the case that we just generated, we actually do have this happening.  We did have two people, at least two people, with the same birthday.  We get true.  Now, to estimate the probability, we're going to repeat this experiment.  We're going to run a Monte Carlo simulation over and over again.  
+
+So what we do is we do it 10,000 times.  We use the replicate function like this.  And when we're done, we get that the probability of having two people, at least two people, with the same birthday in a group of 50 people is about 98%.  Were you expecting this to be so high?  People tend to underestimate these probabilities, so [][*it might be an opportunity for you to bet and make some money off of your friends*] (key point of this course, please keep in mind).  To get an intuition as to why this is so high, think of what happens as you get close to 365 people.  At this stage, we run out of days, and the probability is 1.  In the next video, we're going to actually compute this probability for different group sizes and see how fast it gets close to 1.  
+
+
+[][Textbook link]
+
+Here is a link to the textbook section on the birthday problem External link.
+https://rafalab.github.io/dsbook/probability.html#birthday-problem
+
+
+[][Key points]
+
+    duplicated() takes a vector and returns a vector of the same length with TRUE for any elements that have appeared previously in that vector.
+    We can compute the probability of shared birthdays in a group of people by modeling birthdays as random draws from the numbers 1 through 365. We can then use this sampling model of birthdays to run a Monte Carlo simulation to estimate the probability of shared birthdays.
+
+Code: The birthday problem
+
+# checking for duplicated bdays in one 50 person group
+n <- 50
+bdays <- sample(1:365, n, replace = TRUE)    # generate n random birthdays
+any(duplicated(bdays))    # check if any birthdays are duplicated
+
+# Monte Carlo simulation with B=10000 replicates
+B <- 10000
+results <- replicate(B, {    # returns vector of B logical values
+    bdays <- sample(1:365, n, replace = TRUE)
+    any(duplicated(bdays))
+})
+mean(results)    # calculates proportion of groups with duplicated bdays
+
+
+
+
+```{r}
+birthdays <- sample(1:365, 50, replace = T)
+
+length(unique(birthdays))      # So we do have the same birthday classmates in a 50 sized class, should repeat it many times and simulate the %
+
+
+mean(birthdays %in% unique(birthdays))
+```
+
+```{r}
+birthdaycheck <- replicate(100000, {
+  same <- sample(365, 50, replace = T)
+  50 - length(unique(same)) >=1             # I haven't learn the course, did I doing it wrong or something?  Why its so high ???
+})
+
+
+mean(birthdaycheck)
+```
+
+
+
+
+![](C:/Users/JJ/Pictures/in a random selected class of 50 people, the chance of at least two people share birthday.png)
+
+![](C:/Users/JJ/Pictures/using r to generate randomly selected 50 birthdays.png)
+
+![](C:/Users/JJ/Pictures/duplicated function.png)
+
+![](C:/Users/JJ/Pictures/a example of duplicated function.png)
+
+![](C:/Users/JJ/Pictures/we can use any function combined with duplicated function to check if duplicate happened in list.png)
+
+![](C:/Users/JJ/Pictures/the probability of at least two classmates sharing same birthday in 50 people sized class is freaking high.png)
+
+
+
+
+
+
+
+
+# sapply
 
 
 
