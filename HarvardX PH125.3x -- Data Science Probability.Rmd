@@ -1268,9 +1268,150 @@ mean(birthdaycheck)
 
 
 
+
 # sapply
 
 
+Say you want to use what you've just learned about the birthday problem to bet with friends about two people having the same birthday in a group of people.  [][*When are the chances larger than 50%?  Larger than 75%? *]  Let's create a lookup table.  We can quickly create a function to compute this for any group.  We write the function like this.  We'll call it compute prob, and we'll basically make the calculations for the probability of two people having the same birthday.  We will use a small Monte Carlo simulation to do it.  Now that we've done this, we want to compute this function, we want to apply this function to several values of n, let's say from 1 to 60.  
+
+Let's define n as a sequence starting at 1 and ending at 60.  Now, we can use a for loop to apply this function to each value in n, but it turns out that *for loops are rarely the preferred approach in R*.  In general, we try to perform operations on entire vectors.  Arithmetic operations, for example, operate on vectors in an element wise fashion.  We saw this when we learned about R.  So if we type x equals 1 through 10, now X is the vector starting at 1 and ending at 10, and we compute the square root of x, it actually computes the square root for each element.  
+
+Equally, if we define y to be 1 through 10, and then multiply x by y, it multiplies each element 1 by 1--1 times 1, 2 times 2, et cetera.  So there's really no need for for loops.  [][*But not all functions work this way*].  You can't just send a vector to any function in R.  For example, the function we just wrote does not work element-wise since it's expecting a scalar, it's expecting an n.  This piece of code does not do what we want.  If we type compute prob and send it the vector n, we will not get what we want.  We will get just one number.  
+
+What we can do instead is use the function sapply().  sapply permits us to perform element-wise operations on any function.  Here's how it works.  We'll define a simple example for the vector 1 through 10.  If we want to apply the square roots of each element of x, 
+we can simply type sapply x comma square root,
+and it'll apply square root to each element of x.
+Of course, we don't need to do this because square root already does that,
+but we are using it as a simple example.
+So for our case, we can simply type prob equals sapply n-- n is our vector--
+and then the function we define compute prob.
+And this will assign to each element of prob
+the probability of two people having the same birthday for that n.
+And now we can very quickly make a plot.
+We plot the probability of two people having the same birthday
+against the size of the group.
+Now, let's compute the exact probabilities
+rather than use Monte Carlo simulations.
+The function we just defined uses a Monte Carlo simulation,
+but we can use what we've learned about probability theory
+to compute the exact value.
+Not only do we get the exact answer using math,
+but the computations are much faster since we
+don't have to generate experiments.
+We simply get a number.
+To make the math simpler for this particular problem,
+instead of computing the probability of it happening,
+we'll compute the probability of it not happening,
+and then we can use the multiplication rule.
+Let's start with the first person.
+The probability that person 1 has a unique birthday is 1, of course.
+All right.
+Now let's move on to the second one.
+The probability that the second person has
+a unique birthday given that person 1 already took one of the days
+is 364 divided by 365.
+Then for a person 3, given that the first two people already
+have unique birthdays, that leaves 363.
+So now that probability is 363 divided by 365.
+If we continue this way and find the chances of all,
+say, 50 people having unique birthdays, we would multiply 1 times 364 divided
+by 365, times 363 divided by 365, dot dot
+dot, all the way to the 50th element.
+Here's the equation.
+Now, we can easily write a function that does this.
+This time we'll call it exact prob.
+It takes n as a argument, and it computes
+this probability using this simple code.
+Now we can compute each probability for each n using sapply again, like this.
+And if we plot it, we can see that the Monte Carlo
+simulations were almost exactly right.
+They were almost exact approximations of the actual value.
+Now, notice had it not been possible to compute
+the exact probabilities, something that sometimes happens,
+we would have still been able to accurately estimate
+the probabilities using Monte Carlo.
+
+
+
+
+
+```{r}
+library(tidyverse)
+
+
+compute_prob <- function(n, B = 100000){
+  same_day <- replicate(B, {                # We are applying a Monte Carlo simulation, obviously we need replicate function
+    bdays <- sample(1:365, n, replace = T)
+    any(duplicated(bdays))
+  })
+  mean(same_day)
+}
+
+
+
+compute_prob(23)       # Can you believe it, I got one shoot and get the correct answer 50%
+                       # The power of replacement, how interesting ???
+# ===============================================================================================================================
+# Get prepared, womeday we may need to write a R function for later use
+
+
+
+# ===============================================================================================================================
+n <- seq(1, 30)
+
+sapply(n, compute_prob)   # =========================================================================================================
+
+
+
+plot(sapply(n, compute_prob))
+```
+
+```{r}
+exact_prob <- function(n){                # =============================================================================================
+  prob_unique <- seq(365, 365-n+1)/365    # What does this line of code doing ???
+  1 - prod(prob_unique)       # prod stands for product calculation
+}
+
+
+exact_prob(23)
+
+
+
+eprob <- sapply(60, exact_prob)           # Using sappy() a sequence with defined function, but inside the function, seq() already did element wise 
+                                          # ========================================================================================================
+eprob
+```
+
+```{r}
+ff <- seq(365, 300)
+
+
+ff
+```
+
+```{r}
+n <- seq(1: 60)      # ==================================================================================================================
+
+
+
+prob <- sapply(n, compute_prob)       ##############
+
+
+exact_prob <- function(n){                # =============================================================================================
+  prob_unique <- seq(365, 365-n+1)/365    # What does this line of code doing ???
+  1 - prod(prob_unique)       # prod stands for product calculation
+}
+
+
+
+eprob <- sapply(n, exact_prob)         ##############
+
+
+plot(n, prob) 
+lines(n, eprob, col = "red")
+```
+
+![](C:/Users/JJ/Pictures/the monte carlo simulation and the calculation outcome were almost identical.png)
 
 
 
@@ -1280,19 +1421,31 @@ mean(birthdaycheck)
 
 
 
+![](C:/Users/JJ/Pictures/say we are digging on the same birthday peobability problem, when would the probability of at least 2 people share birthday larger than 50%.png)
 
+![](C:/Users/JJ/Pictures/and how about larger than larger than 75%.png)
 
+![This image ment to be here](C:/Users/JJ/Pictures/20220609_234402.jpg)
 
+![](C:/Users/JJ/Pictures/can you see it, how can we change the variable n to change random pick group size and check if ther is same birthday shared within.png)
 
+![](C:/Users/JJ/Pictures/r provides the calculation element wise, and for loop in r pperforms bad.png)
 
+![On any function](C:/Users/JJ/Pictures/r sapply function permits us to perform element-wise operations.png)
 
+![](C:/Users/JJ/Pictures/and we can make a plot with plot function on at least 2 people share birthday from 1 through 30 people sized group.png)
 
+![](C:/Users/JJ/Pictures/lets start with the first person has a unique birthday.png)
 
+![break thought into tensors and approaching the solution.png](C:/Users/JJ/Pictures/break thought into tensors and approaching the solution.png)
 
+![Now you must can understand this, this is the bridge](C:/Users/JJ/Pictures/and here is for the person 3 have unique birthday given person 1 and person 2 already has unique birthday .png)
 
+![](C:/Users/JJ/Pictures/not saying we are finding the group size n which no one share birthday in that group, here is the probability.png)
 
+![](C:/Users/JJ/Pictures/after observed the pattern in above sample, we can writ that down into a function, and let r help us doing the calculations.png)
 
-
+![](C:/Users/JJ/Pictures/using sapply function to applying sequence element wise function calculation.png)
 
 
 
