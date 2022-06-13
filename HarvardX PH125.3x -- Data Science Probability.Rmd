@@ -998,11 +998,13 @@ hands <- permutations(52, 2, v = deck)     # ===================================
 length(hands[, 1])
 
 
+
 n = nrow(hands)
 
 index <- sample(n, 6)      # ===========================================================================================
 
 hands[index, ]
+
 
 
 first_card <- hands[, 1]
@@ -1020,6 +1022,9 @@ sum(first_card %in% kings)
 
 sum(first_card %in% kings & second_card %in% kings)/sum(first_card %in% kings)
 ```
+
+# =============================================================================================================================================
+![how to think this equation in the right way](C:/Users/JJ/Pictures/Screenshot_20220612-121142_Gallery.jpg)
 
 ![Yes, this image has to be here](C:/Users/JJ/Pictures/20220608_225119.jpg)
 
@@ -1054,8 +1059,8 @@ deck <- expand.grid(suit = suits, number = numbers)
 deck <- paste(deck$number, deck$suit)
 
 
-all_hands <- permutations(52, 2, v = deck)      # ==================================================================================
-head(all_hands)                                 # First finish this approach, and Notice in Blackjack the natural 21 means card not order
+all_hands <- permutations(52, 2, v = deck)      # =========================================================================================
+head(all_hands)                                 # First finish this approach, and Notice in Blackjack the natural 21 means cards, not order
 
 
 
@@ -1065,6 +1070,9 @@ natural21
 ```
 
 ```{r}
+library(gtools)
+
+
 suits <- c("Clubs", "Diamonds", "Hearts", "Spades")
 
 aces <- paste("Ace", suits)
@@ -1091,7 +1099,7 @@ deck <- paste(deck$number, deck$suit)
 
 
 hands <- combinations(52, 2, v = deck)
-length(hands)
+length(hands[, 2])
 
 
 mean(hands[, 1] %in% aces & hands[, 2] %in% facedcard_combine)
@@ -1276,61 +1284,85 @@ Say you want to use what you've just learned about the birthday problem to bet w
 
 Let's define n as a sequence starting at 1 and ending at 60.  Now, we can use a for loop to apply this function to each value in n, but it turns out that *for loops are rarely the preferred approach in R*.  In general, we try to perform operations on entire vectors.  Arithmetic operations, for example, operate on vectors in an element wise fashion.  We saw this when we learned about R.  So if we type x equals 1 through 10, now X is the vector starting at 1 and ending at 10, and we compute the square root of x, it actually computes the square root for each element.  
 
-Equally, if we define y to be 1 through 10, and then multiply x by y, it multiplies each element 1 by 1--1 times 1, 2 times 2, et cetera.  So there's really no need for for loops.  [][*But not all functions work this way*].  You can't just send a vector to any function in R.  For example, the function we just wrote does not work element-wise since it's expecting a scalar, it's expecting an n.  This piece of code does not do what we want.  If we type compute prob and send it the vector n, we will not get what we want.  We will get just one number.  
+Equally, if we define y to be 1 through 10, and then multiply x by y, it multiplies each element 1 by 1--1 times 1, 2 times 2, et cetera.  So there's really no need for for loops.  [][*But not all functions work this way*].  You can't just send a vector to any function in R.  For example, the function we just wrote does not work element-wise since it's expecting a scalar, it's expecting an n.  This piece of code does not do what we want.  If we type compute prob and send it the vector n, we will not get what we want.  We will get just one number.  What we can do instead is use the function sapply().  **sapply permits us to perform element-wise operations on any function**.  Here's how it works.  We'll define a simple example for the vector 1 through 10.  If we want to apply the square roots of each element of x, we can simply type sapply x comma square root, and it'll apply square root to each element of x.  Of course, we don't need to do this because square root already does that, but we are using it as a simple example.  So for our case, we can simply type prob equals sapply n-- n is our vector--and then the function we define compute prob.  
 
-What we can do instead is use the function sapply().  sapply permits us to perform element-wise operations on any function.  Here's how it works.  We'll define a simple example for the vector 1 through 10.  If we want to apply the square roots of each element of x, 
-we can simply type sapply x comma square root,
-and it'll apply square root to each element of x.
-Of course, we don't need to do this because square root already does that,
-but we are using it as a simple example.
-So for our case, we can simply type prob equals sapply n-- n is our vector--
-and then the function we define compute prob.
-And this will assign to each element of prob
-the probability of two people having the same birthday for that n.
-And now we can very quickly make a plot.
-We plot the probability of two people having the same birthday
-against the size of the group.
-Now, let's compute the exact probabilities
-rather than use Monte Carlo simulations.
-The function we just defined uses a Monte Carlo simulation,
-but we can use what we've learned about probability theory
-to compute the exact value.
-Not only do we get the exact answer using math,
-but the computations are much faster since we
-don't have to generate experiments.
-We simply get a number.
-To make the math simpler for this particular problem,
-instead of computing the probability of it happening,
-we'll compute the probability of it not happening,
-and then we can use the multiplication rule.
-Let's start with the first person.
-The probability that person 1 has a unique birthday is 1, of course.
-All right.
-Now let's move on to the second one.
-The probability that the second person has
-a unique birthday given that person 1 already took one of the days
-is 364 divided by 365.
-Then for a person 3, given that the first two people already
-have unique birthdays, that leaves 363.
-So now that probability is 363 divided by 365.
-If we continue this way and find the chances of all,
-say, 50 people having unique birthdays, we would multiply 1 times 364 divided
-by 365, times 363 divided by 365, dot dot
-dot, all the way to the 50th element.
-Here's the equation.
-Now, we can easily write a function that does this.
-This time we'll call it exact prob.
-It takes n as a argument, and it computes
-this probability using this simple code.
-Now we can compute each probability for each n using sapply again, like this.
-And if we plot it, we can see that the Monte Carlo
-simulations were almost exactly right.
-They were almost exact approximations of the actual value.
-Now, notice had it not been possible to compute
-the exact probabilities, something that sometimes happens,
-we would have still been able to accurately estimate
-the probabilities using Monte Carlo.
+And this will assign to each element of prob the probability of two people having the same birthday for that n.  And now we can very quickly make a plot.  We plot the probability of two people having the same birthday against the size of the group.  Now, let's compute the exact probabilities rather than use Monte Carlo simulations.  The function we just defined uses a Monte Carlo simulation, but we can use what we've learned about probability theory to compute the exact value.  Not only do we get the exact answer using math, but the computations are much faster since we don't have to generate experiments.  We simply get a number.  To make the math simpler for this particular problem, [][*instead of computing the probability of it happening, we'll compute the probability of it not happening, and then we can use the multiplication rule*].  
 
+*==============You need to break your thought to tensor level, and pushing it forward one by one, then you'll have the solution ==============*
+Let's start with the first person.  The probability that person 1 has a unique birthday is 1, of course.  All right.  Now let's move on to the second one.  The probability that the second person has a unique birthday given that person 1 already took one of the days is 364 divided by 365.  *Then for a person 3, given that the first two people already have unique birthdays, that leaves 363.  So now that probability is 363 divided by 365*.  If we continue this way and find the chances of all, say, 50 people having unique birthdays, we would multiply 1 times 364 divided by 365, times 363 divided by 365, dot dot dot, all the way to the 50th element.  
+
+Here's the equation.  Now, we can easily write a function that does this.  This time we'll call it exact prob.  It takes n as a argument, and it computes this probability using this simple code.  Now we can compute each probability for each n using sapply again, like this.  And if we plot it, we can see that the Monte Carlo simulations were almost exactly right.  They were almost exact approximations of the actual value.  Now, notice had it not been possible to compute the exact probabilities, something that sometimes happens, we would have still been able to accurately estimate the probabilities using Monte Carlo.  
+
+
+
+[][Textbook links]
+The textbook discussion of the basics of sapply() can be found in this textbook section External link.
+https://rafalab.github.io/dsbook/programming-basics.html#vectorization
+The textbook discussion of sapply() for the birthday problem can be found within the birthday problem section External link.
+https://rafalab.github.io/dsbook/probability.html#birthday-problem
+
+
+
+[][Key points]
+
+    Some functions automatically apply element-wise to vectors, such as sqrt() and *.
+    However, other functions do not operate element-wise by default. This includes functions we define ourselves.
+
+    The function sapply(x, f) allows any other function f to be applied element-wise to the vector x.
+
+    The probability of an event happening is 1 minus the probability of that event not happening:
+        Pr(event) = 1 - Pr(no event)
+        
+    We can compute the probability of shared birthdays mathematically:
+        Pr(shared birthdays) = 1 - Pr(no shared birthdays) = 1 - (1 * 364/365 * 363/365 * ... * (365-n+1)/365)
+
+ 
+
+Code: Function for birthday problem Monte Carlo simulations
+
+Note that the function body of compute_prob() is the code that we wrote in the previous video. If we write this code as a function, we can use sapply() to apply this function to several values of n.
+
+# function to calculate probability of shared bdays across n people
+compute_prob <- function(n, B = 10000) {
+	same_day <- replicate(B, {
+    	bdays <- sample(1:365, n, replace = TRUE)
+        any(duplicated(bdays))
+    })
+    mean(same_day)
+}
+
+n <- seq(1, 60)
+
+Code: Element-wise operation over vectors and sapply
+
+x <- 1:10
+sqrt(x)    # sqrt operates on each element of the vector
+
+y <- 1:10
+x*y    # * operates element-wise on both vectors
+
+compute_prob(n)    # does not iterate over the vector n without sapply
+
+x <- 1:10
+sapply(x, sqrt)    # this is equivalent to sqrt(x)
+
+prob <- sapply(n, compute_prob)    # element-wise application of compute_prob to n
+plot(n, prob)
+
+Code: Computing birthday problem probabilities with sapply
+
+# function for computing exact probability of shared birthdays for any n
+exact_prob <- function(n){
+    prob_unique <- seq(365, 365-n+1)/365   # vector of fractions for mult. rule
+    1 - prod(prob_unique)    # calculate prob of no shared birthdays and subtract from 1
+}
+
+# applying function element-wise to vector of n values
+eprob <- sapply(n, exact_prob)
+
+# plotting Monte Carlo results and exact probabilities on same graph
+plot(n, prob)    # plot Monte Carlo results
+lines(n, eprob, col = "red")    # add line for exact prob
 
 
 
@@ -1425,7 +1457,7 @@ lines(n, eprob, col = "red")
 
 ![](C:/Users/JJ/Pictures/and how about larger than larger than 75%.png)
 
-![This image ment to be here](C:/Users/JJ/Pictures/20220609_234402.jpg)
+![This image ment to be here](C:/Users/JJ/Pictures/20220609_233459.jpg)
 
 ![](C:/Users/JJ/Pictures/can you see it, how can we change the variable n to change random pick group size and check if ther is same birthday shared within.png)
 
@@ -1455,37 +1487,82 @@ lines(n, eprob, col = "red")
 
 
 
+# How Many Monte Carlo Experiments are Enough?
 
 
+In the examples we have seen, we have used 10,000 Monte Carlo experiments.  It turns out that this provided very accurate estimates for the examples
+we looked at.  In more complex calculations, 10,000 may not nearly be enough.  Also for some calculations, 10,000 experiments might not be computationally feasible, and it might be more than we need.  In practice, we won't know what the answer is, so we don't know if our Monte Carlo estimate is accurate.  
 
+We know that the larger the number of experiments, we've been using the letter B to represent that, the better the approximation.  But how big do we need it to be?  This is actually a challenging question, and answering it often requires advanced theoretical statistics training.  One practical approach we will describe here is to check for the stability of the estimate.  Here's an example with the birthday problem.  We're going to use n equals 22.  There's 22 people.  So we're going to run a simulation where we compute or estimate the probability of two people having a certain birthday using different sizes of the Monte Carlo simulations.  So the value of b going to go from 10, to 20, to 40, to 100, et cetera.  We compute the simulation, and now we look at the values that we get for each simulation.  
 
+Remember, each simulation has a different b, a different number of experiments.  When we see this graph, we can see that it's wiggling up and down.  That's because the estimate is not stable yet.  It's not such a great estimate.  But as b gets bigger and bigger, eventually it starts to stabilize.
+And that's when we start getting a feeling for the fact that now perhaps we have a large enough number of experiments.  
 
 
+[][Textbook link]
 
+Here is a link to the matching textbook section External link.
+https://rafalab.github.io/dsbook/probability.html#infinity-in-practice
 
 
+[][Key points]
 
+    The larger the number of Monte Carlo replicates , the more accurate the estimate.
+    Determining the appropriate size for can require advanced statistics.
+    One practical approach is to try many sizes for and look for sizes that provide stable estimates.
 
+Code: Estimating a practical value of B
 
+This code runs Monte Carlo simulations to estimate the probability of shared birthdays using several B values and plots the results. When B is large enough that the estimated probability stays stable, then we have selected a useful value of B.
 
+B <- 10^seq(1, 5, len = 100)    # defines vector of many B values
+compute_prob <- function(B, n = 22){    # function to run Monte Carlo simulation with each B
+	same_day <- replicate(B, {
+    	bdays <- sample(1:365, n, replace = TRUE)
+        any(duplicated(bdays))
+    })
+    mean(same_day)
+}
 
+prob <- sapply(B, compute_prob)    # apply compute_prob to many values of B
+plot(log10(B), prob, type = "l")    # plot a line graph of estimates 
 
 
 
 
+```{r}
+B <- 10^seq(1, 5, len=100)
 
+compute_prob22 <- function(B, n=22){
+  same_day <- replicate(B, {
+    bdays <- sample(365, n, replace = T)
+    any(duplicated(bdays))
+  })
+  mean(same_day)
+}
 
 
+prob22 <- sapply(B, compute_prob22)
+prob22
 
+hist(prob22)
+```
 
+```{r}
+plot(log10(B), prob22)
+```
 
 
 
 
 
+![This is actually a challenging question, and answering it often requires advanced theoretical statistics training.](C:/Users/JJ/Pictures/how big does b need to be, depending on the problem we are solving.png)
 
+![](C:/Users/JJ/Pictures/apply different sized monte carlo simulation on shared birthday with 22 people.png)
 
+![](C:/Users/JJ/Pictures/and this is how we plot the outcome of same birthday monte carlo simulation.png)
 
+![](C:/Users/JJ/Pictures/and using this graph to represent the trending of probability whne change the size of simulation.png)
 
 
 
@@ -1495,37 +1572,353 @@ lines(n, eprob, col = "red")
 
 
 
+# DataCamp Assessment: Combinations and Permutations
 
 
 
+Assessment due Jun 15, 2022 10:43 AWST
 
+This assessment covers combinations and permutations.
 
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+Assessment: Combinations and permutations (External resource) (5.0 points possible)
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
 
 
+## Exercise 1. Independence
 
+Imagine you draw two balls from a box containing colored balls. You either replace the first ball before you draw the second or you leave the first ball out of the box when you draw the second ball.
 
+Under which situation are the two draws independent of one another?
 
+Remember that two events A and B are independent if Pr(A and B) = Pr(A) * P(B).
+Instructions
+50 XP
+Possible Answers
 
+    You don't replace the first ball before drawing the next.
+    You do replace the first ball before drawing the next.
+    Neither situation describes independent events.
+    Both situations describe independent events.
 
 
+## Exercise 2. Sampling with replacement
 
+Say you’ve drawn 5 balls from the a box that has 3 cyan balls, 5 magenta balls, and 7 yellow balls, with replacement, and all have been yellow.
 
+What is the probability that the next one is yellow?
+Instructions
+100 XP
 
+    Assign the variable p_yellow as the probability of choosing a yellow ball on the first draw.
+    Using the variable p_yellow, calculate the probability of choosing a yellow ball on the sixth draw.
 
 
+# Below are my solutions
+```{r}
+cyan <- 3
+magenta <- 5
+yellow <- 7
 
+# Assign the variable 'p_yellow' as the probability that a yellow ball is drawn from the box.
+p_yellow <- yellow/(cyan + magenta + yellow)
+p_yellow
 
+# Using the variable 'p_yellow', calculate the probability of drawing a yellow ball on the sixth draw. Print this value to the console.
+p_yellow6 <- (1 - p_yellow)^5 * p_yellow        # Those are my imagination, figured what does the question ask for first
+p_yellow6
+```
 
+# Incorrect submission
+You are not providing a calculation that gives the correct answer. The probability of choosing a yellow ball does not depend on subsequent draws when balls are replaced after each draw. 
 
 
+## Exercise 3. Rolling a die
 
+If you roll a 6-sided die once, what is the probability of not seeing a 6? If you roll a 6-sided die six times, what is the probability of not seeing a 6 on any of those rolls?
+Instructions
+100 XP
 
+    Assign the variable p_no6 as the probability of not seeing a 6 on a single roll.
+    Then, calculate the probability of not seeing a 6 on six rolls using p_no6.
 
+```{r}
+# Assign the variable 'p_no6' as the probability of not seeing a 6 on a single roll.
+p_no6 <- 1/6
 
+# Calculate the probability of not seeing a 6 on six rolls using `p_no6`. Print your result to the console: do not assign it to a variable.
+1- p_no6
+```
 
+# Incorrect submission
+Make sure that you use p_no6 as your variable name for the probability of rolling any number other than six on a 6-sided die. 
 
+# Incorrect submission
+You are not providing a calculation that gives the correct answer. The probability of rolling any number other than a six does not change from roll to roll. 
 
+```{r}
+# Assign the variable 'p_no6' as the probability of not seeing a 6 on a single roll.
+p_no6 <- 5/6
 
+# Calculate the probability of not seeing a 6 on six rolls using `p_no6`. Print your result to the console: do not assign it to a variable.
+1 - p_no6
+```
+
+```{r}
+# Assign the variable 'p_no6' as the probability of not seeing a 6 on a single roll.
+p_no6 <- 5/6
+
+# Calculate the probability of not seeing a 6 on six rolls using `p_no6`. Print your result to the console: do not assign it to a variable.
+p_no6
+```
+
+```{r}
+# Assign the variable 'p_no6' as the probability of not seeing a 6 on a single roll.
+p_no6 <- 5/6
+
+# Calculate the probability of not seeing a 6 on six rolls using `p_no6`. Print your result to the console: do not assign it to a variable.
+p_no6^6
+```
+
+# Its a problem with carefully read the silly question instead of training your statistics knowledge and etc
+
+
+## Exercise 4. Probability the Celtics win a game
+
+Two teams, say the Celtics and the Cavs, are playing a seven game series. The Cavs are a better team and have a 60% chance of winning each game.
+
+What is the probability that the Celtics win at least one game? Remember that the Celtics must win one of the first four games, or the series will be over!
+Instructions
+100 XP
+
+    Calculate the probability that the Cavs will win the first four games of the series.
+    Calculate the probability that the Celtics win at least one game in the first four games of the series.
+
+```{r}
+# Assign the variable `p_cavs_win4` as the probability that the Cavs will win the first four games of the series.
+p_cavs_win4 <- (0.6)^4
+
+# Using the variable `p_cavs_win4`, calculate the probability that the Celtics win at least one game in the first four games of the series.
+1 - p_cavs_win4
+```
+
+
+## Exercise 5. Monte Carlo simulation for Celtics winning a game
+
+Create a Monte Carlo simulation to confirm your answer to the previous problem by estimating how frequently the Celtics win at least 1 of 4 games. Use B <- 10000 simulations.
+
+The provided sample code simulates a single series of four random games, simulated_games.
+Instructions
+100 XP
+
+    Use the replicate function for B <- 10000 simulations of a four game series. The results of replicate should be stored to a variable named celtic_wins.
+    Within each simulation, replicate the sample code to simulate a four-game series named simulated_games. Then, use the any function to indicate whether the four-game series contains at least one win for the Celtics. Perform these operations in two separate steps.
+    Use the mean function on celtic_wins to find the proportion of simulations that contain at least one win for the Celtics out of four games.
+
+# This is wrong code
+```{r}
+# This line of example code simulates four independent random games where the Celtics either lose or win. Copy this example code to use within the `replicate` function.
+simulated_games <- sample(c("lose","win"), 4, replace = TRUE, prob = c(0.6, 0.4))
+
+# The variable 'B' specifies the number of times we want the simulation to run. Let's run the Monte Carlo simulation 10,000 times.
+B <- 10000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1)
+
+# Create an object called `celtic_wins` that replicates two steps for B iterations: (1) generating a random four-game series `simulated_games` using the example code, then (2) determining whether the simulated series contains at least one win for the Celtics.
+
+celtic_wins <- replicate(B, {
+    simulated_games <- sample(c("lose","win"), 4, replace = TRUE, prob = c(0.6, 0.4))
+    any(duplicated(simulated_games))
+})
+
+
+
+# Calculate the frequency out of B iterations that the Celtics won at least one game. Print your answer to the console.
+mean(celtic_wins)
+```
+
+# This should be the correct one
+```{r}
+# This line of example code simulates four independent random games where the Celtics either lose or win. Copy this example code to use within the `replicate` function.
+simulated_games <- sample(c("lose","win"), 4, replace = TRUE, prob = c(0.6, 0.4))
+
+# The variable 'B' specifies the number of times we want the simulation to run. Let's run the Monte Carlo simulation 10,000 times.
+B <- 10000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1)
+
+# Create an object called `celtic_wins` that replicates two steps for B iterations: (1) generating a random four-game series `simulated_games` using the example code, then (2) determining whether the simulated series contains at least one win for the Celtics.
+
+celtic_wins <- replicate(B, {
+    simulated_games <- sample(c("lose","win"), 4, replace = TRUE, prob = c(0.6, 0.4))
+    any(simulated_games %in% "win")
+})
+
+
+
+# Calculate the frequency out of B iterations that the Celtics won at least one game. Print your answer to the console.
+mean(celtic_wins)
+```
+
+
+## End of Assessment: Independence and Multiplication Rule
+
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
+
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
+
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
+
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
+
+
+
+
+
+
+
+
+## Course  /  Section 1: Discrete Probability  /  1.3 Addition Rule and Monty Hall
+
+
+
+# The Addition Rule
+
+
+Earlier, we showed you how to compute the probability of a natural 21 in blackjack.  This is **getting a face card and an ace in your first draw**.  Here, we're going to show you the [][*addition rule*], which gives you another way to compute this probability.  The addition rule tells us that the probability of A or B, right, we're going to have to make this calculation now, because [][***you can get to 21 in two ways.  You can get either a face card and then an ace.  Or you can get an ace and then a face card***].  So we're asking what's the probability of that or?  A or B?  The addition rule tells us the probability of A or B is the probability of A plus the probability a B minus the probability of A and B.  
+
+To understand why this makes sense, [][*think of a Venn diagram*].  If we're computing the probability of this whole thing happening, A or B, we can add the blue circle plus the pink circle, and then subtract the middle because we have added it twice by adding the blue plus the pink.  So it makes sense-- the addition rule makes a lot of sense.  So now let's apply it to the natural 21.  In the case of natural 21, the intersection is empty.  Since both hands can't happen, you can't have both an ace and then a face card, and then at the same time have a face card and then an ace.  Those two things can't happen at the same time.  So this will be a very easy application of the addition rule.  The probability of an ace followed by a face card we know is 1 over 13 times 16 divided by 51.  And the probability of a face card followed by an ace is 16 over 52 times 4 over 51.  These are actually the same, which makes sense due to symmetry.  
+
+These two values are actually the same.  In any case, we get the same result that we got before for the natural 21, which is about 0.05.  
+
+
+[][Textbook link]
+
+Here is a link to the textbook section on the addition rule External link.
+https://rafalab.github.io/dsbook/probability.html#addition-rule
+
+
+[][Clarification]
+
+By "facecard", the professor means a card with a value of 10 (K, Q, J, 10).
+Key points
+
+[][**    The addition rule states that the probability of event A or event B happening is the probability of event A plus the probability of event B minus the probability of both events A and B happening together.**]
+[][**        Pr(A or B) = Pr(A) + Pr(B) - Pr(A and B)**]
+
+[][*    Note that (A or B) is equivalent to (A | B).*]  ========================================================================================
+
+Example: The addition rule for a natural 21 in blackjack
+
+[][***We apply the addition rule where A = drawing an ace then a facecard and B = drawing a facecard then an ace. Note that in this case, both events A and B cannot happen at the same time, so Pr(A and B) = 0***]
+
+        Pr(aces then faced cards) = 4/52 * 16/51                 ------------> Pr(B|A)
+        pr(faced cards then aces) = 16/52 * 4/51                 ------------> Pr(A|B)
+        Pr(aces then faced cards | faced cards then aces) = 4/51 * 16/51 * 16/52 * 4/51 = 0.0483.
+
+**
+ 
+
+
+![this gives you another to compute the natural 21 in blackjack card game](C:/Users/JJ/Pictures/the addition rule.png)
+
+![](C:/Users/JJ/Pictures/this is what addition rule tell us.png)
+
+![if we compute this whole thing happening, a or b](C:/Users/JJ/Pictures/we can use a ven diagram to understand this.png)
+
+![](C:/Users/JJ/Pictures/the probability of an ace followed by a faced card is this.png)
+
+![](C:/Users/JJ/Pictures/and this the the probability of a faced card followed by an ace card.png)
+
+```{r}
+1/13 * 16/51
+
+16/52 * 4/51
+```
+
+
+
+
+
+
+
+# The Monty Hall Problem
+
+
+
+
+
+
+# Trying to understand the logic behind the below R code, next time you should be able to draft those kind to code by reading the questions =========
+```{r}
+B <- 100000
+
+stick <- replicate(B, {
+  doors <- as.character(1:3)
+  prize <- sample(c("Car", "Goat", "Goat"))
+  prize_door <- doors[prize == "Car"]
+  the_pick <- sample(doors, 1)
+  show <- sample(doors[!doors %in% c(the_pick, prize_door)], 1)
+  stick <- the_pick
+  stick == prize_door
+})
+
+
+mean(stick)
+
+
+
+
+switch <- replicate(B, {
+  doors <- as.character(1:3)
+  prize <- sample(c("Car", "Goat", "Goat"))
+  prize_door <- doors[prize == "Car"]
+  the_pick <- sample(doors, 1)
+  show <- sample(doors[!doors %in% c(the_pick, prize_door)], 1)
+  switch <- sample(doors[!doors %in% c(the_pick, show)], 1)
+  switch == prize_door
+})
+
+
+mean(switch)
+```
+
+```{r}
+doors <- as.character(1:3)
+doors
+
+prize <- sample(c("Car", "Goat", "Goat"))
+prize
+```
+
+
+
+
+
+![](C:/Users/JJ/Pictures/monty hall problem.png)
+
+![](C:/Users/JJ/Pictures/behind one door is the prize, and had goat behind other two.png)
+
+![and show contestant that there is no prize behind that door](C:/Users/JJ/Pictures/if the contestant failed at first try, monty hall will oepn one of two remaining door that has a goat behind it.png)
+
+![](C:/Users/JJ/Pictures/because the original choose are based on first condition, the 3 potential prize probabilities.png)
+
+![](C:/Users/JJ/Pictures/but if you switch, the chance will double to 2 in 3.png)
+
+![](C:/Users/JJ/Pictures/lets find the probability of monty hall problem with monte carlo simulation and comparing with 2 strategies.png)
+
+![](C:/Users/JJ/Pictures/lets go through the code with stick to the same door strategy with monte carlo simulation.png)
 
 
 
