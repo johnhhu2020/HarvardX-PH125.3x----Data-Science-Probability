@@ -802,9 +802,9 @@ Possible Answers
 
 In our very first example, we imagine an urn with 5 beads--3 blue, 2 red.  To review, to compute the probability distribution of 1 draw, we simply listed out all the possibilities-- there were 5--and then for each event, we counted how many of these possibilities were associated with that event.  So for example, for the blue beads the probability is 0.6.  **For more complicated examples, however, these computations are not necessarily straightforward**.  [][*For example, what does the probability that if I draw 5 cards without replacement, I get all cards of the same suit, what is called a flush in poker?*]  
 
-Discrete probability teaches us how to make these computations using mathematics.  Here we focus on how to use R code.  So we're going to use card games as examples.  So let's start by constructing a deck of cards using R.  For this, we will use the function [][expand.grid()] and the function [][Paste()].  We *use Paste to create strings by joining smaller strings*.  For example, if we have the number and the suit for a card, in 2 different variables we can create the card name using Paste like this.  It also works on pairs of vectors.  It performs the operation element-wise.  So if we type this line of code, we get the following result.  *The function expand.grid gives us all the combinations of 2 lists* ([][*the outcome of expand.grid function is a data.frame, be careful with this*]).  So for example, if you have blue and black pants and white, gray, and plaid shirt, all your combinations can be computed using the expand.grid function like this.  You can see all 6 combinations.  
+Discrete probability teaches us how to make these computations using mathematics.  Here we focus on how to use R code.  So we're going to use card games as examples.  So let's start by constructing a deck of cards using R.  For this, we will use the function [][expand.grid()] and the function [][Paste()].  We *use Paste to create strings by joining smaller strings*.  For example, if we have the number and the suit for a card, in 2 different variables we can create the card name using Paste like this.  It also works on pairs of vectors.  It performs the operation element-wise.  So if we type this line of code, we get the following result.  *The function expand.grid gives us all the combinations of 2 lists* ([][*the outcome of expand.grid() function is a data.frame, be careful with this*]).  So for example, if you have blue and black pants and white, gray, and plaid shirt, all your combinations can be computed using the expand.grid function like this.  You can see all 6 combinations.  
 
-So here's how we generate a deck of cards.  We define the four suits, we define the 13 numbers, and then we create the deck using expand.grid and then pasting together the 2 columns that expand.grid creates.  Now that we have a deck constructed, we can now start answering questions about probability.  Let's start by doing something simple.  *Let's double-check that the probability of a king in the first card is 1 in 13 with R code*.  We simply [][*compute the proportion of possible outcomes that satisfy our condition*].  So we create a vector that contains the four ways we can get a king.  That's going to be the kings variable.  And then we simply check what proportion of the deck is one of these cards and we get the answer that we expect--0.076 dot dot dot, which is 1 in 13.  
+So here's how we generate a deck of cards.  We define the four suits, we define the 13 numbers, and then we create the deck using expand.grid() and then pasting together the 2 columns that expand.grid() creates.  Now that we have a deck constructed, we can now start answering questions about probability.  Let's start by doing something simple.  *Let's double-check that the probability of a king in the first card is 1 in 13 with R code*.  We simply [][*compute the proportion of possible outcomes that satisfy our condition*].  So we create a vector that contains the four ways we can get a king.  That's going to be the kings variable.  And then we simply check what proportion of the deck is one of these cards and we get the answer that we expect--0.076 dot dot dot, which is 1 in 13.  
 
 Now, ******how about the conditional probability of the second card being a king, given that the first was a king?******  Earlier we deduced that if 1 king is already out, then there's 51 left.  So the probability is 3 in 51.  But let's confirm by listing out all possible outcomes.  To do this, we're going to use [][the combinations() and permutations() functions that are available from the gtools package].  The permutations function computes for any list of size n all the different ways we can select R items.  So here's an example--here all the ways we can choose 2 numbers from the list 1, 2, 3, 4, 5.  *Notice that the order matters with the permutations() function*.  So 3, 1 is different than 1, 3, So it appears in our permutations.  Also notice that 1, 1; 2, 2; and 3, 3 don't appear, because once we pick a number, it can't appear again (no replacement).  Optionally for this function permutations, we can add a vector.  So for example, if you want to see 5 random 7-digit phone numbers out of all possible phone numbers, you could type code like this.  Here we're defining a vector of digits that goes from 0 to 9 rather than 1 through 10.  So these four lines of code generate all phone numbers, picks 5 at random, and then shows them to you.  
 
@@ -1853,9 +1853,60 @@ Example: The addition rule for a natural 21 in blackjack
 
 
 
+
 # The Monty Hall Problem
 
 
+We're going to look at one last example from discrete probability.  It's the Monty Hall problem.  In the 1970s, there was a game show called Let's Make A Deal.  Monty Hall was the host.  This is where the name of the problem comes from.  ***At some point in the game, contestants were asked to pick one of three doors.  Behind one door there was a prize.  The other two had a goat behind them.  And this basically meant that you lost.  Monty Hall would open one of the two remaining doors and show the contestant that there was no prize behind that door.  So you're left with two doors-- the one you picked, and one door that you do not know what's behind it.  So then, Monty Hall would ask, do you want to switch doors?  ***
+
+What would you do?  We can use probability to show that if you stick to the original door, your chances of winning a car, or whatever big prize, is 1 in 3.  But if you switch, your chances double to 2 in 3.  This seems counterintuitive.  Many people incorrectly think both chances are 1 in 2 since there's only two doors left, and there's a prize behind one of them.  You can find detailed explanations-- we're going to provide links of the mathematics of how you can calculate that this is in fact wrong, that you have a higher chance if you switch.  [][*But here, we're going to use a Monte Carlo simulation to show you that this is the case.  And this will help you understand how it all works*].  
+
+Note that the code we're going to show you is longer than it needs to be.  But we're using it as an illustration to help you understand the logic behind what actually happens here.  So let's start by creating a simulation that imitates the strategy of sticking to the same door.  Let's go through the code.  We're going to do 10,000 experiments.  We're going to do this over and over 10,000 times.  First thing we do, is we assign the prize to a door.  All right, so the prize is going to be in one of the three doors that we have created.  Then, that's going to be in prize door.  Prize door contains the number of the door with the prize behind it.  Then, we're going to imitate your pick by taking a random sample of these three doors.  Now, in the next step, we're going to decide which door you're shown.  You're going to be shown--not your door and not the door with the prize.  You're going to be shown the other one.  You stick to your door, that's what you stick to, nothing changed.  All this that we did right above doesn't matter because you're sticking to your door.  So now we do this over and over again, and at the end (*Its actually not at the end, its at the end of each simulation, so we will get a boolean value of each simulation 10000 times*), we ask, is the door you chose the one you stuck to?  Is that the prize door?  How often does this happen?  
+
+We know it's going to be a third, because none of this procedure changed anything.  You started picking one out of three, nothing changed, and now you are asked, is the one I picked the door?  If we run the simulation, we actually see it happening.  We ran it 10,000 times and the probability of winning was 0.3357, about 1 in 3.  Now let's repeat the exercise, but consider the switch strategy.  We start the same way.  We have three doors, we assign three prizes at random.  Then we know which one has the good prize, the car, but we don't tell the contestant.  So the contestant has to pick one.  It's basically a random pick.  That's what my pick is.  And now we're going to show the contestant one door.  It can't be the one they chose, and it can't be the one with the car.  So, that only leaves one door-- the door with nothing behind it that was not chosen.  So now what you're going to do is you're going to switch.  You're going to switch to the door that they didn't show you, because the one that they did show you had nothing behind it.  So basically, what's happening is you are switching from the original that had a 1 in 3 chance of being the one to whatever is the other option, which has to have a 2 in 3 chance.  So if we run the simulation, we actually confirm that.  We get that the proportion of times a win is 0.6717 which is about 2/3.  The Monte Carlo estimate confirms the two out of three calculation.  
+
+
+[][Textbook section]
+
+Here is the textbook section on the Monty Hall Problem External link.
+https://rafalab.github.io/dsbook/probability.html#monty-hall-problem
+
+
+[][Key points]
+
+    Monte Carlo simulations can be used to simulate random outcomes, which makes them useful when exploring ambiguous or less intuitive problems like the Monty Hall problem.
+    In the Monty Hall problem, contestants choose one of three doors that may contain a prize. Then, one of the doors that was not chosen by the contestant and does not contain a prize is revealed. The contestant can then choose whether to stick with the original choice or switch to the remaining unopened door.
+    Although it may seem intuitively like the contestant has a 1 in 2 chance of winning regardless of whether they stick or switch, Monte Carlo simulations demonstrate that the actual probability of winning is 1 in 3 with the stick strategy and 2 in 3 with the switch strategy.
+    For more on the Monty Hall problem, you can watch a detailed explanation here External link or read an explanation here External link.
+    https://www.khanacademy.org/math/statistics-probability/probability-library/basic-theoretical-probability/v/monty-hall-problem
+    https://en.wikipedia.org/wiki/Monty_Hall_problem
+
+Code: Monte Carlo simulation of stick strategy
+
+B <- 10000
+stick <- replicate(B, {
+	doors <- as.character(1:3)
+	prize <- sample(c("car","goat","goat"))    # puts prizes in random order
+	prize_door <- doors[prize == "car"]    # note which door has prize
+	my_pick  <- sample(doors, 1)    # note which door is chosen
+	show <- sample(doors[!doors %in% c(my_pick, prize_door)],1)    # open door with no prize that isn't chosen
+	stick <- my_pick    # stick with original door
+	stick == prize_door    # test whether the original door has the prize
+})
+mean(stick)    # probability of choosing prize door when sticking
+
+Code: Monte Carlo simulation of switch strategy
+
+switch <- replicate(B, {
+	doors <- as.character(1:3)
+	prize <- sample(c("car","goat","goat"))    # puts prizes in random order
+	prize_door <- doors[prize == "car"]    # note which door has prize
+	my_pick  <- sample(doors, 1)    # note which door is chosen first
+	show <- sample(doors[!doors %in% c(my_pick, prize_door)], 1)    # open door with no prize that isn't chosen
+	switch <- doors[!doors%in%c(my_pick, show)]    # switch to the door that wasn't chosen first or opened
+	switch == prize_door    # test whether the switched door has the prize
+})
+mean(switch)    # probability of choosing prize door when switching
 
 
 
@@ -1920,7 +1971,9 @@ prize
 
 ![](C:/Users/JJ/Pictures/lets go through the code with stick to the same door strategy with monte carlo simulation.png)
 
+![](C:/Users/JJ/Pictures/now lets repeat this exercise but consider the switch strategy.png)
 
+![](C:/Users/JJ/Pictures/same as stick strategy, we have 3 doors, we assign 3 prizes at random, then we know which one has the good prize.png)
 
 
 
@@ -1931,59 +1984,204 @@ prize
 
 
 
+# DataCamp Assessment: The Addition Rule and Monty Hall
 
 
+Assessment due Jun 15, 2022 10:43 AWST
 
+This assessment covers more principles of probability again looking at sports game series.
 
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+Assessment: The Addition Rule and Monty Hall (External resource) (4.5 points possible)
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
 
 
+## Exercise 1. The Cavs and the Warriors
 
+Two teams, say the Cavs and the Warriors, are playing a seven game championship series. The first to win four games wins the series. The teams are equally good, so they each have a 50-50 chance of winning each game.
 
+If the Cavs lose the first game, what is the probability that they win the series?
+Instructions
+100 XP
 
+    Assign the number of remaining games to the variable n.
+    Assign a variable outcomes as a vector of possible outcomes in a single game, where 0 indicates a loss and 1 indicates a win for the Cavs.
+    Assign a variable l to a list of all possible outcomes in all remaining games. Use the rep function to create a list of n games, where each game consists of list(outcomes).
+    Use the expand.grid function to create a data frame containing all the combinations of possible outcomes of the remaining games.
+    Use the rowSums function to identify which combinations of game outcomes result in the Cavs winning the number of games necessary to win the series.
+    Use the mean function to calculate the proportion of outcomes that result in the Cavs winning the series and print your answer to the console.
+    
+# My poor initial approach, 
+# ==================================================================================================================================================
+```
+# Assign a variable 'n' as the number of remaining games.
+n <- 7 - 1
 
+# Assign a variable `outcomes` as a vector of possible game outcomes, where 0 indicates a loss and 1 indicates a win for the Cavs.
+outcomes <- sample(c(0, 1), 1, prob=c(0.5, 0.5), replace=T)
+outcomes
 
+# Assign a variable `l` to a list of all possible outcomes in all remaining games. Use the `rep` function on `list(outcomes)` to create list of length `n`.
+l <- rep(list(outcomes), times=n)
+l
 
+# Create a data frame named 'possibilities' that contains all combinations of possible outcomes for the remaining games.
+possibilities <- expand.grid(l)
 
+# Create a vector named 'results' that indicates whether each row in the data frame 'possibilities' contains enough wins for the Cavs to win the series.
+results <- 
 
+# Calculate the proportion of 'results' in which the Cavs win the series. Print the outcome to the console.
+mean(results)
+```
 
+![Vectors are generally created using the c function.png](C:/Users/JJ/Pictures/Vectors are generally created using the c function.png)
 
+# Hint
 
+    Any combination of 4 or more wins across the 6 remaining games allows the Cavs to win the series.
+    The possibilities data frame should contain one column for each remaining game.
+    The possibilities data frame should contain one row for each combination of wins (1) or losses (0) for the next 6 games.
+    results should be a logical vector.
 
+```{r}
+# Assign a variable 'n' as the number of remaining games.
+n <- 6
 
+# Assign a variable `outcomes` as a vector of possible game outcomes, where 0 indicates a loss and 1 indicates a win for the Cavs.
+outcomes <- c(0, 1)
 
+# Assign a variable `l` to a list of all possible outcomes in all remaining games. Use the `rep` function on `list(outcomes)` to create list of length `n`.
+l <- rep(list(outcomes), n)
+l
+# Create a data frame named 'possibilities' that contains all combinations of possible outcomes for the remaining games.
+possibilities <- expand.grid(l)
+possibilities
+# Create a vector named 'results' that indicates whether each row in the data frame 'possibilities' contains enough wins for the Cavs to win the series.
+results <- rowSums(possibilities) >= 4
+results
+# Calculate the proportion of 'results' in which the Cavs win the series. Print the outcome to the console.
+mean(results)
+```
 
 
 
+## Exercise 2. The Cavs and the Warriors - Monte Carlo
 
+Confirm the results of the previous question with a Monte Carlo simulation to estimate the probability of the Cavs winning the series after losing the first game.
+Instructions
+100 XP
 
+    Use the replicate function to replicate the sample code for B <- 10000 simulations.
+    Use the sample function to simulate a series of 6 games with random, independent outcomes of either a loss for the Cavs (0) or a win for the Cavs (1) in that order. Use the default probabilities to sample.
+    Use the sum function to determine whether a simulated series contained at least 4 wins for the Cavs.
+    Use the mean function to find the proportion of simulations in which the Cavs win at least 4 of the remaining games. Print your answer to the console.
 
+# Thank god, got corrected with one shoot
+```{r}
+# The variable `B` specifies the number of times we want the simulation to run. Let's run the Monte Carlo simulation 10,000 times.
+B <- 10000
 
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1)
 
+# Create an object called `results` that replicates for `B` iterations a simulated series and determines whether that series contains at least four wins for the Cavs.
+results <- replicate(B, {
+    sum(sample(c(0, 1), 6, replace=T)) >= 4
+})
 
 
 
+# Calculate the frequency out of `B` iterations that the Cavs won at least four games in the remainder of the series. Print your answer to the console.
+mean(results)
+```
 
 
+## Exercise 3. A and B play a series - part 1
 
+Two teams, A and B, are playing a seven series game series. Team A is better than team B and has a p>0.5 chance of winning each game.
+Instructions
+100 XP
 
+    Use the function `sapply()` to compute the probability, call it `Pr` of winning for `p <- seq(0.5, 0.95, 0.025)`.
+    Then plot the result plot(p, Pr).
 
+# Thank god, got one shoot again
+```{r}
+# Let's assign the variable 'p' as the vector of probabilities that team A will win.
+p <- seq(0.5, 0.95, 0.025)
 
+# Given a value 'p', the probability of winning the series for the underdog team B can be computed with the following function based on a Monte Carlo simulation:
+prob_win <- function(p){
+  B <- 10000
+  result <- replicate(B, {
+    b_win <- sample(c(1,0), 7, replace = TRUE, prob = c(1-p, p))
+    sum(b_win)>=4
+    })
+  mean(result)
+}
 
+# Apply the 'prob_win' function across the vector of probabilities that team A will win to determine the probability that team B will win. Call this object 'Pr'.
+Pr <- sapply(p, prob_win)
 
+# Plot the probability 'p' on the x-axis and 'Pr' on the y-axis.
+plot(p, Pr) 
+```
 
 
 
+## Exercise 4. A and B play a series - part 2
 
+Repeat the previous exercise, but now keep the probability that team
 
+wins fixed at p <- 0.75 and compute the probability for different series lengths. For example, wins in best of 1 game, 3 games, 5 games, and so on through a series that lasts 25 games.
+Instructions
+100 XP
 
+    Use the seq function to generate a list of odd numbers ranging from 1 to 25.
+    Use the function sapply to compute the probability, call it Pr, of winning during series of different lengths.
+    Then plot the result plot(N, Pr).
 
+# Lets see how to construct a R solution based on the statistic thinking framework we trained
+```{r}
+# Given a value 'p', the probability of winning the series for the underdog team B can be computed with the following function based on a Monte Carlo simulation:
+prob_win <- function(N, p=0.75){
+      B <- 10000
+      result <- replicate(B, {
+        b_win <- sample(c(1,0), N, replace = TRUE, prob = c(1-p, p))
+        sum(b_win)>=(N+1)/2
+        })
+      mean(result)
+    }
 
+# Assign the variable 'N' as the vector of series lengths. Use only odd numbers ranging from 1 to 25 games.
+N <- seq(1,25, 2)
+N
+# Apply the 'prob_win' function across the vector of series lengths to determine the probability that team B will win. Call this object `Pr`.
+Pr <- sapply(N, prob_win)
+Pr
+# Plot the number of games in the series 'N' on the x-axis and 'Pr' on the y-axis.
+plot(N, Pr)
+```
 
 
+## End of Assessment: The Addition Rule
 
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
 
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
 
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
 
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
 
 
 
@@ -1992,14 +2190,1217 @@ prize
 
 
 
+## Course  /  Section 1: Discrete Probability  /  1.4 Assessment: Discrete Probability
 
 
+# Introduction
 
+The following assessments allow you to practice the probability and coding skills you've learned in Section 1: Discrete Probability. You will likely find it useful to try out code to answer the problems using R on your own machine.
 
+You will benefit from using the following libraries:
 
+library(gtools)
+library(tidyverse)
 
 
+```{r}
+library(gtools)
+library(tidyverse)
 
+
+```
+
+
+
+## Question 1: Olympic running
+
+
+Assessment due Jun 15, 2022 10:43 AWST
+
+In the 200m dash finals in the Olympics, 8 runners compete for 3 medals (order matters). In the 2012 Olympics, 3 of the 8 runners were from Jamaica and the other 5 were from different countries. The three medals were all won by Jamaica (Usain Bolt, Yohan Blake, and Warren Weir).
+
+Use the information above to help you answer the following four questions.
+
+
+## Question 1a
+1/1 point (graded)
+How many different ways can the 3 medals be distributed across 8 runners?
+correct
+
+336
+Loading
+
+Explanation
+
+The following code can be used to determine the number of permutations:
+
+          library(gtools)
+medals <- permutations(8,3)
+nrow(medals)
+        
+
+You have used 2 of 10 attempts 
+
+
+# The thing is how can we understand this statistic case based on what we learned in the previous card game?  Does this makes sense to us????
+# =============================================================================================================================
+```{r}
+library(gtools)
+library(tidyverse)
+
+
+prizes <- c("Gold", "Silver", "Bronze") 
+runners <- c("Runner_01", "Runner_02", "Runner_03", "Runner_04", "Runner_05", "Runner_06", "Runner_07", "Runner_08")
+
+
+# Use your brain to think about this condition and the card game?  Why we shouldn't apple same process here???
+# ===============================================================================================================================
+prob <- expand.grid(prize = prizes, runner = runners)
+
+cases <- paste(prob$prize, prob$runner)
+
+
+outcomes <- permutations(8, 3, v=runners)
+#outcomes
+length(outcomes[, 1])
+```
+
+
+##  Question 1b
+1/1 point (graded)
+How many different ways can the three medals be distributed among the 3 runners from Jamaica?
+correct
+
+6
+Loading
+
+Explanation
+
+The following code can be used to determine the number of permutations:
+
+          jamaica < permutations(3,3)
+nrow(jamaica)
+        
+
+You have used 1 of 10 attempts 
+
+# Below is my own approach, withought reading the solution
+```{r}
+library(gtools)
+
+suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
+numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
+
+
+deck <- expand.grid(suit = suits, number = numbers)
+deck <- paste(deck$suit, deck$number)
+deck
+
+
+hands <- permutations(52, 2, v = deck)     # ===========================================================================
+
+length(hands[, 1])
+deck
+```
+
+
+##  Question 1c
+1/1 point (graded)
+What is the probability that all 3 medals are won by Jamaica?
+correct
+
+0.0179
+Loading
+
+Explanation
+
+The following code can be used to determine the probability:
+
+          nrow(jamaica)/nrow(medals)
+        
+
+You have used 1 of 10 attempts Some
+
+# Below is my own approach, withought reading the solution
+```{r}
+library(gtools)
+library(tidyverse)
+
+
+prizes <- c("Gold", "Silver", "Bronze") 
+runners <- c("Jamaica_01", "Jamaica_02", "Jamaica_03", "Runner_04", "Runner_05", "Runner_06", "Runner_07", "Runner_08")
+jamaicas <- c("Jamaica_01", "Jamaica_02", "Jamaica_03")
+
+
+# Use your brain to think about this condition and the card game?  Why we shouldn't apple same process here???
+prob <- expand.grid(prize = prizes, runner = runners)
+
+cases <- paste(prob$prize, prob$runner)
+
+
+all_outcomes <- permutations(8, 3, v=runners)
+jamaica_coucomes <- permutations(3, 3, v=jamaicas)
+length(all_outcomes[, 1])
+length(jamaica_coucomes[, 1])
+
+mean(all_outcomes[, 1] %in% jamaica_coucomes & all_outcomes[, 2] %in% jamaica_coucomes & all_outcomes[, 3] %in% jamaica_coucomes)
+```
+
+
+##  Question 1d
+1/1 point (graded)
+
+Run a Monte Carlo simulation on this vector representing the countries of the 8 runners in this race:
+
+      
+runners <- c("Jamaica", "Jamaica", "Jamaica", "USA", "Ecuador", "Netherlands", "France", "South Africa")
+
+    
+
+For each iteration of the Monte Carlo simulation, within a replicate() loop, select 3 runners representing the 3 medalists and check whether they are all from Jamaica. Repeat this simulation 10,000 times. Set the seed to 1 before running the loop.
+Calculate the probability that all the runners are from Jamaica.
+correct
+
+0.0165
+Loading
+
+Explanation
+
+Note that your answer will differ depending on whether you are using R 3.5 or earlier (0.0165) or R 3.6 or later (0.0174) because of the way set.seed works in different versions of R.
+
+The following code can be used to determine the probability:
+
+          set.seed(1)
+runners <- c("Jamaica", "Jamaica", "Jamaica", "USA", "Ecuador", "Netherlands", "France", "South Africa")
+B <- 10000
+all_jamaica <- replicate(B, {
+  results <- sample(runners, 3)
+  all(results == "Jamaica")
+})
+mean(all_jamaica)
+        
+
+# Below is my own approach, withought reading the solution
+```{r}
+set.seed(1, sample.kind="Rounding")
+
+
+runners <- c("Jamaica", "Jamaica", "Jamaica", "USA", "Ecuador", "Netherlands", "France", "South Africa")
+
+B <- 10000
+
+monte_carlo <- replicate(B, {
+  outcomes <- sample(runners, 3)
+  outcomes[1] == "Jamaica" & outcomes[2] == "Jamaica" & outcomes[3] == "Jamaica"
+})
+
+
+mean(monte_carlo)
+```
+
+
+
+
+
+
+
+
+# Question 2: Restaurant management
+
+
+
+Assessment due Jun 15, 2022 10:43 AWST
+
+Use the information below to answer the following five questions.
+
+A restaurant manager wants to advertise that his lunch special offers enough choices to eat different meals every day of the year. He doesn't think his current special actually allows that number of choices, but wants to change his special if needed to allow at least 365 choices.
+
+A meal at the restaurant includes 1 entree, 2 sides, and 1 drink. He currently offers a choice of 1 entree from a list of 6 options, a choice of 2 different sides from a list of 6 options, and a choice of 1 drink from a list of 2 options.
+
+
+## Question 2a
+1/1 point (graded)
+How many meal combinations are possible with the current menu?
+correct
+
+180
+Loading
+
+Explanation
+
+The following code can be used to determine the number of combinations:
+
+          6 * nrow(combinations(6,2)) * 2
+        
+
+You have used 2 of 10 attempts Some
+
+
+```{r}
+6 * 6*5 * 2
+
+
+all_entrees <- c("entree_1", "entree_2", "entree_3", "entree_4", "entree_5", "entree_6")
+sides <- c("side_1", "side_2", "side_3", "side_4", "side_5", "side_6")
+all_comb <- combinations(6, 2, v=sides)
+all_comb
+
+all_sides <- paste(all_comb[, 1], all_comb[, 2])
+all_sides
+
+all_drinks <- c("drink_1", "drink_2")
+
+
+special_offers <- expand.grid(all_entrees, all_sides, all_drinks)
+nrow(special_offers)
+
+```
+
+
+##  Question 2b
+1/1 point (graded)
+
+The manager has one additional drink he could add to the special.
+How many combinations are possible if he expands his original special to 3 drink options?
+correct
+
+270
+Loading
+
+Explanation
+
+The following code can be used to determine the number of combinations:
+
+          6 * nrow(combinations(6,2)) * 3
+        
+
+You have used 1 of 10 attempts Some
+
+```{r}
+all_entrees <- c("entree_1", "entree_2", "entree_3", "entree_4", "entree_5", "entree_6")
+sides <- c("side_1", "side_2", "side_3", "side_4", "side_5", "side_6")
+all_comb <- combinations(6, 2, v=sides)
+all_comb
+
+all_sides <- paste(all_comb[, 1], all_comb[, 2])
+all_sides
+
+all_drinks <- c("drink_1", "drink_2", "drink_3")
+
+
+special_offers <- expand.grid(all_entrees, all_sides, all_drinks)
+nrow(special_offers)
+```
+
+
+##  Question 2c
+1/1 point (graded)
+
+The manager decides to add the third drink but needs to expand the number of options. The manager would prefer not to change his menu further and wants to know if he can meet his goal by letting customers choose more sides.
+How many meal combinations are there if customers can choose from 6 entrees, 3 drinks, and select 3 sides from the current 6 options?
+correct
+
+360
+Loading
+
+Explanation
+
+The following code can be used to determine the number of combinations:
+
+          6 * nrow(combinations(6,3)) * 3
+        
+
+You have used 1 of 10 attempts Some
+
+```{r}
+all_entrees <- c("entree_1", "entree_2", "entree_3", "entree_4", "entree_5", "entree_6")
+sides <- c("side_1", "side_2", "side_3", "side_4", "side_5", "side_6")
+all_comb <- combinations(6, 3, v=sides)
+all_comb
+
+all_sides <- paste(all_comb[, 1], all_comb[, 2])
+all_sides
+
+all_drinks <- c("drink_1", "drink_2", "drink_3")
+
+
+special_offers <- expand.grid(all_entrees, all_sides, all_drinks)
+nrow(special_offers)
+```
+
+
+##  Question 2d
+1/1 point (graded)
+
+The manager is concerned that customers may not want 3 sides with their meal. He is willing to increase the number of entree choices instead, but if he adds too many expensive options it could eat into profits. He wants to know how many entree choices he would have to offer in order to meet his goal.
+
+- Write a function that takes a number of entree choices and returns the number of meal combinations possible given that number of entree options, 3 drink choices, and a selection of 2 sides from 6 options.
+
+- Use sapply() to apply the function to entree option counts ranging from 1 to 12.
+What is the minimum number of entree options required in order to generate more than 365 combinations?
+correct
+
+9
+Loading
+
+Explanation
+
+The following code can be used to determine the minimum number of entree options:
+
+          library(tidyverse)
+
+entree_choices <- function(x){
+  x * nrow(combinations(6,2)) * 3
+}
+
+combos <- sapply(1:12, entree_choices)
+
+data.frame(entrees = 1:12, combos = combos) %>%
+  filter(combos > 365) %>%
+  min(.$entrees)
+        
+
+You have used 2 of 10 attempts Some
+
+```{r}
+n <- seq(1:12)
+n
+
+
+# function to calculate probability of shared bdays across n people
+my_func <- function(n) {
+	all_entrees <- c(1:n)
+  sides <- c("side_1", "side_2", "side_3", "side_4", "side_5", "side_6")
+  all_comb <- combinations(6, 2, v=sides)
+  all_sides <- paste(all_comb[, 1], all_comb[, 2])
+  all_drinks <- c("drink_1", "drink_2", "drink_3")
+  
+  special_offers <- expand.grid(all_entrees, all_sides, all_drinks)
+  nrow(special_offers)
+  #mean(same_day)
+}
+
+
+
+sapply(n, my_func)
+```
+
+
+## Question 2e
+1/1 point (graded)
+
+The manager isn't sure he can afford to put that many entree choices on the lunch menu and thinks it would be cheaper for him to expand the number of sides. He wants to know how many sides he would have to offer to meet his goal of at least 365 combinations.
+
+- Write a function that takes a number of side choices and returns the number of meal combinations possible given 6 entree choices, 3 drink choices, and a selection of 2 sides from the specified number of side choices.
+
+- Use sapply() to apply the function to side counts ranging from 2 to 12.
+What is the minimum number of side options required in order to generate more than 365 combinations?
+correct
+
+7
+Loading
+
+Explanation
+
+The following code can be used to determine the minimum number of side options:
+
+          side_choices <- function(x){
+  6 * nrow(combinations(x, 2)) * 3
+}
+
+combos <- sapply(2:12, side_choices)
+
+data.frame(sides = 2:12, combos = combos) %>%
+  filter(combos > 365) %>%
+  min(.$sides)
+        
+
+You have used 1 of 10 attempts Some
+
+```{r}
+n <- seq(2,12)
+n
+
+
+# function to calculate probability of shared bdays across n people
+my_func <- function(n) {
+	all_entrees <- c("side_1", "side_2", "side_3", "side_4", "side_5", "side_6")
+  sides <- seq(n)
+  sides
+  all_comb <- combinations(n, 2, v=sides)
+  all_sides <- paste(all_comb[, 1], all_comb[, 2])
+  all_drinks <- c("drink_1", "drink_2", "drink_3")
+  
+  special_offers <- expand.grid(all_entrees, all_sides, all_drinks)
+  nrow(special_offers)
+  #mean(same_day)
+}
+
+
+
+sapply(n, my_func)
+```
+
+
+
+
+
+
+
+
+
+# Questions 3 and 4: Esophageal cancer and alcohol/tobacco use, part 1
+
+
+
+Assessment due Jun 15, 2022 10:43 AWST
+
+Case-control studies help determine whether certain exposures are associated with outcomes such as developing cancer. The built-in dataset esoph contains data from a case-control study in France comparing people with esophageal cancer (cases, counted in ncases) to people without esophageal cancer (controls, counted in ncontrols) that are carefully matched on a variety of demographic and medical characteristics. The study compares alcohol intake in grams per day (alcgp) and tobacco intake in grams per day (tobgp) across cases and controls grouped by age range (agegp).
+
+The dataset is available in base R and can be called with the variable name esoph:
+
+head(esoph)
+
+You will be using this dataset to answer the following four multi-part questions (Questions 3-6).
+
+You may wish to use the tidyverse package:
+
+library(tidyverse)
+
+The following three parts have you explore some basic characteristics of the dataset.
+
+Each row contains one group of the experiment. Each group has a different combination of age, alcohol consumption, and tobacco consumption. The number of cancer cases and number of controls (individuals without cancer) are reported for each group.
+
+
+##  Question 3a
+1/1 point (graded)
+How many groups are in the study?
+correct
+
+88
+Loading
+
+Explanation
+
+You can find the number of groups using nrow(esoph).
+You have used 1 of 10 attempts Some
+
+```{r}
+esoph
+
+
+
+library(tidyverse)
+
+
+nrow(esoph)
+
+
+
+all_cases <- esoph %>%
+  filter(ncases != 0) 
+
+
+all_cases <- sum(all_cases$ncases)
+all_cases
+
+all_controls <- sum(esoph$ncontrols)
+all_controls
+```
+
+
+##  Question 3b
+1/1 point (graded)
+How many cases are there?
+
+Save this value as all_cases for later problems.
+correct
+
+200
+Loading
+
+Explanation
+
+You can find the number of cases using this code:
+
+          all_cases <- sum(esoph$ncases)
+all_cases
+        
+
+You have used 2 of 10 attempts Some
+
+
+## ##  Question 3c
+1/1 point (graded)
+How many controls are there?
+
+Save this value as all_controls for later problems.
+correct
+
+Loading
+You have used 1 of 10 attempts Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+Correct (1/1 point) 
+
+```{r}
+esoph %>% 
+  mutate(n_ncases = sum(ncases),
+         n_ncontrols = sum(ncontrols), 
+         prob = n_ncases/(n_ncases + n_ncontrols)) %>%
+  group_by(alcgp) %>%
+  select(alcgp, n_ncases, n_ncontrols, prob) %>%
+  unique()
+```
+
+```
+Teams %>% 
+  filter(yearID %in% 1961:2001) %>%
+  mutate(Singles = (H - HR - X2B - X3B)/G, BB = BB/G, HR = HR/G) %>%
+  summarize(cor(BB, HR), cor(Singles, HR), cor(BB, Singles))
+```
+
+
+##  Question 4a
+1/1 point (graded)
+What is the probability that a subject in the highest alcohol consumption group is a cancer case?
+
+Report your answer to 3 significant figures.
+correct
+
+0.672 or 0.402
+Loading
+
+Explanation
+
+You can find the probability using this code:
+
+          esoph %>%
+  filter(alcgp == "120+") %>%
+  summarize(ncases = sum(ncases), ncontrols = sum(ncontrols)) %>%
+  mutate(p_case = ncases / (ncases + ncontrols)) %>%
+  pull(p_case)
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 2 of 10 attempts Some
+
+```{r}
+high_alco <- esoph %>%
+  filter(alcgp == "120+")
+
+
+high_alco
+
+sum(high_alco$ncases)/(sum(high_alco$ncases) + sum(high_alco$ncontrols))
+```
+
+
+##   Question 4b
+1/1 point (graded)
+What is the probability that a subject in the lowest alcohol consumption group is a cancer case?
+
+Report your answer to 3 significant figures.
+correct
+
+0.0699 or 0.0653
+Loading
+
+Explanation
+
+You can find the probability using this code:
+
+          esoph %>%
+  filter(alcgp == "0-39g/day") %>%
+  summarize(ncases = sum(ncases), ncontrols = sum(ncontrols)) %>%
+  mutate(p_case = ncases / (ncases + ncontrols)) %>%
+  pull(p_case)
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 3 of 10 attempts Some
+
+```{r}
+esoph
+
+
+low_alco <- esoph %>%
+  filter(alcgp == "0-39g/day")
+
+
+low_alco
+
+sum(low_alco$ncases)/(sum(low_alco$ncases) + sum(low_alco$ncontrols))
+```
+
+
+##  Question 4c
+1/1 point (graded)
+Given that a person is a case, what is the probability that they smoke 10g or more a day?
+correct
+
+0.61
+Loading
+
+Explanation
+
+You can find the probability using this code:
+
+          tob_cases <- esoph %>%
+  filter(tobgp != "0-9g/day") %>%
+  pull(ncases) %>%
+  sum()
+
+tob_cases/all_cases
+
+        
+
+You have used 1 of 10 attempts Some
+
+```{r}
+esoph
+
+
+cas <- esoph %>%
+  filter(ncases != 0)
+
+
+Less10 <- cas %>%
+  filter(tobgp == "0-9g/day")
+
+Less10
+
+
+
+1- sum(Less10$ncases)/sum(cas$ncases)
+```
+
+
+##  Question 4d
+1/1 point (graded)
+Given that a person is a control, what is the probability that they smoke 10g or more a day?
+
+Report your answer to 3 significant figures.
+correct
+
+0.423 or 0.462
+Loading
+
+Explanation
+
+You can find the probability using this code:
+
+          tob_controls <- esoph %>%
+  filter(tobgp != "0-9g/day") %>%
+  pull(ncontrols) %>%
+  sum()
+
+tob_controls/all_controls
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 2 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+to_df <- esoph %>%
+  filter(ncontrols != 0) %>%
+  group_by(tobgp) %>%
+  mutate(NO = sum(ncontrols)) %>%
+  select(tobgp, NO) %>%
+  unique()
+
+to_df
+
+
+not10 <- to_df %>%
+  filter(!tobgp %in% "0-9g/day") %>%
+  pull(NO) %>%
+  sum
+not10
+
+not10/sum(to_df$NO)
+
+```
+
+
+
+
+
+
+
+
+## Questions 5 and 6: Esophageal cancer and alcohol/tobacco use, part 2
+
+
+Assessment due Jun 15, 2022 10:43 AWST
+
+The following four parts look at probabilities related to alcohol and tobacco consumption among the cases.
+
+
+## Question 5a
+1.0/1.0 point (graded)
+For cases, what is the probability of being in the highest alcohol group?
+correct
+
+0.225
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          high_alc_cases <- esoph %>%
+  filter(alcgp == "120+") %>%
+  pull(ncases) %>%
+  sum()
+
+p_case_high_alc <- high_alc_cases/all_cases
+p_case_high_alc
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+cases_alcogroup <- esoph %>%
+  filter(ncases != 0) %>%
+  group_by(alcgp) %>%
+  mutate(n_cases = sum(ncases)) %>%
+  select(alcgp, n_cases) %>%
+  unique()
+
+cases_alcogroup
+
+
+cases_highalco <- cases_alcogroup %>%
+  filter(alcgp == "120+")
+
+cases_highalco$n_cases/sum(cases_alcogroup$n_cases)
+
+45/(45+29+75+51)
+```
+
+
+##  Question 5b
+1.0/1.0 point (graded)
+For cases, what is the probability of being in the highest tobacco group?
+correct
+
+0.155
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          high_tob_cases <- esoph %>%
+  filter(tobgp == "30+") %>%
+  pull(ncases) %>%
+  sum()
+
+p_case_high_tob <- high_tob_cases/all_cases
+p_case_high_tob
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+cases_togroup <- esoph %>%
+  filter(ncases != 0) %>%
+  group_by(tobgp) %>%
+  mutate(n_cases = sum(ncases)) %>%
+  select(tobgp, n_cases) %>%
+  unique()
+
+cases_togroup
+
+
+cases_highto <- cases_togroup %>%
+  filter(tobgp == "30+")
+
+cases_highto$n_cases/sum(cases_togroup$n_cases)
+
+31/(31+78+33+58)
+```
+
+
+##  Question 5c
+1.0/1.0 point (graded)
+For cases, what is the probability of being in the highest alcohol group and the highest tobacco group?
+correct
+
+0.05
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          high_alc_tob_cases <- esoph %>%
+  filter(alcgp == "120+" & tobgp == "30+") %>%
+  pull(ncases) %>%
+  sum()
+
+p_case_high_alc_tob <- high_alc_tob_cases/all_cases
+p_case_high_alc_tob
+        
+
+You have used 2 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+cases_2group <- esoph %>%
+  filter(ncases != 0) %>%
+  group_by(alcgp, tobgp) %>%
+  mutate(n_cases = sum(ncases)) %>%
+  select(alcgp, tobgp, n_cases) %>%
+  unique()
+
+cases_2group
+
+
+both_high <- cases_2group %>%
+  filter(alcgp == "120+" & tobgp == "30+")
+
+both_high$n_cases/sum(cases_2group$n_cases)
+10/(5+5+10+7+6+19+19+9+34+9+7+16+15+17+10+12)
+```
+
+
+##  Question 5d
+1.0/1.0 point (graded)
+For cases, what is the probability of being in the highest alcohol group or the highest tobacco group?
+correct
+
+0.33
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          p_case_either_highest <- p_case_high_alc + p_case_high_tob - p_case_high_alc_tob
+p_case_either_highest
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+cases_2group <- esoph %>%
+  filter(ncases != 0) %>%
+  group_by(alcgp, tobgp) %>%
+  mutate(n_cases = sum(ncases)) %>%
+  select(alcgp, tobgp, n_cases) %>%
+  unique()
+
+cases_2group
+
+
+or_high <- cases_2group %>%
+  filter(alcgp == "120+" | tobgp == "30+")
+
+sum(or_high$n_cases)/sum(cases_2group$n_cases)
+(12+16+7+9+7+10+5)/(5+5+10+7+6+19+19+9+34+9+7+16+15+17+10+12)
+```
+
+
+##  Question 6a
+1.0/1.0 point (graded)
+For controls, what is the probability of being in the highest alcohol group?
+
+Report your answer to 3 significant figures.
+correct
+
+0.0284 or 0.0687
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          high_alc_controls <- esoph %>%
+  filter(alcgp == "120+") %>%
+  pull(ncontrols) %>%
+  sum()
+
+p_control_high_alc <- high_alc_controls/all_controls
+p_control_high_alc
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 1 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+cont_alcogroup <- esoph %>%
+  filter(ncontrols != 0) %>%
+  group_by(alcgp) %>%
+  mutate(n_controls = sum(ncontrols)) %>%
+  select(alcgp, n_controls) %>%
+  unique()
+
+cont_alcogroup
+
+
+alco_high <- cont_alcogroup %>%
+  filter(alcgp == "120+")
+
+sum(alco_high$n_controls)/sum(cont_alcogroup$n_controls)
+```
+
+
+##  Question 6b
+1.0/1.0 point (graded)
+How many times more likely are cases than controls to be in the highest alcohol group?
+
+Report your answer to 3 significant figures.
+correct
+
+7.93 or 3.27
+Loading
+
+Explanation
+
+This calculated using the following code:
+
+p_case_high_alc/p_control_high_alc
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 2 of 10 attempts Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button. 
+
+
+# Keep thinking, instead of jumpping or guessing or assumption
+```{r}
+cas_alcogroup <- esoph %>%
+  filter(ncases != 0) %>%
+  group_by(alcgp) %>%
+  mutate(n_ncases = sum(ncases)) %>%
+  select(alcgp, n_ncases) %>%
+  unique()
+
+cas_alcogroup
+
+
+cas_alcohigh <- cas_alcogroup %>%
+  filter(alcgp == "120+")
+
+
+
+con_alcogroup <- esoph %>%
+  filter(ncontrols != 0) %>%
+  group_by(alcgp) %>%
+  mutate(n_ncontrols = sum(ncontrols)) %>%
+  select(alcgp, n_ncontrols) %>%
+  unique()
+
+con_alcogroup
+
+
+con_alcohigh <- con_alcogroup %>%
+  filter(alcgp == "120+")
+
+(cas_alcohigh$n_ncases/sum(cas_alcogroup$n_ncases))/(con_alcohigh$n_ncontrols/sum(con_alcogroup$n_ncontrols))
+```
+
+
+##  Question 6c
+1/1 point (graded)
+For controls, what is the probability of being in the highest tobacco group?
+
+Report your answer to 3 significant figures.
+correct
+
+0.0658 or 0.0841
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          high_tob_controls <- esoph %>%
+  filter(tobgp == "30+") %>%
+  pull(ncontrols) %>%
+  sum()
+
+p_control_high_tob <- high_tob_controls/all_controls
+p_control_high_tob
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 1 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+conts <- esoph %>%
+  filter(ncontrols != 0)
+
+cont_hightob <- conts %>%
+  filter(tobgp == "30+")
+
+
+cont_hightob
+
+
+sum(cont_hightob$ncontrols)/sum(conts$ncontrols)
+```
+
+
+##  Question 6d
+1/1 point (graded)
+For controls, what is the probability of being in the highest alcohol group and the highest tobacco group?
+
+Report your answer to 3 significant figures.
+correct
+
+0.00387 or 0.0133
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          high_alc_tob_controls <- esoph %>%
+  filter(alcgp == "120+" & tobgp == "30+") %>%
+  pull(ncontrols) %>%
+  sum()
+
+p_control_high_alc_tob <- high_alc_tob_controls/all_controls
+p_control_high_alc_tob
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 1 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+conts <- esoph %>%
+  filter(ncontrols != 0)
+
+cont_2high <- conts %>%
+  filter(tobgp == "30+" & alcgp == "120+")
+
+
+cont_2high
+
+
+sum(cont_2high$ncontrols)/sum(conts$ncontrols)
+```
+
+
+##  Question 6e
+1/1 point (graded)
+For controls, what is the probability of being in the highest alcohol group or the highest tobacco group?
+
+Report your answer to 3 significant figures.
+correct
+
+0.0903 or 0.139
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          p_control_either_highest <- p_control_high_alc + p_control_high_tob - p_control_high_alc_tob
+p_control_either_highest
+        
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 1 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+conts <- esoph %>%
+  filter(ncontrols != 0)
+
+cont_2high <- conts %>%
+  filter(tobgp == "30+" | alcgp == "120+")
+
+
+cont_2high
+
+
+sum(cont_2high$ncontrols)/sum(conts$ncontrols)
+```
+
+
+##  Question 6f
+1/1 point (graded)
+How many times more likely are cases than controls to be in the highest alcohol group or the highest tobacco group?
+
+Report your answer to 3 significant figures.
+correct
+
+3.65 or 2.37
+Loading
+
+Explanation
+
+This calculated using the following code:
+
+p_case_either_highest/p_control_either_highest
+
+Note that depending on your version of R and the dataset you will get a different answer because of bug fixes to the dataset!
+You have used 3 of 10 attempts Some
+
+
+```{r}
+esoph
+
+
+conts <- esoph %>%
+  filter(ncontrols != 0)
+
+cont_2high <- conts %>%
+  filter(tobgp == "30+" | alcgp == "120+")
+
+
+cont_2high
+
+
+
+cas <- esoph %>%
+  filter(ncases != 0)
+
+cas_2high <- cas %>%
+  filter(tobgp == "30+" | alcgp == "120+")
+
+
+cas_2high
+
+
+(sum(cas_2high$ncases)/sum(cas$ncases))/(sum(cont_2high$ncontrols)/sum(conts$ncontrols))
+# (cas_alcohigh$n_ncases/sum(cas_alcogroup$n_ncases))/(con_alcohigh$n_ncontrols/sum(con_alcogroup$n_ncontrols))
+```
+
+
+## The 1.4 Assessment: Discrete Probability were designed poorly, you are not trying hard enough, just add up similar questions
+
+discussion posted less than a minute ago by john_hhu2020
+
+If you can update the part, it would be a good course, but the instructor seems not really care about the statistic training he can provides to the audience. I suppose he can talked about more info about Montely Hall problem, instead of simulation
 
 
 
