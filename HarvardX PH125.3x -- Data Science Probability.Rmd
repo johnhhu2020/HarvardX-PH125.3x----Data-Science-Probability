@@ -5,32 +5,6 @@ date: '2022-05-30'
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-
-
 
 
 
@@ -105,27 +79,27 @@ https://rafalab.github.io/dsbook/probability.html#discrete-probability
 
 
 
-![](C:/Users/JJ/Pictures/discrete probability.png)
+![](C:/Users/qp/Pictures/discrete probability.png)
 
-![](C:/Users/JJ/Pictures/googles auto complete of what are the chance of ....png)
+![](C:/Users/qp/Pictures/googles auto complete of what are the chance of ....png)
 
-![](C:/Users/JJ/Pictures/having rains tomorrow.png)
+![](C:/Users/qp/Pictures/having rains tomorrow.png)
 
-![](C:/Users/JJ/Pictures/picking beads rnadomly from a urn.png)
+![](C:/Users/qp/Pictures/picking beads rnadomly from a urn.png)
 
-![](C:/Users/JJ/Pictures/a precise definition giving that there are 5 possible outcomes of which 2 satisfy the condition necessary.png)
+![](C:/Users/qp/Pictures/a precise definition giving that there are 5 possible outcomes of which 2 satisfy the condition necessary.png)
 
-![](C:/Users/JJ/Pictures/A more tangible way to think about the probability of an event is as a condition of times the events occurs.png)
+![](C:/Users/qp/Pictures/A more tangible way to think about the probability of an event is as a condition of times the events occurs.png)
 
-![](C:/Users/JJ/Pictures/paobability of a notation.png)
+![](C:/Users/qp/Pictures/paobability of a notation.png)
 
-![](C:/Users/JJ/Pictures/term event to refering things can happen when something happens by chance.png)
+![](C:/Users/qp/Pictures/term event to refering things can happen when something happens by chance.png)
 
-![in data science we will often deal with continuous variables.png](C:/Users/JJ/Pictures/in data science we will often deal with continuous variables.png)
+![in data science we will often deal with continuous variables.png](C:/Users/qp/Pictures/in data science we will often deal with continuous variables.png)
 
-![](C:/Users/JJ/Pictures/events sample in data science dealing with continuous variable.png)
+![](C:/Users/qp/Pictures/events sample in data science dealing with continuous variable.png)
 
-![](C:/Users/JJ/Pictures/then we write it in a more mathematical form.png)
+![](C:/Users/qp/Pictures/then we write it in a more mathematical form.png)
 
 
 
@@ -191,32 +165,32 @@ prop.table(tab)
 
 
 
-![](C:/Users/JJ/Pictures/computer provides us the random number enerators.png)
+![](C:/Users/qp/Pictures/computer provides us the random number enerators.png)
 
-![](C:/Users/JJ/Pictures/sample function in r helps us apply a random experiment.png)
+![](C:/Users/qp/Pictures/sample function in r helps us apply a random experiment.png)
 
-![](C:/Users/JJ/Pictures/use rep function to create a urn includes 2 red and 3 blue.png)
+![](C:/Users/qp/Pictures/use rep function to create a urn includes 2 red and 3 blue.png)
 
 
-![](C:/Users/JJ/Pictures/and now we can produce 1 random outcome.png)
+![](C:/Users/qp/Pictures/and now we can produce 1 random outcome.png)
 
-![](C:/Users/JJ/Pictures/monte carlo simulation.png)
+![](C:/Users/qp/Pictures/monte carlo simulation.png)
 
-![](C:/Users/JJ/Pictures/replicate function premits us to repeat same task any number of time we want.png)
+![](C:/Users/qp/Pictures/replicate function premits us to repeat same task any number of time we want.png)
 
-![](C:/Users/JJ/Pictures/now we repeat the random event 10 thousand times and check the outcome.png)
+![](C:/Users/qp/Pictures/now we repeat the random event 10 thousand times and check the outcome.png)
 
-![](C:/Users/JJ/Pictures/we can use table function to see the distribution.png)
+![](C:/Users/qp/Pictures/we can use table function to see the distribution.png)
 
-![](C:/Users/JJ/Pictures/and use the prop.table function to see the proportions.png)
+![](C:/Users/qp/Pictures/and use the prop.table function to see the proportions.png)
 
-![](C:/Users/JJ/Pictures/default sample function repeat offers us without replacement experiment.png)
+![](C:/Users/qp/Pictures/default sample function repeat offers us without replacement experiment.png)
 
-![](C:/Users/JJ/Pictures/sample one by one and we get this, without replacement.png)
+![](C:/Users/qp/Pictures/sample one by one and we get this, without replacement.png)
 
-![](C:/Users/JJ/Pictures/and now we don't have enough beads in urn.png)
+![](C:/Users/qp/Pictures/and now we don't have enough beads in urn.png)
 
-![](C:/Users/JJ/Pictures/now check what happens on your own what happends if we change default replace arg from FALSE to T.png)
+![](C:/Users/qp/Pictures/now check what happens on your own what happends if we change default replace arg from FALSE to T.png)
 
 
 
@@ -325,9 +299,9 @@ https://rafalab.github.io/dsbook/probability.html#discrete-probability-distribut
 
 
 
-![for each bead type, the proportion defines the distribution](C:/Users/JJ/Pictures/beads in a urn for each bead type.png)
+![for each bead type, the proportion defines the distribution](C:/Users/qp/Pictures/beads in a urn for each bead type.png)
 
-![categorical data makes it easy to define probability distribution](C:/Users/JJ/Pictures/this proportion defines the probability for each group.png)
+![categorical data makes it easy to define probability distribution](C:/Users/qp/Pictures/this proportion defines the probability for each group.png)
 
 (  *A discrete probability distribution counts occurrences that have countable or finite outcomes. This is in contrast to a continuous distribution, where outcomes can fall anywhere on a continuum. Common examples of discrete distribution include the binomial, Poisson, and Bernoulli distributions.*  )
 
@@ -389,41 +363,41 @@ We can expand the multiplication rule for dependent events to more than 2 events
 
 
 
-![](C:/Users/JJ/Pictures/definition of independent.png)
+![](C:/Users/qp/Pictures/definition of independent.png)
 
-![](C:/Users/JJ/Pictures/toss coin is a example of independent.png)
+![](C:/Users/qp/Pictures/toss coin is a example of independent.png)
 
-![with replacement](C:/Users/JJ/Pictures/pick bead from urn is also a independent.png)
+![with replacement](C:/Users/qp/Pictures/pick bead from urn is also a independent.png)
 
-![The first outcome affects the second](C:/Users/JJ/Pictures/not independent event example are card games.png)
+![The first outcome affects the second](C:/Users/qp/Pictures/not independent event example are card games.png)
 
-![not independent events are without replacement card games.png](C:/Users/JJ/Pictures/not independent events are without replacement card games.png)
+![not independent events are without replacement card games.png](C:/Users/qp/Pictures/not independent events are without replacement card games.png)
 
-![compute the probability that the second dealt card is king, given that the first was king](C:/Users/JJ/Pictures/when events are not independent, conditional probabilities are useful and necessary.png)
+![compute the probability that the second dealt card is king, given that the first was king](C:/Users/qp/Pictures/when events are not independent, conditional probabilities are useful and necessary.png)
 
-![](C:/Users/JJ/Pictures/in probability we use following notation to represent conditional probability.png)
+![](C:/Users/qp/Pictures/in probability we use following notation to represent conditional probability.png)
 
-![](C:/Users/JJ/Pictures/notice when 2 events are independent, we have following equation.png)
+![](C:/Users/qp/Pictures/notice when 2 events are independent, we have following equation.png)
 
-![](C:/Users/JJ/Pictures/applies the multiplication rule to calculate the probability of 2 events occurring.png)
+![](C:/Users/qp/Pictures/applies the multiplication rule to calculate the probability of 2 events occurring.png)
 
-![so the probability of a and b is equal to the probability of a multiplied by the probability of b given that a already happened.png](C:/Users/JJ/Pictures/so the probability of a and b is equal to the probability of a multiplied by the probability of b given that a already happened.png)
+![so the probability of a and b is equal to the probability of a multiplied by the probability of b given that a already happened.png](C:/Users/qp/Pictures/so the probability of a and b is equal to the probability of a multiplied by the probability of b given that a already happened.png)
 
-![](C:/Users/JJ/Pictures/blackjack game winning rate is you first get ace card then get 10 or face card.png)
+![](C:/Users/qp/Pictures/blackjack game winning rate is you first get ace card then get 10 or face card.png)
 
-![](C:/Users/JJ/Pictures/the multiplicative rule also applies to more then two events.png)
+![](C:/Users/qp/Pictures/the multiplicative rule also applies to more then two events.png)
 
-![](C:/Users/JJ/Pictures/for independent events, the multiplication rule becomes simpler.png)
+![](C:/Users/qp/Pictures/for independent events, the multiplication rule becomes simpler.png)
 
-![](C:/Users/JJ/Pictures/how to know if the events are independent or not.png)
+![](C:/Users/qp/Pictures/how to know if the events are independent or not.png)
 
-![](C:/Users/JJ/Pictures/having mustache and beard.png)
+![](C:/Users/qp/Pictures/having mustache and beard.png)
 
-![](C:/Users/JJ/Pictures/1 in 10 men has beard and 1 in 5 men has mustache.png)
+![](C:/Users/qp/Pictures/1 in 10 men has beard and 1 in 5 men has mustache.png)
 
-![assume independence, not true at all.png](C:/Users/JJ/Pictures/assume independence, not true at all.png)
+![assume independence, not true at all.png](C:/Users/qp/Pictures/assume independence, not true at all.png)
 
-![](C:/Users/JJ/Pictures/The conditional probability of a man having a mustache, conditional on them.png)
+![](C:/Users/qp/Pictures/The conditional probability of a man having a mustache, conditional on them.png)
 
 
 
@@ -580,7 +554,7 @@ Here is a screenshot of what DataCamp looks like:
 
 Image of DataCamp Platform
 
-![](C:/Users/JJ/Pictures/datacamp interface.png)
+![](C:/Users/qp/Pictures/datacamp interface.png)
 
 There are two ways to send commands from the editor to the console:
 
@@ -590,7 +564,7 @@ There are two ways to send commands from the editor to the console:
 
 Tip: DataCamp suggests useful keyboard shortcuts after most exercises.
 
-![](C:/Users/JJ/Pictures/datacamp exercise pannel.png)
+![](C:/Users/qp/Pictures/datacamp exercise pannel.png)
 
 After submit answer on the platform
 
@@ -1024,9 +998,9 @@ sum(first_card %in% kings & second_card %in% kings)/sum(first_card %in% kings)
 ```
 
 # =============================================================================================================================================
-![how to think this equation in the right way](C:/Users/JJ/Pictures/Screenshot_20220612-121142_Gallery.jpg)
+![how to think this equation in the right way](C:/Users/qp/Pictures/Screenshot_20220612-121142_Gallery.jpg)
 
-![Yes, this image has to be here](C:/Users/JJ/Pictures/20220608_225119.jpg)
+![Yes, this image has to be here](C:/Users/qp/Pictures/20220608_225119.jpg)
 
 ```{r}
 combinations(3, 2)
@@ -1132,61 +1106,61 @@ mean(result)
 
 
 
-![](C:/Users/JJ/Pictures/our very first example is 5 beads in a urn.png)
+![](C:/Users/qp/Pictures/our very first example is 5 beads in a urn.png)
 
-![](C:/Users/JJ/Pictures/here is the probability of randomly picking a blue beads from the urn.png)
+![](C:/Users/qp/Pictures/here is the probability of randomly picking a blue beads from the urn.png)
 
-![](C:/Users/JJ/Pictures/r function expand.grid.png)
+![](C:/Users/qp/Pictures/r function expand.grid.png)
 
-![](C:/Users/JJ/Pictures/r function paste.png)
+![](C:/Users/qp/Pictures/r function paste.png)
 
-![](C:/Users/JJ/Pictures/we use paste function to create strings be joining smaller strings.png)
+![](C:/Users/qp/Pictures/we use paste function to create strings be joining smaller strings.png)
 
-![](C:/Users/JJ/Pictures/the paste function performs the operation elements wise.png)
+![](C:/Users/qp/Pictures/the paste function performs the operation elements wise.png)
 
-![](C:/Users/JJ/Pictures/expand.grid gives us all the combination of two lists.png)
+![](C:/Users/qp/Pictures/expand.grid gives us all the combination of two lists.png)
 
-![](C:/Users/JJ/Pictures/using what we just leant r functions, expand.grid and paste to generate a deck of cards.png)
+![](C:/Users/qp/Pictures/using what we just leant r functions, expand.grid and paste to generate a deck of cards.png)
 
-![now, how about the second card being a king, given that the first card is king ??? Think about it](C:/Users/JJ/Pictures/this is the first king probability.png)
+![now, how about the second card being a king, given that the first card is king ??? Think about it](C:/Users/qp/Pictures/this is the first king probability.png)
 
-![Note: these functions are available in gtools package](C:/Users/JJ/Pictures/we are going to use the combinations function and permutations function.png)
+![Note: these functions are available in gtools package](C:/Users/qp/Pictures/we are going to use the combinations function and permutations function.png)
 
-![](C:/Users/JJ/Pictures/what does a permutations function does.png)
+![](C:/Users/qp/Pictures/what does a permutations function does.png)
 
-![Notice: here the order maters, and once we pick a number, it cant appear again](C:/Users/JJ/Pictures/here we list all the way we can choose 2 numbers from the list 1 2 3 4 5.png)
+![Notice: here the order maters, and once we pick a number, it cant appear again](C:/Users/qp/Pictures/here we list all the way we can choose 2 numbers from the list 1 2 3 4 5.png)
 
-![](C:/Users/JJ/Pictures/we can add vector for this permutations function.png)
+![](C:/Users/qp/Pictures/we can add vector for this permutations function.png)
 
-![](C:/Users/JJ/Pictures/a sample permutations.png)
+![](C:/Users/qp/Pictures/a sample permutations.png)
 
-![](C:/Users/JJ/Pictures/and we will define grabbing first card and the second card using this code.png)
+![](C:/Users/qp/Pictures/and we will define grabbing first card and the second card using this code.png)
 
-![](C:/Users/JJ/Pictures/check how many cases have first card as king, but I failed running this code.png)
+![](C:/Users/qp/Pictures/check how many cases have first card as king, but I failed running this code.png)
 
-![](C:/Users/JJ/Pictures/notice how we calculate the conditional probability.png)
+![](C:/Users/qp/Pictures/notice how we calculate the conditional probability.png)
 
-![](C:/Users/JJ/Pictures/using proportions will also gives us the answers.png)
+![](C:/Users/qp/Pictures/using proportions will also gives us the answers.png)
 
-![](C:/Users/JJ/Pictures/multiplication rule equation.png)
+![](C:/Users/qp/Pictures/multiplication rule equation.png)
 
-![](C:/Users/JJ/Pictures/combinations.png)
+![](C:/Users/qp/Pictures/combinations.png)
 
-![](C:/Users/JJ/Pictures/here is the permutations function.png)
+![](C:/Users/qp/Pictures/here is the permutations function.png)
 
-![](C:/Users/JJ/Pictures/and here is the outcome from a combination function.png)
+![](C:/Users/qp/Pictures/and here is the outcome from a combination function.png)
 
-![](C:/Users/JJ/Pictures/compute the natural 21 in blackjack.png)
+![](C:/Users/qp/Pictures/compute the natural 21 in blackjack.png)
 
-![But be careful how combination function wroks, as this code seems counterintuitive](C:/Users/JJ/Pictures/using thie piece of code to compute the probability of natural 21, where aces or faced card order doesn't matter.png)
+![But be careful how combination function wroks, as this code seems counterintuitive](C:/Users/qp/Pictures/using thie piece of code to compute the probability of natural 21, where aces or faced card order doesn't matter.png)
 
-![](C:/Users/JJ/Pictures/we get the same answer, and this is because combinations function works and how it list the probabilities.png)
+![](C:/Users/qp/Pictures/we get the same answer, and this is because combinations function works and how it list the probabilities.png)
 
-![](C:/Users/JJ/Pictures/use the sample function to simulation draw a card without replacement with default replace vector.png)
+![](C:/Users/qp/Pictures/use the sample function to simulation draw a card without replacement with default replace vector.png)
 
-![](C:/Users/JJ/Pictures/here we sue monte carlo simulation with this code to draw two card from the deck without replacement.png)
+![](C:/Users/qp/Pictures/here we sue monte carlo simulation with this code to draw two card from the deck without replacement.png)
 
-![](C:/Users/JJ/Pictures/and we can repeat this over and over and then we get a very good approximation of probability.png)
+![](C:/Users/qp/Pictures/and we can repeat this over and over and then we get a very good approximation of probability.png)
 
 
 
@@ -1257,17 +1231,17 @@ mean(birthdaycheck)
 
 
 
-![](C:/Users/JJ/Pictures/in a random selected class of 50 people, the chance of at least two people share birthday.png)
+![](C:/Users/qp/Pictures/in a random selected class of 50 people, the chance of at least two people share birthday.png)
 
-![](C:/Users/JJ/Pictures/using r to generate randomly selected 50 birthdays.png)
+![](C:/Users/qp/Pictures/using r to generate randomly selected 50 birthdays.png)
 
-![](C:/Users/JJ/Pictures/duplicated function.png)
+![](C:/Users/qp/Pictures/duplicated function.png)
 
-![](C:/Users/JJ/Pictures/a example of duplicated function.png)
+![](C:/Users/qp/Pictures/a example of duplicated function.png)
 
-![](C:/Users/JJ/Pictures/we can use any function combined with duplicated function to check if duplicate happened in list.png)
+![](C:/Users/qp/Pictures/we can use any function combined with duplicated function to check if duplicate happened in list.png)
 
-![](C:/Users/JJ/Pictures/the probability of at least two classmates sharing same birthday in 50 people sized class is freaking high.png)
+![](C:/Users/qp/Pictures/the probability of at least two classmates sharing same birthday in 50 people sized class is freaking high.png)
 
 
 
@@ -1443,7 +1417,7 @@ plot(n, prob)
 lines(n, eprob, col = "red")
 ```
 
-![](C:/Users/JJ/Pictures/the monte carlo simulation and the calculation outcome were almost identical.png)
+![](C:/Users/qp/Pictures/the monte carlo simulation and the calculation outcome were almost identical.png)
 
 
 
@@ -1453,31 +1427,31 @@ lines(n, eprob, col = "red")
 
 
 
-![](C:/Users/JJ/Pictures/say we are digging on the same birthday peobability problem, when would the probability of at least 2 people share birthday larger than 50%.png)
+![](C:/Users/qp/Pictures/say we are digging on the same birthday peobability problem, when would the probability of at least 2 people share birthday larger than 50%.png)
 
-![](C:/Users/JJ/Pictures/and how about larger than larger than 75%.png)
+![](C:/Users/qp/Pictures/and how about larger than larger than 75%.png)
 
-![This image ment to be here](C:/Users/JJ/Pictures/20220609_233459.jpg)
+![This image ment to be here](C:/Users/qp/Pictures/20220609_233459.jpg)
 
-![](C:/Users/JJ/Pictures/can you see it, how can we change the variable n to change random pick group size and check if ther is same birthday shared within.png)
+![](C:/Users/qp/Pictures/can you see it, how can we change the variable n to change random pick group size and check if ther is same birthday shared within.png)
 
-![](C:/Users/JJ/Pictures/r provides the calculation element wise, and for loop in r pperforms bad.png)
+![](C:/Users/qp/Pictures/r provides the calculation element wise, and for loop in r pperforms bad.png)
 
-![On any function](C:/Users/JJ/Pictures/r sapply function permits us to perform element-wise operations.png)
+![On any function](C:/Users/qp/Pictures/r sapply function permits us to perform element-wise operations.png)
 
-![](C:/Users/JJ/Pictures/and we can make a plot with plot function on at least 2 people share birthday from 1 through 30 people sized group.png)
+![](C:/Users/qp/Pictures/and we can make a plot with plot function on at least 2 people share birthday from 1 through 30 people sized group.png)
 
-![](C:/Users/JJ/Pictures/lets start with the first person has a unique birthday.png)
+![](C:/Users/qp/Pictures/lets start with the first person has a unique birthday.png)
 
-![break thought into tensors and approaching the solution.png](C:/Users/JJ/Pictures/break thought into tensors and approaching the solution.png)
+![break thought into tensors and approaching the solution.png](C:/Users/qp/Pictures/break thought into tensors and approaching the solution.png)
 
-![Now you must can understand this, this is the bridge](C:/Users/JJ/Pictures/and here is for the person 3 have unique birthday given person 1 and person 2 already has unique birthday .png)
+![Now you must can understand this, this is the bridge](C:/Users/qp/Pictures/and here is for the person 3 have unique birthday given person 1 and person 2 already has unique birthday .png)
 
-![](C:/Users/JJ/Pictures/not saying we are finding the group size n which no one share birthday in that group, here is the probability.png)
+![](C:/Users/qp/Pictures/not saying we are finding the group size n which no one share birthday in that group, here is the probability.png)
 
-![](C:/Users/JJ/Pictures/after observed the pattern in above sample, we can writ that down into a function, and let r help us doing the calculations.png)
+![](C:/Users/qp/Pictures/after observed the pattern in above sample, we can writ that down into a function, and let r help us doing the calculations.png)
 
-![](C:/Users/JJ/Pictures/using sapply function to applying sequence element wise function calculation.png)
+![](C:/Users/qp/Pictures/using sapply function to applying sequence element wise function calculation.png)
 
 
 
@@ -1556,13 +1530,13 @@ plot(log10(B), prob22)
 
 
 
-![This is actually a challenging question, and answering it often requires advanced theoretical statistics training.](C:/Users/JJ/Pictures/how big does b need to be, depending on the problem we are solving.png)
+![This is actually a challenging question, and answering it often requires advanced theoretical statistics training.](C:/Users/qp/Pictures/how big does b need to be, depending on the problem we are solving.png)
 
-![](C:/Users/JJ/Pictures/apply different sized monte carlo simulation on shared birthday with 22 people.png)
+![](C:/Users/qp/Pictures/apply different sized monte carlo simulation on shared birthday with 22 people.png)
 
-![](C:/Users/JJ/Pictures/and this is how we plot the outcome of same birthday monte carlo simulation.png)
+![](C:/Users/qp/Pictures/and this is how we plot the outcome of same birthday monte carlo simulation.png)
 
-![](C:/Users/JJ/Pictures/and using this graph to represent the trending of probability whne change the size of simulation.png)
+![](C:/Users/qp/Pictures/and using this graph to represent the trending of probability whne change the size of simulation.png)
 
 
 
@@ -1831,15 +1805,15 @@ Example: The addition rule for a natural 21 in blackjack
  
 
 
-![this gives you another to compute the natural 21 in blackjack card game](C:/Users/JJ/Pictures/the addition rule.png)
+![this gives you another to compute the natural 21 in blackjack card game](C:/Users/qp/Pictures/the addition rule.png)
 
-![](C:/Users/JJ/Pictures/this is what addition rule tell us.png)
+![](C:/Users/qp/Pictures/this is what addition rule tell us.png)
 
-![if we compute this whole thing happening, a or b](C:/Users/JJ/Pictures/we can use a ven diagram to understand this.png)
+![if we compute this whole thing happening, a or b](C:/Users/qp/Pictures/we can use a ven diagram to understand this.png)
 
-![](C:/Users/JJ/Pictures/the probability of an ace followed by a faced card is this.png)
+![](C:/Users/qp/Pictures/the probability of an ace followed by a faced card is this.png)
 
-![](C:/Users/JJ/Pictures/and this the the probability of a faced card followed by an ace card.png)
+![](C:/Users/qp/Pictures/and this the the probability of a faced card followed by an ace card.png)
 
 ```{r}
 1/13 * 16/51
@@ -1957,24 +1931,23 @@ prize
 
 
 
-![](C:/Users/JJ/Pictures/monty hall problem.png)
+![](C:/Users/qp/Pictures/monty hall problem.png)
 
-![](C:/Users/JJ/Pictures/behind one door is the prize, and had goat behind other two.png)
+![](C:/Users/qp/Pictures/behind one door is the prize, and had goat behind other two.png)
 
-![and show contestant that there is no prize behind that door](C:/Users/JJ/Pictures/if the contestant failed at first try, monty hall will oepn one of two remaining door that has a goat behind it.png)
+![and show contestant that there is no prize behind that door](C:/Users/qp/Pictures/if the contestant failed at first try, monty hall will oepn one of two remaining door that has a goat behind it.png)
 
-![](C:/Users/JJ/Pictures/because the original choose are based on first condition, the 3 potential prize probabilities.png)
+![](C:/Users/qp/Pictures/because the original choose are based on first condition, the 3 potential prize probabilities.png)
 
-![](C:/Users/JJ/Pictures/but if you switch, the chance will double to 2 in 3.png)
+![](C:/Users/qp/Pictures/but if you switch, the chance will double to 2 in 3.png)
 
-![](C:/Users/JJ/Pictures/lets find the probability of monty hall problem with monte carlo simulation and comparing with 2 strategies.png)
+![](C:/Users/qp/Pictures/lets find the probability of monty hall problem with monte carlo simulation and comparing with 2 strategies.png)
 
-![](C:/Users/JJ/Pictures/lets go through the code with stick to the same door strategy with monte carlo simulation.png)
+![](C:/Users/qp/Pictures/lets go through the code with stick to the same door strategy with monte carlo simulation.png)
 
-![](C:/Users/JJ/Pictures/now lets repeat this exercise but consider the switch strategy.png)
+![](C:/Users/qp/Pictures/now lets repeat this exercise but consider the switch strategy.png)
 
-![](C:/Users/JJ/Pictures/same as stick strategy, we have 3 doors, we assign 3 prizes at random, then we know which one has the good prize.png)
-
+![](C:/Users/qp/Pictures/same as stick strategy, we have 3 doors, we assign 3 prizes at random, then we know which one has the good prize.png)
 
 
 
@@ -2035,7 +2008,7 @@ results <-
 mean(results)
 ```
 
-![Vectors are generally created using the c function.png](C:/Users/JJ/Pictures/Vectors are generally created using the c function.png)
+![Vectors are generally created using the c function.png](C:/Users/qp/Pictures/Vectors are generally created using the c function.png)
 
 # Hint
 
@@ -3410,6 +3383,27 @@ If you can update the part, it would be a good course, but the instructor seems 
 
 
 
+## Course  /  Section 2: Continuous Probability  /  Section 2 Overview
+
+
+# Section 2 Overview
+
+
+
+Section 2 introduces you to [][*Continuous Probability*].
+
+After completing Section 2, you will:
+
+[][*        understand the differences between calculating probabilities for discrete and continuous data.*]
+[][*        be able to use cumulative distribution functions to assign probabilities to intervals when dealing with continuous data.*]
+        be able to use R to generate normally distributed outcomes for use in Monte Carlo simulations.
+[][***        know some of the useful theoretical continuous distributions in addition to the normal distribution, such as the student-t, chi-squared, exponential, gamma, beta, and beta-binomial distributions.***] #######################################################
+
+There is 1 assignment that uses the DataCamp platform for you to practice your coding skills as well as a set of questions on the edX platform at the end of section 3.
+
+This section corresponds to the continuous probability section of the course textbook.
+
+We encourage you to use R to interactively test out your answers and further your learning.
 
 
 
@@ -3419,6 +3413,97 @@ If you can update the part, it would be a good course, but the instructor seems 
 
 
 
+## Course  /  Section 2: Continuous Probability  /  2.1 Continuous Probability
+
+
+# Continuous Probability
+
+
+Earlier we explained why when summarizing a list of numeric values such as heights, it's not useful to construct a distribution that assigns a proportion to each possible outcome (`need to read the text book anyway`).  Note, for example, that if we measure every single person in a very large population with extremely high precision, **because no two people are exactly the same height**, we would need to assign a proportion to each observed value and attain no useful summary at all.  
+
+*Similarly when defining probability distributions, it is not useful to assign a very small probability to every single height*.  Just like when using distributions to summarize numeric data, it is much more practical to define a function that operates on intervals (`timeframe`) rather than single values.  The standard way of doing this is using the cumulative distribution function.  
+
+We previously described the [][*empirical cumulative distribution function*] (*what is this ??? Go back to read the textbook*)--eCDF--as a basic summary of a list of numeric values.  As an example, we define the eCDF for heights for male adult students.  Here, we define the vector x to use as an example that contains the male heights.  We use this little piece of code.  Now we can define the empirical distribution function like this very simply.  
+
+We just count the number of cases where x is smaller or equal to a and divide by n.  We take the mean, that's the proportion of cases.  So for every value of a, this gives a proportion of values in the list x that are smaller or equal to a.  [][*Note that we have not yet introduced probability*].  We've been talking about list of numbers and summarizing these lists.  So let's introduce probability.  For example, let's ask if I pick one of the male students at random, what is the chance that he is taller than 70.5 inches?  
+
+Because every student has the same chance of being picked, the answer to this question is the proportion of students that are taller than 70.5.  **Using eCDF, we obtain the answer**.  We simply type 1 minus f of 70, and we get about 37%.  Once the CDF is defined, we can use this to compute the probability of any subset.  For example, the probability of a student being between the height a and the height b is simply f of b minus f of a.  Because we can compute the probability for any possible event this way, the cumulative probability function defines a probability distribution for picking a height at random from our vector of heights x.  
+
+
+[][Textbook links]
+
+Ths video corresponds to the textbook section on continuous probability.
+https://rafalab.github.io/dsbook/probability.html#continuous-probability
+
+The previous discussion of CDF is from the Data Visualization course. Here is the textbook section on the CDF.
+https://rafalab.github.io/dsbook/distributions.html#cdf-intro
+
+
+[][Key points]
+
+    The cumulative distribution function (CDF) is a distribution function for continuous data x that reports the proportion of the data below a for all values of a:
+
+F(a)=Pr(x≤a)
+
+    The CDF is the probability distribution function for continuous variables. For example, to determine the probability that a male student is taller than 70.5 inches given a vector of male heights x, we can use the CDF:
+
+Pr(x>70.5)=1−Pr(x≤70.5)=1−F(70.5)
+
+    The probability that an observation is in between two values a,b is F(b)−F(a).
+
+Code: Cumulative distribution function
+
+Define x as male heights from the dslabs heights dataset:
+
+library(tidyverse)
+library(dslabs)
+data(heights)
+x <- heights %>% filter(sex=="Male") %>% pull(height)
+
+Given a vector x, we can define a function for computing the CDF of x using:
+
+F <- function(a) mean(x <= a)
+1 - F(70)    # probability of male taller than 70 inches
+
+
+
+```{r}
+library(tidyverse)
+library(dslabs)
+
+
+data(heights)
+
+x <- heights %>%
+  filter(sex=='Male') %>%
+  .$height
+
+
+length(x)
+x[1:7]
+```
+
+```{r}
+F <- function(a) mean(x<a)
+# Think about it, how can we get what we wanted value through this function?
+
+
+F(70)
+
+```
+
+
+
+
+![](C:/Users/qp/Pictures/the standard way of doing operate the intervals statistics is cdf.png)
+
+![](C:/Users/qp/Pictures/we previously described the empirical commulative distribution function as a bacis summary of a list of numeric value.png)
+
+![](C:/Users/qp/Pictures/we defind a ecdf from the male height.png)
+
+![](C:/Users/qp/Pictures/what is the chance our random selected male height is talled that 70.5 inches.png)
+
+![](C:/Users/qp/Pictures/once the cdf is defined, we can use it to compute the probability of any subset.png)
 
 
 
@@ -3428,15 +3513,7 @@ If you can update the part, it would be a good course, but the instructor seems 
 
 
 
-
-
-
-
-
-
-
-
-
+# Theoretical Distribution
 
 
 
