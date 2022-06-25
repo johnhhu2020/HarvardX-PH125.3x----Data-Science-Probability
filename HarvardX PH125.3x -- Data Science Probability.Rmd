@@ -3419,13 +3419,13 @@ We encourage you to use R to interactively test out your answers and further you
 # Continuous Probability
 
 
-Earlier we explained why when summarizing a list of numeric values such as heights, it's not useful to construct a distribution that assigns a proportion to each possible outcome (`need to read the text book anyway`).  Note, for example, that if we measure every single person in a very large population with extremely high precision, **because no two people are exactly the same height**, we would need to assign a proportion to each observed value and attain no useful summary at all.  
+[][***Earlier we explained why when summarizing a list of numeric values such as heights, it's not useful to construct a distribution that assigns a proportion to each possible outcome***] (`need to read the text book anyway`).  Note, for example, that if we measure every single person in a very large population with extremely high precision, **because no two people are exactly the same height**, we would need to assign a proportion to each observed value and attain no useful summary at all.  
 
-*Similarly when defining probability distributions, it is not useful to assign a very small probability to every single height*.  Just like when using distributions to summarize numeric data, it is much more practical to define a function that operates on intervals (`timeframe`) rather than single values.  The standard way of doing this is using the cumulative distribution function.  
+*Similarly when defining probability distributions, it is not useful to assign a very small probability to every single height*.  Just like when using distributions to summarize numeric data, it is much [][*more practical to define a function that operates on intervals (`timeframe`) rather than single values*].  The standard way of doing this is using the cumulative distribution function.  
 
 We previously described the [][*empirical cumulative distribution function*] (*what is this ??? Go back to read the textbook*)--eCDF--as a basic summary of a list of numeric values.  As an example, we define the eCDF for heights for male adult students.  Here, we define the vector x to use as an example that contains the male heights.  We use this little piece of code.  Now we can define the empirical distribution function like this very simply.  
 
-We just count the number of cases where x is smaller or equal to a and divide by n.  We take the mean, that's the proportion of cases.  So for every value of a, this gives a proportion of values in the list x that are smaller or equal to a.  [][*Note that we have not yet introduced probability*].  We've been talking about list of numbers and summarizing these lists.  So let's introduce probability.  For example, let's ask if I pick one of the male students at random, what is the chance that he is taller than 70.5 inches?  
+We just count the number of cases where x is smaller or equal to a and divide by n.  We take the mean, that's the proportion of cases.  So for every value of a, this gives a proportion of values in the list x that are smaller or equal to a.  Note that we have not yet introduced probability.  **We've been talking about list of numbers and summarizing these lists**.  So let's introduce probability.  For example, let's ask if I pick one of the male students at random, what is the chance that he is taller than 70.5 inches?  
 
 Because every student has the same chance of being picked, the answer to this question is the proportion of students that are taller than 70.5.  **Using eCDF, we obtain the answer**.  We simply type 1 minus f of 70, and we get about 37%.  Once the CDF is defined, we can use this to compute the probability of any subset.  For example, the probability of a student being between the height a and the height b is simply f of b minus f of a.  Because we can compute the probability for any possible event this way, the cumulative probability function defines a probability distribution for picking a height at random from our vector of heights x.  
 
@@ -3494,7 +3494,6 @@ F(70)
 
 
 
-
 ![](C:/Users/qp/Pictures/the standard way of doing operate the intervals statistics is cdf.png)
 
 ![](C:/Users/qp/Pictures/we previously described the empirical commulative distribution function as a bacis summary of a list of numeric value.png)
@@ -3513,63 +3512,148 @@ F(70)
 
 
 
+
 # Theoretical Distribution
 
 
+# ==============================================================================================================
+In the data visualization module, [][*we introduced the normal distribution as a useful approximation to many naturally occurring distributions*], including that of height.  The cumulative distribution for the normal distribution is defined by a mathematical formula, which in R can be obtained with the function pnorm().  We say that a random quantity is normally distributed with average, avg, and standard deviation, s, if its probability distribution is defined by f of a equals pnorm a, average, s.  This is the code.  **This is useful, because if we are willing to use the normal approximation for say, height, we don't need the entire dataset to answer questions such as, what is the probability that a randomly selected student is taller than 70.5 inches**.  
 
+*We just need the average height and the standard deviation*.  Then we can use this piece of code, 1 minus pnorm 70.5 mean of x, sd of x.  And that gives us the answer of 0.37.  [][*The normal distribution is derived mathematically*].  Apart from computing the average and the standard deviation, we don't use data to define it.  Also [][*the normal distribution is defined for continuous variables*].  It is not described for discrete variables.  However, ***for practicing data scientists, pretty much everything we do involves data, which is technically speaking discrete***.  For example, we could consider our adult data categorical with each specific height a unique category.  The probability distribution would then be defined by the proportion of students reporting each of those unique heights.  
 
+Here is what a plot of that would look like.  This would be the distribution function for those *categories*.  So each reported height gets a probability defined by the proportion of students reporting it.  Now while most students rounded up their height to the nearest inch, others reported values with much more precision.  For example, student reported his height to be 69.6850393700787.  What is that about?  What's that very, very precise number?  Well, it turns out, that's 177 centimeters.  So the student converted it to inches, and copied and pasted the result into the place where they had to report their heights.  **The probability assigned to this height is about 0.001.  It's 1 in 708.  However, the probability for 70 inches is 0.12**.  This is much higher than what was reported with this other value.  But does it really make sense to think that the probability of being exactly 70 inches is so much higher than the probability of being 69.68?  Clearly, it is much more useful for data analytic purposes to treat this outcome as a continuous numeric variable. ( Think, Think, Think )  
 
+But keeping in mind that very few people, perhaps none, are exactly 70 inches.  But rather, that people rounded to the nearest inch.  *With continuous distributions, the probability of a singular value is not even defined*.  For example, it does not make sense to ask what is the probability that a normally distributed value is 70.  Instead, we define probabilities for intervals.  So we could ask instead, what is a probability that someone is between 69.99 and 70.01.  [][*In cases like height in which the data is rounded, the normal approximation is particularly useful if we deal with intervals that include exactly one round number*].  So for example, the normal distribution is useful for approximating the proportion of students reporting between 69.5 and 70.5.  
 
+Here are three other examples.  Look at the numbers that are being reported.  This is using the data, the actual data, not the approximation.  Now look at what we get when we use the approximation.  We get almost the same values.  For these particular intervals, the normal approximation is quite useful.  [][*However, the approximation is not that useful for other intervals.  For example, those that don't include an integer*].  Here are two examples.  If we use these two intervals, again, this is the data, look at the approximations now with the normal distribution.  They're not that good.  In general, we call this situation discretization.  Although the true height distribution is continuous, the reported heights tend to be more common at discrete values, in this case, due to rounding.  As long as we are aware of how to deal with this reality, the normal approximation can still be a very useful tool.  
 
 
+```{r}
+library(tidyverse)
+library(dslabs)
 
 
+data(heights)
+x <- heights %>% 
+  filter(sex=="Male") %>% 
+  pull(height)
 
+x[1:30]
+```
 
+```{r}
+1 - pnorm(70.5, mean(x), sd(x))
+```
 
+```{r}
+plot(prop.table(table(x)), xlab='a=Height in inches', ylabel='Pr(X=a)')
+```
 
+```{r}
+mean(x <= 68.5) - mean(x <= 67.5)
+mean(x <= 69.5) - mean(x <= 68.5)
+mean(x <= 70.5) - mean(x <= 69.5)
 
+pnorm(68.5, mean(x), sd(x)) - pnorm(67.5, mean(x), sd(x))
+pnorm(69.5, mean(x), sd(x)) - pnorm(68.5, mean(x), sd(x))
+pnorm(70.5, mean(x), sd(x)) - pnorm(69.5, mean(x), sd(x))
 
 
+# Why ???
+mean(x <= 70.9) - mean(x <= 70.1)
+pnorm(70.9, mean(x), sd(x)) - pnorm(70.1, mean(x), sd(x))
 
+# ===============================================================================================================
+# the approximation with normal distribution is totally different than the 
+```
 
 
+[][Textbook link]
 
+This video corresponds to the textbook section on the theoretical distribution and the normal approximation.
+https://rafalab.github.io/dsbook/probability.html#theoretical-continuous-distributions
 
 
+[][Key points]
 
+[][*    pnorm(a, avg, s) gives the value of the cumulative distribution function F(a) for the normal distribution defined by average avg and standard deviation s.*]
 
+[][*    We say that a random quantity is normally distributed with average avg and standard deviation s if the approximation pnorm(a, avg, s) holds for all values of a.]
+    If we are willing to use the normal approximation for height, we can estimate the distribution simply from the mean and standard deviation of our values.
+[][*    If we treat the height data as discrete rather than categorical, we see that the data are not very useful because integer values are more common than expected due to rounding. This is called discretization.*]
+*============================================================================================================*
+[][*    With rounded data, the normal approximation is particularly useful when computing probabilities of intervals of length 1 that include exactly one integer.*]   *Sorry I didn't get it*
 
+Code: Using pnorm() to calculate probabilities
 
+Given male heights x:
 
+library(tidyverse)
+library(dslabs)
+data(heights)
+x <- heights %>% filter(sex=="Male") %>% pull(height)
 
+We can estimate the probability that a male is taller than 70.5 inches using:
 
+1 - pnorm(70.5, mean(x), sd(x))
 
+Code: Discretization and the normal approximation
 
+# plot distribution of exact heights in data
+plot(prop.table(table(x)), xlab = "a = Height in inches", ylab = "Pr(x = a)")
 
+# probabilities in actual data over length 1 ranges containing an integer
+mean(x <= 68.5) - mean(x <= 67.5)
+mean(x <= 69.5) - mean(x <= 68.5)
+mean(x <= 70.5) - mean(x <= 69.5)
 
+# probabilities in normal approximation match well
+pnorm(68.5, mean(x), sd(x)) - pnorm(67.5, mean(x), sd(x))
+pnorm(69.5, mean(x), sd(x)) - pnorm(68.5, mean(x), sd(x))
+pnorm(70.5, mean(x), sd(x)) - pnorm(69.5, mean(x), sd(x))
 
+# probabilities in actual data over other ranges don't match normal approx as well
+mean(x <= 70.9) - mean(x <= 70.1)
+pnorm(70.9, mean(x), sd(x)) - pnorm(70.1, mean(x), sd(x))
 
 
 
 
+![normal distribution is a useful approximation to many naturally occurring distributions.png](C:/Users/qp/Pictures/normal distribution is a useful approximation to many naturally occurring distributions.png)
 
+![the cumulative distribution for the normal distribution is defined by a mathematical formula.png](C:/Users/qp/Pictures/the cumulative distribution for the normal distribution is defined by a mathematical formula.png)
 
+![pnorm function in r.png](C:/Users/qp/Pictures/pnorm function in r.png)
 
+![pnorm function require the random quantity with normally distributed avg and standard deviation s.png](C:/Users/qp/Pictures/pnorm function require the random quantity with normally distributed avg and standard deviation s.png)
 
+![so what is the probability of randomly selected student is taller than 70.5 inches.png](C:/Users/qp/Pictures/so what is the probability of randomly selected student is taller than 70.5 inches.png)
 
+# The normal distribution is defined for continous variables, it is not described for discrete variables.  Whereas for data science, pretty much every data involved is technically discrete
 
+![consider our adult data categorical with each specific height a unique category.png](C:/Users/qp/Pictures/consider our adult data categorical with each specific height a unique category.png)
 
+![](C:/Users/qp/Pictures/and this would be the distribution function for those categories.png)
 
+![](C:/Users/qp/Pictures/how about one student report his height with much more precision like this value.png)
 
+![](C:/Users/qp/Pictures/if we change the unit, that high presion value would be 177 center meters.png)
 
+![](C:/Users/qp/Pictures/and the probability assigned to this height is about this value.png)
 
+![](C:/Users/qp/Pictures/or it can be say as the 1 in 708.png)
 
+![](C:/Users/qp/Pictures/with continuous distributions, we define probabilities for intervals, the probability of single value is not defined.png)
 
+![](C:/Users/qp/Pictures/here are 3 examples, which we deal with intervals that include the exactly one round number.png)
 
+![and here is the numbers being reported, this is using the actual data not the approximation.png](C:/Users/qp/Pictures/and here is the numbers being reported, this is using the actual data not the approximation.png)
 
+![and here is what we got when use the approximation.png](C:/Users/qp/Pictures/and here is what we got when use the approximation.png)
 
+![check this example when we use 2 intervals and the approximations when not include an interger.png](C:/Users/qp/Pictures/check this example when we use 2 intervals and the approximations when not include an interger.png)
 
+![In general, we call this situation discretization.png](C:/Users/qp/Pictures/In general, we call this situation discretization.png)
 
 
 
@@ -3579,33 +3663,62 @@ F(70)
 
 
 
+## Probability Density
 
 
+For categorical data, we can define the probability of a category.  For example, a roll of a die, let's call it x, can be 1, 2, 3, 4, 5, or 6.  The probability of 4 is defined as probability of x equals 4 is 1/6.  The CDF can easily be defined by simply adding up probability.  So F of 4 is the probability of x being less than 4, which is the probability of x being 4, or 3, or 2, or 1.  So we just add up those probabilities.  
 
+In contrast, [][*for continuous distributions, the probability of a single value is not defined*] (*How, I dont understand*).  However, there is a theoretical definition that has a similar interpretation.  This has to do with the probability density.  The probability density at x is defined as the function, we're going to call it little f of x, such that the probability distribution big F of a, which is the probability of x being less than or equal to a, is the integral of all values up to a of little f of x dx.  
 
+For those that know calculus, remember, that the integral is related to a sum.  It's the sum of bars with widths that are approximating 0.  If you don't know calculus, you can think of little f of x as a curve for which the area under the curve up to the value a gives you the probability of x being less than or equal to a.  For example, to use the normal approximation to estimate the probability of someone being taller than 76 inches, we can use the probability density.  So this is a mathematical formula.  Mathematically, the gray area in this figure represents the probability of x being bigger than 76.  The curve you see is a probability density function for the normal distribution.  
 
+In R you get the probability density function for the normal distribution using the function dnorm().  D stands for density.  Although it may not be immediately obvious why knowing about probability densities is useful, [][*understanding this concept will be essential to those wanting to fit models to data for which predefined functions are not available*].  *++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=*
 
 
+# Estimate the probability of someone being taller than 76 inches
+```{r}
+avg <- mean(x)
+s <- sd(x)
 
+1 - pnorm(76, avg, s)
+```
 
 
 
+[][Textbook link]
 
+This video corresponds to the textbook section on probability density.
+https://rafalab.github.io/dsbook/probability.html#the-probability-density
 
 
+[][Key points]
 
+[][*    The probability of a single value is not defined for a continuous distribution.*]
+    The quantity with the most similar interpretation to the probability of a single value is the probability density function (f(x).
+    The probability density f(x) is defined such that the integral of f(x) over a range gives the CDF of that range.
 
+F(a) = Pr(X<=a) = f_(-infty~a) f(x) dx
 
+    In R, the probability density function for the normal distribution is given by dnorm(). We will see uses of dnorm() in the future.
+    Note that dnorm() gives the density function and pnorm() gives the distribution function, which is the integral of the density function.
 
 
 
+![](C:/Users/qp/Pictures/row a diegives you the probability of a category.png)
 
+![](C:/Users/qp/Pictures/and this the cdf, can easily be defined by adding up probabilities.png)
 
+![](C:/Users/qp/Pictures/for continous distribution the single value is not defined in cdf but there is a theoretical definition.png)
 
+![](C:/Users/qp/Pictures/the probabiliti density at x is defined as this function.png)
 
+![](C:/Users/qp/Pictures/if you don't know calculus you can think fx as a curve for whitch the area under the curve adds up to a.png)
 
+![](C:/Users/qp/Pictures/for example to use the normal approximation to estimate the probability of someone being taller than 76 inches.png)
 
+![the curve we see here is the probability density function for the normal distribution](C:/Users/qp/Pictures/represent the probability of x being bigger than 76.png)
 
+![](C:/Users/qp/Pictures/you use dnorm function to get the probability dnesity function for the normal distribution.png)
 
 
 
@@ -3614,18 +3727,39 @@ F(70)
 
 
 
+## Plotting the Probability Density
 
 
+Plotting the probability density for the normal distribution
 
+We can use dnorm() to plot the [][*density curve*] for the normal distribution. dnorm(z) gives the probability density f(x) of a certain z-score, so we can draw a curve by calculating the density over a range of possible values of z.
 
+First, we generate a series of z-scores covering the typical range of the normal distribution. Since we know 99.7% of observations will be within -3 <= z <= 3, we can use a value of z slightly larger than 3 and this will cover most likely values of the normal distribution. Then, we calculate f(z), which is dnorm() of the series of z-scores. Last, we plot z against f(z).
 
+library(tidyverse)
+x <- seq(-4, 4, length = 100)
+data.frame(x, f = dnorm(x)) %>%
+    ggplot(aes(x, f)) +
+    geom_line()
 
+```{r}
+library(tidyverse)
 
+x <- seq(-4, 4, length = 10)
+data.frame(x, f = dnorm(x)) %>%
+    ggplot(aes(x, f)) +
+    geom_line()
+```
 
 
+Here is the resulting plot:
+![](C:/Users/qp/Pictures/normal-density-1.png)
 
+Plot of the normal distribution generated using the dnorm function.
 
+Note that dnorm() gives densities for the standard normal distribution by default. Probabilities for alternative normal distributions with mean mu and standard deviation sigma can be evaluated with:
 
+[][*dnorm(z, mu, sigma)*]
 
 
 
@@ -3635,45 +3769,112 @@ F(70)
 
 
 
+## Monte Carlo Simulations
 
 
+In this video, we're going to show you how to run Monte Carlo simulations using normally distributed variables.  R provides a function to generate normally distributed outcomes.  Specifically, the rnorm() function takes three arguments-- size; average, which defaults to 0; standard deviation, which defaults to 1--and produces these random numbers.  Here's an example of how we can generate data that looks like our reported heights.  
 
+So if our reported heights are in the vector x, we compute their length, their average, and their standard deviation, and then use the rnorm() function to generate the randomly distributed outcomes.  Not surprisingly, the distribution of **these outcomes looks normal because they were generated to look normal**.  [][*This is one of the most useful functions in R, as it will permit us to generate data that mimics naturally occurring events*], and it'll let us answer questions related to what could happen by chance by running Monte Carlo simulations.  
 
+For example, if we pick 800 males at random, what is the distribution of the tallest person?  Specifically, we could ask, how rare is that the tallest person is a seven footer?  We can use the following Monte Carlo simulation to answer this question.  We're going to run 10,000 simulations, and for each one, we're going to generate 800 normally distributed values, pick the tallest one, and return that.  The tallest variable will have these values.  So now we can ask, what proportion of these simulations return a seven footer as the tallest person?  And we can see that it's a very small number.  
 
 
+[][Textbook link]
 
+This video corresponds to the textbook section on Monte Carlo simulations for continuous variables.
+https://rafalab.github.io/dsbook/probability.html#monte-carlo-simulations-for-continuous-variables
 
 
+[][Key points]
 
+    rnorm(n, avg, s) generates n random numbers from the normal distribution with average avg and standard deviation s.
+    By generating random numbers from the normal distribution, we can simulate height data with similar properties to our dataset. Here we generate simulated height data using the normal distribution.
 
+Code: Generating normally distributed random numbers
 
+# define x as male heights from dslabs data
+library(tidyverse)
+library(dslabs)
+data(heights)
+x <- heights %>% filter(sex=="Male") %>% pull(height)
 
+# generate simulated height data using normal distribution - both datasets should have n observations
+n <- length(x)
+avg <- mean(x)
+s <- sd(x)
+simulated_heights <- rnorm(n, avg, s)
 
+# plot distribution of simulated_heights
+data.frame(simulated_heights = simulated_heights) %>%
+    ggplot(aes(simulated_heights)) +
+    geom_histogram(color="black", binwidth = 2)
 
+Code: Monte Carlo simulation of tallest person over 7 feet
 
+B <- 10000
+tallest <- replicate(B, {
+    simulated_data <- rnorm(800, avg, s)    # generate 800 normally distributed random heights
+    max(simulated_data)    # determine the tallest height
+})
+mean(tallest >= 7*12)    # proportion of times that tallest person exceeded 7 feet (84 inches)
 
 
 
+```{r}
+x <- heights %>%
+  filter(sex=='Male') %>%
+  .$height
 
+n <- length(x)
+acg <- mean(x)
+s <- sd(x)
 
+simulated_height <- rnorm(n, avg, s)   # ========================================================================
+dim(simulated_height)
+# The rnorm() function in R generates a random number using a normal(bell curve) distribution. Thus, the rnorm() function simulates random variates having a specified normal distribution.21 Dec 2021
 
 
+ds_theme_set()
+data.frame(simulated_height=simulated_height) %>%
+  ggplot(aes(simulated_height)) +
+  geom_histogram(color='white', bins = 30)   # This is a histogram, so what does rnorm() function returns us ???
 
 
+y <- heights %>%
+  filter(sex=='Male') %>%
+  .$height
 
+data.frame(Mheight=y) %>%
+  ggplot(aes(Mheight)) +
+  geom_histogram(color='orange', bins=30)
+```
 
+```{r}
+B <- 10000
 
+tallest <- replicate(B, {
+  simulated_data <- rnorm(800, avg, s)
+  max(simulated_data)
+})
 
 
+mean(tallest >= 7*12)
+```
 
 
 
 
+![](C:/Users/qp/Pictures/the rnorm function helps us generate normally distributed outcomes.png)
 
+![](C:/Users/qp/Pictures/here is an example of how we can generate the data that looks like our reported height.png)
 
+![](C:/Users/qp/Pictures/now lets check the distribution of these outcome.png)
 
+![](C:/Users/qp/Pictures/the plot seems a normal distributioned from those outcomes.png)
 
+![](C:/Users/qp/Pictures/we are using normal distribution assumption and generate 800 normal distributed values and pick the tallest one.png)
 
+![](C:/Users/qp/Pictures/then we can ask what proportion of these simulations returns 7 feet as the tallest person.png)
 
 
 
@@ -3683,13 +3884,772 @@ F(70)
 
 
 
+# Other Continuous Distributions
 
 
+The normal distribution is not the only useful theoretical distribution.  Other continuous distributions that we may encounter are [][*student-t, the chi-squared, the exponential, the gamma, and the beta distribution.  *]
 
+R provides functions to compute the density, the quantiles, the cumulative distribution function, and to generate Monte Carlo simulations for all these distributions.  ***R uses a convention that lets us remember the names of these functions.  Namely, using the letters d for density, q for quantile, p for probability density function, and r for random.  By putting these letters in front of a shorthand for the distribution, gives us the names of these useful functions.  ***
 
+We have already seen the functions dnorm, pnorm, and rnorm.  So these are examples of what we just described.  These are for the normal distribution.  Norm is the nickname or shorthand for the normal distribution.  The function qnorm gives us the quantiles.  For example, we can use the dnorm function to generate this plot.  This is the density function for the normal distribution.  We use the function dnorm.  For the student's t distribution, which has shorthand t, we can use the functions dt, qt, pt, and rt to generate the density, quantiles, probability density function, or a Monte Carlo simulation.  
 
 
+[][Textbook link]
 
+This video corresponds to the textbook section on other continuous distributions.
+https://rafalab.github.io/dsbook/probability.html#continuous-distributions
+
+
+[][Key points]
+
+    You may encounter other continuous distributions (Student t, chi-squared, exponential, gamma, beta, etc.).
+[][*    R provides functions for density (d), quantile (q), probability distribution (p) and random number generation (r) for many of these distributions.*]
+[][*    Each distribution has a matching abbreviation (for example, norm() or t()) that is paired with the related function abbreviations (d, p, q, r) to create appropriate functions.*]
+    For example, use rt() to generate random numbers for a Monte Carlo simulation using the Student t distribution.
+
+Code: Plotting the normal distribution with dnorm
+
+Use d to plot the density function of a continuous distribution. Here is the density function for the normal distribution (abbreviation norm()):
+
+x <- seq(-4, 4, length.out = 100)
+data.frame(x, f = dnorm(x)) %>%
+    ggplot(aes(x,f)) +
+    geom_line()
+
+
+
+![](C:/Users/qp/Pictures/other continuous distribution student-t.png)
+
+![](C:/Users/qp/Pictures/other continuous distribution chi-squared.png)
+
+![](C:/Users/qp/Pictures/other continuous distribution exponential.png)
+
+![](C:/Users/qp/Pictures/other continuous distribution gama.png)
+
+![](C:/Users/qp/Pictures/other continuous distribution beta.png)
+
+![](C:/Users/qp/Pictures/r provides functions to compute the density .png)
+
+![](C:/Users/qp/Pictures/r provides functions to compute the quantiles.png)
+
+![](C:/Users/qp/Pictures/r provides function to compute the cumulative distribution functions.png)
+
+![](C:/Users/qp/Pictures/and provides the functuions to generate the monte carlo simulations.png)
+
+![](C:/Users/qp/Pictures/r use a convention that let us remember the names of these functions, d for density.png)
+
+![](C:/Users/qp/Pictures/r use a convention that let us remember the names of these functions, q for quantile.png)
+
+![](C:/Users/qp/Pictures/r use a convention that let us remember the names of these functions, p for probability density function.png)
+
+![](C:/Users/qp/Pictures/r use a convention that let us remember the names of these functions, r for random.png)
+
+![](C:/Users/qp/Pictures/we have already seen the function dnorm.png)
+
+![](C:/Users/qp/Pictures/we have already seen the function pnorm.png)
+
+![](C:/Users/qp/Pictures/we have already seen the function rnorm.png)
+
+![](C:/Users/qp/Pictures/the norm in r is the nickname for normal distribution.png)
+
+![](C:/Users/qp/Pictures/the function qnorm gives us the quantiles.png)
+
+![](C:/Users/qp/Pictures/we can use dnorm function to generate this plot.png)
+
+![](C:/Users/qp/Pictures/use dnorm function to generate this plot, do you remember it.png)
+
+![](C:/Users/qp/Pictures/for the student-t distribution we can use the functions dt and others.png)
+
+![](C:/Users/qp/Pictures/in student-t distribution we can use dt, qt, pt, rt functions.png)
+
+![](C:/Users/qp/Pictures/d for density, q for quantitles, p for density, or r for random simulation.png)
+
+
+
+
+
+
+
+
+
+## DataCamp Assessment: Continuous Probability
+
+
+
+Assessment due Jun 26, 2022 15:31 AWST
+
+This assessment covers the basics of continuous probability.
+
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+Assessment: Continuous Probability (External resource) (7.5 points possible)
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
+
+
+## Exercise 1. Distribution of female heights - 1
+
+Assume the distribution of female heights is approximated by a normal distribution with a mean of 64 inches and a standard deviation of 3 inches. If we pick a female at random, what is the probability that she is 5 feet or shorter?
+Instructions
+100 XP
+
+    Use pnorm to define the probability that a height will take a value less than 5 feet given the stated distribution.
+
+```{r}
+# Assign a variable 'female_avg' as the average female height.
+female_avg <- 64
+
+# Assign a variable 'female_sd' as the standard deviation for female heights.
+female_sd <- 3
+
+# Using variables 'female_avg' and 'female_sd', calculate the probability that a randomly selected female is shorter than 5 feet. Print this value to the console.
+
+pnorm(5*12, female_avg, female_sd)
+```
+
+
+## Exercise 2. Distribution of female heights - 2
+
+Assume the distribution of female heights is approximated by a normal distribution with a mean of 64 inches and a standard deviation of 3 inches. If we pick a female at random, what is the probability that she is 6 feet or taller?
+Instructions
+100 XP
+
+    Use pnorm to define the probability that a height will take a value of 6 feet or taller.
+
+```{r}
+# Assign a variable 'female_avg' as the average female height.
+female_avg <- 64
+
+# Assign a variable 'female_sd' as the standard deviation for female heights.
+female_sd <- 3
+
+# Using variables 'female_avg' and 'female_sd', calculate the probability that a randomly selected female is 6 feet or taller. Print this value to the console.
+1 - pnorm(6*12, female_avg, female_sd)
+```
+
+
+## Exercise 3. Distribution of female heights - 3
+
+Assume the distribution of female heights is approximated by a normal distribution with a mean of 64 inches and a standard deviation of 3 inches. If we pick a female at random, what is the probability that she is between 61 and 67 inches?
+Instructions
+100 XP
+
+    Use pnorm to define the probability that a randomly chosen woman will be shorter than 67 inches.
+    Subtract the probability that a randomly chosen will be shorter than 61 inches.
+
+```{r}
+# Assign a variable 'female_avg' as the average female height.
+female_avg <- 64
+
+# Assign a variable 'female_sd' as the standard deviation for female heights.
+female_sd <- 3
+
+# Using variables 'female_avg' and 'female_sd', calculate the probability that a randomly selected female is between the desired height range. Print this value to the console.
+pnorm(67, female_avg, female_sd) - pnorm(61, female_avg, female_sd)
+```
+
+
+## Exercise 4. Distribution of female heights - 4
+
+Repeat the previous exercise, but convert everything to centimeters. That is, multiply every height, including the standard deviation, by 2.54. What is the answer now?
+Instructions
+100 XP
+
+    Convert the average height and standard deviation to centimeters by multiplying each value by 2.54.
+    Repeat the previous calculation using pnorm to define the probability that a randomly chosen woman will have a height between 61 and 67 inches, converted to centimeters by multiplying each value by 2.54.
+
+```{r}
+# Assign a variable 'female_avg' as the average female height. Convert this value to centimeters.
+female_avg <- 64*2.54
+
+# Assign a variable 'female_sd' as the standard deviation for female heights. Convert this value to centimeters.
+female_sd <- 3*2.54
+
+# Using variables 'female_avg' and 'female_sd', calculate the probability that a randomly selected female is between the desired height range. Print this value to the console.
+pnorm(67*2.54, female_avg, female_sd) - pnorm(61*2.54, female_avg, female_sd)
+```
+
+
+## Exercise 5. Probability of 1 SD from average
+
+Compute the probability that the height of a randomly chosen female is within 1 SD from the average height.
+Instructions
+100 XP
+
+    Calculate the values for heights one standard deviation taller and shorter than the average.
+    Calculate the probability that a randomly chosen woman will be within 1 SD from the average height.
+
+```{r}
+# Assign a variable 'female_avg' as the average female height.
+female_avg <- 64
+
+# Assign a variable 'female_sd' as the standard deviation for female heights.
+female_sd <- 3
+
+# To a variable named 'taller', assign the value of a height that is one SD taller than average.
+taller <- female_avg + female_sd
+
+# To a variable named 'shorter', assign the value of a height that is one SD shorter than average.
+shorter <- female_avg - female_sd
+
+# Calculate the probability that a randomly selected female is between the desired height range. Print this value to the console.
+pnorm(taller, female_avg, female_sd) - pnorm(shorter, female_avg, female_sd)
+```
+
+
+## Exercise 6. Distribution of male heights
+
+Imagine the distribution of male adults is approximately normal with an average of 69 inches and a standard deviation of 3 inches. How tall is a male in the 99th percentile?
+Instructions
+100 XP
+
+    Determine the height of a man in the 99th percentile, given an average height of 69 inches and a standard deviation of 3 inches.
+
+```{r}
+# Assign a variable 'male_avg' as the average male height.
+male_avg <- 69
+
+# Assign a variable 'male_sd' as the standard deviation for male heights.
+male_sd <- 3
+
+# Determine the height of a man in the 99th percentile of the distribution.
+qnorm(0.99, mean=male_avg, sd=male_sd)
+```
+
+
+## Exercise 7. Distribution of IQ scores
+
+The distribution of IQ scores is approximately normally distributed. The average is 100 and the standard deviation is 15. Suppose you want to know the distribution of the person with the highest IQ in your school district, where 10,000 people are born each year.
+
+Generate 10,000 IQ scores 1,000 times using a Monte Carlo simulation. Make a histogram of the highest IQ scores.
+Instructions
+100 XP
+
+    Use the function rnorm to generate a random distribution of 10,000 values with a given average and standard deviation.
+    Use the function max to return the largest value from a supplied vector.
+    Repeat the previous steps a total of 1,000 times. Store the vector of the top 1,000 IQ scores as highestIQ.
+    Plot the histogram of values using the function hist.
+
+Incorrect submission
+Make sure to use the function rnorm to generate a distribution of 10,000 IQ scores in every iteration. 
+
+# Read the statement careful
+```{r}
+# The variable `B` specifies the number of times we want the simulation to run.
+B <- 1000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random number generation.
+set.seed(1)
+
+# Create an object called `highestIQ` that contains the highest IQ score from each random distribution of 10,000 people.
+highestIQ <- replicate(B, {
+    simulated_dat <- rnorm(10000, mean=100, sd=15)
+    max(simulated_dat)
+})
+
+# Make a histogram of the highest IQ scores.
+hist(highestIQ)
+```
+
+
+## End of Assessment: Continuous Probability
+
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
+
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
+
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
+
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
+
+
+
+
+
+
+
+## Course  /  Section 2: Continuous Probability  /  2.2 Assessment: Continuous Probability
+
+
+# Questions 1 and 2: ACT scores, part 1
+
+
+
+Assessment due Jun 26, 2022 15:31 AWST
+
+The ACT is a standardized college admissions test used in the United States. The four multi-part questions in this assessment all involve simulating some ACT test scores and answering probability questions about them.
+
+For the three year period 2016-2018, ACT standardized test scores were approximately normally distributed with a mean of 20.9 and standard deviation of 5.7. (Real ACT scores are integers between 1 and 36, but we will ignore this detail and use continuous values instead.)
+
+First we'll simulate an ACT test score dataset and answer some questions about it.
+
+Set the seed to 16, then use rnorm() to generate a normal distribution of 10000 tests with a mean of 20.9 and standard deviation of 5.7. Save these values as act_scores. You'll be using this dataset throughout these four multi-part questions.
+
+(IMPORTANT NOTE! If you use R 3.6 or later, you will need to use the command format set.seed(x, sample.kind = "Rounding") instead of set.seed(x). Your R version will be printed at the top of the Console window when you start RStudio.)
+
+
+
+##  Question 1a
+1/1 point (graded)
+What is the mean of act_scores?
+correct
+
+20.8
+Loading
+
+Explanation
+
+The mean can be found using the following code:
+
+          set.seed(16, sample.kind = "Rounding")
+act_scores <- rnorm(10000, 20.9, 5.7)
+mean(act_scores)
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 1b
+1/1 point (graded)
+What is the standard deviation of act_scores?
+correct
+
+5.68
+Loading
+
+Explanation
+
+The standard deviation can be found using the following code:
+
+          sd(act_scores)
+        
+
+You have used 2 of 10 attempts Some
+
+
+##  Question 1c
+1/1 point (graded)
+
+A perfect score is 36 or greater (the maximum reported score is 36).
+In act_scores, how many perfect scores are there out of 10,000 simulated tests?
+correct
+
+41
+Loading
+
+Explanation
+
+The number of perfect scores can be found using the following code:
+
+          sum(act_scores >= 36)
+        
+
+```{r}
+set.seed(16, sample.kind = "Rounding")
+
+
+act_scores <- rnorm(10000, mean=20.9, sd=5.7)
+
+mean(act_scores)
+sd(act_scores)
+
+
+act_scores[1:5]
+sum(act_scores>=36)
+
+
+mean(act_scores>=30)
+
+
+mean(act_scores<=10)
+```
+
+##  Question 1d
+1/1 point (graded)
+In act_scores, what is the probability of an ACT score greater than 30?
+correct
+
+0.0527
+Loading
+
+Explanation
+
+The probability can be found using the following code:
+
+          mean(act_scores > 30)
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 1e
+1/1 point (graded)
+In act_scores, what is the probability of an ACT score less than or equal to 10?
+correct
+
+0.0282
+Loading
+
+Explanation
+
+The probability can be found using the following code:
+
+          mean(act_scores <= 10)
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+x <- seq(36)
+
+x
+
+f_x <- dnorm(x, 20.9, 5.7)
+
+
+plot(x, f_x)
+```
+
+
+## Question 2
+1/1 point (graded)
+
+Set x equal to the sequence of integers 1 to 36. Use dnorm to determine the value of the probability density function over x given a mean of 20.9 and standard deviation of 5.7; save the result as f_x. Plot x against f_x.
+Which of the following plots is correct?
+f_x on y-axis, x on x-axis. Curve starts at (0,0) and increases with slight s-shape to about (36,1).
+f_x on y-axis, x on x-axis. Bell-shaped curve that starts at roughly (0,0) with peak at roughly (22,0.07) and ends at about (36,0.001).
+f_x on y-axis, x on x-axis. Curve starts at roughly (1,0.24) and drops steeply to (4,0) and remains flat at y=0 through x=36.
+f_x on y-axis, x on x-axis. Bell-shaped curve that starts at roughly (-3.5,0) with peak at roughly (0,0.4) and ends at about (2.5,0.001).
+correct
+
+Explanation
+
+The second plot, generated using the following code, is correct:
+
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q2_imageA.png)
+
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q2_imageB.png)
+
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q2_imageC.png)
+
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q2_imageD.png)
+
+          x <- 1:36
+f_x <- dnorm(x, 20.9, 5.7)
+data.frame(x, f_x) %>%
+  ggplot(aes(x, f_x)) +
+  geom_line()
+        
+
+The first plot is the distribution function rather than the density function. The third plot fails to include the mean and standard deviation in the dnorm call. The fourth plot is of Z-score values.
+You have used 1 of 2 attempts Some
+
+
+
+
+
+
+
+
+# Questions 3 and 4: ACT scores, part 2
+
+
+
+Assessment due Jun 26, 2022 15:31 AWST
+
+In this 3-part question, you will convert raw ACT scores to Z-scores and answer some questions about them.
+
+Convert act_scores to Z-scores. Recall from Data Visualization (the second course in this series) that to standardize values (convert values into Z-scores, that is, values distributed with a mean of 0 and standard deviation of 1), you must subtract the mean and then divide by the standard deviation. Use the mean and standard deviation of act_scores, not the original values used to generate random test scores.
+
+
+##  Question 3a
+1.0/1.0 point (graded)
+What is the probability of a Z-score greater than 2 (2 standard deviations above the mean)?
+correct
+
+0.0233
+Loading
+
+Explanation
+
+The probability can be calculated using the following code:
+
+          z_scores <- (act_scores - mean(act_scores))/sd(act_scores)
+mean(z_scores > 2)
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 3b
+1/1 point (graded)
+What ACT score value corresponds to 2 standard deviations above the mean (Z = 2)?
+correct
+
+32.2
+Loading
+
+Explanation
+
+The score value can be calculated using the following code:
+
+          2*sd(act_scores) + mean(act_scores)
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 3c
+1/1 point (graded)
+
+A Z-score of 2 corresponds roughly to the 97.5th percentile.
+
+Use qnorm() to determine the 97.5th percentile of normally distributed data with the mean and standard deviation observed in act_scores.
+What is the 97.5th percentile of act_scores?
+correct
+
+32.0
+Loading
+
+Explanation
+
+The 97.5th percentile can be calculated using the following code:
+
+          qnorm(.975, mean(act_scores), sd(act_scores))
+        
+
+You have used 1 of 10 attempts Some
+
+
+
+# ============================================================================================================
+In this 4-part question, you will write a function to create a CDF for ACT scores.
+
+Write a function that takes a value and produces the probability of an ACT score less than or equal to that value (the CDF). Apply this function to the range 1 to 36.
+
+
+##  Question 4a
+1/1 point (graded)
+What is the minimum integer score such that the probability of that score or lower is at least .95?
+
+Your answer should be an integer 1-36.
+correct
+
+31
+Loading
+
+Explanation
+
+The minimum score can be calculated using the following code:
+
+          cdf <- sapply(1:36, function (x){
+  mean(act_scores <= x)
+})
+min(which(cdf >= .95))
+        
+
+You have used 1 of 10 attempts 
+
+
+##  Question 4b
+1/1 point (graded)
+
+Use qnorm() to determine the expected 95th percentile, the value for which the probability of receiving that score or lower is 0.95, given a mean score of 20.9 and standard deviation of 5.7.
+What is the expected 95th percentile of ACT scores?
+correct
+
+30.3
+Loading
+
+Explanation
+
+The expected 95th percentile can be calculated using the following code:
+
+          qnorm(.95, 20.9, 5.7)
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 4c
+1/1 point (graded)
+
+As discussed in the Data Visualization course, we can use quantile() to determine sample quantiles from the data.
+
+Make a vector containing the quantiles for p <- seq(0.01, 0.99, 0.01), the 1st through 99th percentiles of the act_scores data. Save these as sample_quantiles.
+In what percentile is a score of 26?
+
+Your answer should be an integer (i.e. 60), not a percent or fraction. Note that a score between the 98th and 99th percentile should be considered the 98th percentile, for example, and that quantile numbers are used as names for the vector sample_quantiles.
+correct
+
+82
+Loading
+
+Explanation
+
+The percentile for a score of 26 can be calculated using the following code:
+
+          p <- seq(0.01, 0.99, 0.01)
+sample_quantiles <- quantile(act_scores, p)
+names(sample_quantiles[max(which(sample_quantiles < 26))])
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 4d
+1/1 point (graded)
+
+Make a corresponding set of theoretical quantiles using qnorm() over the interval p <- seq(0.01, 0.99, 0.01) with mean 20.9 and standard deviation 5.7. Save these as theoretical_quantiles. Make a QQ-plot graphing sample_quantiles on the y-axis versus theoretical_quantiles on the x-axis.
+Which of the following graphs is correct?
+QQ plot with theoretical_quantiles on x-axis and sample_quantiles on y-axis. Points form a straight line from about (-2.25, 7.5) to (2.25, 34).
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q4D_imageA.png)
+QQ plot with sample_quantiles on x-axis and theoretical_quantiles on y-axis. Points form a straight line from about (7.5, -2.25) to (34, 2.25).
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q4D_imageB.png)
+QQ plot with sample_quantiles on x-axis and theoretical_quantiles on y-axis. Points form a straight line from about (7.5, 7.5) to (34, 34).
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q4D_imageC.png)
+QQ plot with theoretical_quantiles on x-axis and sample_quantiles on y-axis. Points form a straight line from about (7.5, 7.5) to (34, 34).
+![](C:/Users/qp/Pictures/IDS_Mod3_Sect2_Q4D_imageD.png)
+correct
+
+Explanation
+
+The fourth graph is correct and can be generated using the following code:
+
+          p <- seq(0.01, 0.99, 0.01)
+sample_quantiles <- quantile(act_scores, p)
+theoretical_quantiles <- qnorm(p, 20.9, 5.7)
+qplot(theoretical_quantiles, sample_quantiles) + geom_abline()
+        
+
+The first graph uses standard normal theoretical quantiles, the result of omitting the mean and standard deviation in qnorm. The second graph uses standard normal theoretical quantiles and inverts the x and y axes. The third graph inverts the x and y axes.
+You have used 1 of 2 attempts Some
+
+
+
+```{r}
+z_act_scores <- scale(act_scores)
+
+
+mean(z_act_scores > mean(z_act_scores) + 2*sd(z_act_scores))
+
+
+pnorm(mean(z_act_scores)+2*sd(z_act_scores), mean(z_act_scores), sd(z_act_scores))
+
+
+
+mean(act_scores)+2*sd(act_scores)
+```
+
+```{r}
+qnorm(0.975, mean(act_scores), sd(act_scores))
+```
+
+```{r}
+v <- seq(36)
+
+
+my_cdf <- function(v){
+ mean(act_scores<=v) 
+}
+
+
+sapply(v, my_cdf)
+```
+
+```{r}
+qnorm(0.95, mean=20.9, sd=5.7)
+```
+
+```{r}
+quantile(act_scores)
+
+
+p <- seq(0.01, 0.99, 0.01)
+quantile(act_scores, probs=p)
+```
+
+```{r}
+p <- seq(0.01, 0.99, 0.01)
+
+
+p <- seq(0.01, 0.99, 0.01)
+sample_quantiles <- quantile(act_scores, p)
+names(sample_quantiles[max(which(sample_quantiles < 26))])
+
+
+theoretical_quantiles <- qnorm(p, mean=20.9, sd=5.7)
+theoretical_quantiles
+
+
+
+
+qqplot(x=theoretical_quantiles, y=sample_quantiles)
+```
+
+
+
+
+
+
+
+
+# Questions about Assessment: Continuous Probability?
+
+
+
+
+Ask your questions about the continuous probability assessment here. Remember to search the discussion board before posting to see if someone else has asked the same thing before asking a new question! You're also encouraged to answer each other's questions to help further your own learning.
+
+Some reminders:
+
+    Please be specific in the title and body of your post regarding which question you're asking about to facilitate answering your question.
+    Posting snippets of code is okay, but posting full code solutions is not.
+    If you do post snippets of code, please format it as code for readability. If you're not sure how to do this, there are instructions in a pinned post in the general discussion forum.
+
+Discussion: Continuous probability assessment
+Topic: Section 2 / Assessment: Continuous Probability
+
+
+
+
+
+
+
+## Course  /  Section 3: Random Variables, Sampling Models, and the Central Limit Theorem  /  Section 3 Overview
+
+
+# Section 3 Overview
+
+
+
+Section 3 introduces you to Random Variables, Sampling Models, and the Central Limit Theorem.
+
+Section 3 is divided into two parts:
+
+        Random Variables and Sampling Models
+        The Central Limit Theorem.
+
+After completing Section 3, you will:
+
+        understand what random variables are, how to generate them, and the correct mathematical notation to use with them.
+        be able to use sampling models to estimate characteristics of a larger population.
+        be able to explain the difference between a distribution and a probability distribution.
+        understand the Central Limit Theorem and the law of large numbers.
+
+There are 2 assignments that use the DataCamp platform for you to practice your coding skills as well as a set of questions on the edX platform at the end of Section 3.
+
+This section corresponds to the following section of the course textbook.
+https://rafalab.github.io/dsbook/random-variables.html
+
+We encourage you to use R to interactively test out your answers and further your learning.
 
 
 
