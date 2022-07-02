@@ -1105,7 +1105,6 @@ mean(result)
 
 
 
-
 ![](C:/Users/qp/Pictures/our very first example is 5 beads in a urn.png)
 
 ![](C:/Users/qp/Pictures/here is the probability of randomly picking a blue beads from the urn.png)
@@ -4657,6 +4656,432 @@ We encourage you to use R to interactively test out your answers and further you
 
 
 
+## Course  /  Section 3: Random Variables, Sampling Models, and the Central Limit Theorem  /  3.1 Random Variables and Sampling Models
+
+
+# Random Variables
+
+
+Random variables are numeric outcomes resulting from a random process.  We can easily generate random variables using some of the simple examples we have shown, such as the red and blue bead urn.  For example, define x to be 1 if a bead is blue, and red otherwise.  Here's the R code you can write to generate that random variable.  X is a random variable.  Every time we select a new bead, the outcome changes randomly.  Sometimes it's 1, sometimes it's 0.  Here's some examples of how that random variable changes.  We're going to do it three times.  Here is 0, here is 1, and here's 1 again.  In data science, we often deal with data that is affected by chance in some way.  The data comes from a random sample, the data is affected by measurement error, or the data measures some outcome that is random in nature.  [][***Being able to quantify the uncertainty introduced by randomness is one of the most important jobs of a data scientist***].  Statistical inference offers a framework for doing this, as well as several practical tools.  The first step is to learn how to mathematically describe random variables.  We start with games of chance as an illustrative example.  
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on random variables External link.
+https://rafalab.github.io/dsbook/random-variables.html#random-variables-1
+
+
+
+[][Key points]
+
+    Random variables are numeric outcomes resulting from random processes.
+    Statistical inference offers a framework for quantifying uncertainty due to randomness.
+
+Code: Modeling a random variable
+
+# define random variable x to be 1 if blue, 0 otherwise
+beads <- rep(c("red", "blue"), times = c(2, 3))
+x <- ifelse(sample(beads, 1) == "blue", 1, 0)
+
+# demonstrate that the random variable is different every time
+ifelse(sample(beads, 1) == "blue", 1, 0)
+ifelse(sample(beads, 1) == "blue", 1, 0)
+ifelse(sample(beads, 1) == "blue", 1, 0)
+
+
+
+
+```{r}
+beads <- rep(c("Red", "Blue"), times=c(2, 3))
+
+x <- ifelse(sample(beads, 1)=="Blue", 1, 0)
+x
+```
+
+
+
+![](C:/Users/qp/Pictures/Random variables are numeric outcomes resulting from random process.png)
+
+![](C:/Users/qp/Pictures/generate random variable with distribute distribution balls in an urn.png)
+
+![](C:/Users/qp/Pictures/everytime we select a new bead the outcome changes.png)
+
+![](C:/Users/qp/Pictures/statistical inference provides a framework for quantifying the uncertainty introduced by randomness.png)
+
+
+
+
+
+
+
+
+
+
+# Sampling Models
+
+
+Many data-generation procedures, those that produce data that we study, can be modeled quite well as **draws from an urn**.  For example, we can model the process of polling likely voters as drawing 0's--Republicans-- and 1's--Democrats-- from an urn containing the 0 and 1 code for all likely voters.  We'll see that in more detail later.  In epidemiological studies, [][*we often assume that the subjects in our study are a random sample from the population of interest*].  The data related to a specific outcome can be modeled as a random sample from an urn containing the values for those outcomes for the entire population of interest.  
+
+Similarly, in experimental research, we often assume that the individual organisms we are studying-- for example, worms, flies, or mice--are a random sample from a larger population.  Randomized experiments can also be modeled by draws from urn, given the way individuals are assigned to groups.  When getting assigned, you draw your group at random.  Sampling models are therefore ubiquitous in data science.  Casino games offer a *plethora* (a large amount of) of examples of real-world situations in which sampling models are used to answer specific questions.  We will therefore start with such examples.  OK, let's start with this.  
+
+Suppose a very small casino hires you to consult on whether they should set up a roulette wheel.  They want to know if they can make money off it, or if it's too risky and they might lose.  To keep the example simple, we will assume that 1,000 people will play, and that the only game you can play is to bet on red or black.  The casino wants to predict how much money they will make or lose.  They want a range of values that are possible, and in particular, [][*they want to know, what is the chance of losing money?*]  If this probability is too high, they will pass on installing roulette wheels, since they can't take the risk, given that they need to pay their employees and keep the lights on.  
+
+We're going to define a random variable, capital S, that will represent the casino's total winnings.  Let's start by constructing the urn, the urn we use for our sampling model.  A roulette wheel has 18 red pockets, 18 black pockets, and 2 green ones.  So playing a color in one game of roulette is equivalent to drawing from this urn.  Let's write some code.  There's 18 black, 18 red, and 2 green.  The 1,000 outcomes from 1,000 people playing are independent draws from this urn.  If red comes up, the gambler wins, and the casino loses $1, so we draw a negative 1.  Otherwise, the casino wins $1, and we draw a 1.  We can code 1,000 independent draws using the following code.  Here are the first 10 outcomes of these 1,000 draws.  Because we know the proportions of 1's and negative 1's, inside the urn, we can generate the draws with one line of code, without defining color.  Here's that line of code.  We call this approach a sampling model, since we are modeling the random behavior of a roulette with the sampling of draws from an urn.  
+
+[][*The total winnings, capital S, is simply the sum of these 1,000 independent draws*].  So here's a code that generates an example of S.  If you run that code over and over again, you see that S changes every time.  This is, of course, because S is a random variable.  A very important and useful concept is the probability distribution of the random variable.  The probability distribution of a random variable tells us the probability of the observed value falling in any given interval.  So for example, if we want to know the probability that we lose money, we're asking, what is the probability that S is in the interval S less than 0?  Note that if we can define a cumulative distribution function--let's call it f of a, which is equal to the probability of S being less than or equal to a--then we'll be able to answer any question related to the probability of events defined by a random variable S, including the event S less than 0.  We call f the random variable's distribution function.  We can estimate the distribution function for the random variable S by using a Monte Carlo simulation to generate many, many realizations of the random variable.  
+
+With the code we're about to write, we run the experiment of having 1,000 people play roulette over and over.  Specifically, we're going to do this experiment 10,000 times.  Here's the code.  So now we're going to ask, in our simulation, how often did we get sums smaller or equal to a?  We can get the answer by using this simple code.  This will be a very good approximation of f of a, our distribution function.  In fact, we can visualize the distribution by creating a histogram showing the probability f(b) minus f(a) for several intervals ab.  Here it is.  Now we can easily answer the casino's question, how likely is it that we lose money?  We simply ask, how often was S, out of the 10,000 simulations, smaller than 0?  And the answer is, it was only 4.6% of the time.  So it's quite low.  From the histogram, we also see that that distribution appears to be approximately normal.  If you make a Q-Q plot, you'll confirm that the normal approximation is close to perfect.  If, in fact, the distribution is normal, then all we need to define is the distribution's average and standard deviation.  Because we have the original values from which the distribution is created, we can easily compute these.  The average is 52.5, and the standard deviation is 31.75.  
+
+If we add a normal density with this average and standard deviation to the histogram we created earlier, we see that it matches very well.  This average and this standard deviation have special names.  They are referred to as the expected value and the standard error of the random variable S.  We will say more about this in the next section.  It actually turns out that statistical theory provides a way to derive the distribution of a random variable defined as independent draws from an urn.  Specifically, in our example, we can show that S plus n divided by 2 follows what is known as a binomial distribution.  We therefore do not need to run Monte Carlo simulations, nor use the normal approximation, to know the probability distribution of S.  We did this for illustrative purposes.  We ran the simulation for illustrative purposes.  For the details of the binomial distribution, you can consult any probability book, or even Wikipedia.  However, we will discuss an incredibly useful approximation provided by mathematical theory that applies generally to sums of averages of draws from any urn, the central limit theorem.  
+
+
+[][Textbook link and additional information]
+
+This video corresponds to the textbook section on sampling models.
+https://rafalab.github.io/dsbook/random-variables.html#sampling-models
+
+You can read more about the binomial distribution here.
+https://en.wikipedia.org/wiki/Binomial_distribution
+
+
+[][Key points]
+
+    A sampling model models the random behavior of a process as the sampling of draws from an urn.
+    The probability distribution of a random variable is the probability of the observed value falling in any given interval.
+    We can define a CDF F(a) = Pr(S<= a) to answer questions related to the probability of S being in any interval.
+    The average of many draws of a random variable is called its expected value.
+    The standard deviation of many draws of a random variable is called its standard error.
+
+Monte Carlo simulation: Chance of casino losing money on roulette
+
+We build a sampling model for the random variable S that represents the casino's total winnings. 
+
+```{r}
+# sampling model 1: define urn, then sample
+color <- rep(c("Black", "Red", "Green"), c(18, 18, 2)) # define the urn for the sampling model
+
+n <- 1000
+X <- sample(ifelse(color == "Red", -1, 1), n, replace = TRUE)
+X[1:10]
+```
+
+```{r}
+# sampling model 2: define urn inside sample function by noting probabilities
+x <- sample(c(-1, 1), n, replace = TRUE, prob = c(9/19, 10/19))    # 1000 independent draws
+S <- sum(x)    # total winnings = sum of draws
+S
+```
+
+We use the sampling model to run a Monte Carlo simulation and use the results to estimate the probability of the casino losing money.
+
+```{r}
+n <- 1000    # number of roulette players
+B <- 10000    # number of Monte Carlo experiments
+S <- replicate(B, {
+    X <- sample(c(-1,1), n, replace = TRUE, prob = c(9/19, 10/19))    # simulate 1000 spins
+    sum(X)    # determine total profit
+})
+
+mean(S < 0)    # probability of the casino losing money
+```
+
+We can plot a histogram of the observed values of S as well as the normal density curve based on the mean and standard deviation of S.
+
+```{r}
+library(tidyverse)
+
+s <- seq(min(S), max(S), length = 100)    # sequence of 100 values across range of S
+
+normal_density <- data.frame(s = s, f = dnorm(s, mean(S), sd(S))) # generate normal density for S
+
+data.frame (S = S) %>%    # make data frame of S for histogram
+    ggplot(aes(S, ..density..)) +
+    geom_histogram(color = "black", binwidth = 10) +
+    ylab("Probability") +
+    geom_line(data = normal_density, mapping = aes(s, f), color = "blue")
+```
+
+
+
+
+
+
+```{r}
+colors <- rep(c("Black", "Red", "Green"), c(18, 18, 2))
+
+colors
+
+
+
+color_cotcomes <- sample(colors, 1000, replace=T)
+
+mean(color_cotcomes=="Red")
+
+
+casino_2 <- sample(ifelse(colors=="Red", -1, 1), 1000, replace=T)
+
+sum(casino_2)
+```
+
+```{r}
+casino_x <- sample(c(-1, 1), 1000, replace=TRUE, prob=c(9/19, 10/19))
+
+
+sum(casino_x)
+```
+
+```{r}
+n <- 1000
+B <- 100000
+
+S <- replicate(B, {
+  X <- sample(ifelse(colors=="Red", -1, 1), n, replace=T)
+  sum(X)
+})
+
+
+mean(S>100)
+summary(S)
+```
+
+```{r}
+hist(S, 30)
+```
+
+```{r}
+qqnorm(S, pch = 1, frame = FALSE)
+
+qqline(S, col = "steelblue", lwd = 2)
+```
+
+```{r}
+s <- seq(min(S), max(S), length=100)
+
+normal_den <- data.frame(s=s, f=dnorm(s, mean(S), sd(S)))
+
+data.frame(S=S) %>%
+  ggplot(aes(S, ..density..)) +
+  geom_histogram(color="black", bins=30) +
+  ylab("Probability") +
+  geom_line(data=normal_den, mapping=aes(s, f), color='blue')
+```
+
+
+
+
+
+
+
+![](C:/Users/qp/Pictures/many data generation procedures can be modeled as draws from an urn.png)
+
+![](C:/Users/qp/Pictures/we often assume that the subjects in our study are random sample from the population on interest.png)
+
+![](C:/Users/qp/Pictures/sampling models are ubiquitous in data science.png)
+
+![](C:/Users/qp/Pictures/our assumption is 1000 peopel will play rouletter wheel.png)
+
+![](C:/Users/qp/Pictures/also assume the only game you can play with roulette is bet on red or black.png)
+
+![](C:/Users/qp/Pictures/we use capital s to represent the the casino's total winnings.png)
+
+![](C:/Users/qp/Pictures/lets start by constructing the urn, a roulette has 18 red, 18 black, 2 green pocket.png)
+
+![](C:/Users/qp/Pictures/now put all colors into our urn.png)
+
+![](C:/Users/qp/Pictures/we construct the urn with this code.png)
+
+![](C:/Users/qp/Pictures/we can then code 1000 independent draws and using 1 as casino earn 1 dallor ad -1 as losing 1 dallor.png)
+
+![](C:/Users/qp/Pictures/we call this approach a sampling model.png)
+
+![](C:/Users/qp/Pictures/if we run that code over and over again, we see that outcome changes everytime.png)
+
+![](C:/Users/qp/Pictures/because the outcome is a random variable.png)
+
+![a very important and useful concept is the probability distribution of the random variable.png](C:/Users/qp/Pictures/a very important and useful concept is the probability distribution of the random variable.png)
+
+![lets define a comulative distribution function first and then we'll be able to answer any question related to the probability of events defined by random variable.png](C:/Users/qp/Pictures/lets define a comulative distribution function first and then we'll be able to answer any question related to the probability of events defined by random variable.png)
+
+![](C:/Users/qp/Pictures/we call the F as random variable distribution function.png)
+
+![](C:/Users/qp/Pictures/lets use a monte carlo simulation to generate many realizations of the random variable.png)
+
+![](C:/Users/qp/Pictures/we can now answer casino owner's question how likely is it that we lose money.png)
+
+![](C:/Users/qp/Pictures/from the histogram we also see that the distribution appears to be approximatelly normal.png)
+
+![](C:/Users/qp/Pictures/we can check distribution's average and standard deviation.png)
+
+![](C:/Users/qp/Pictures/and using this code to comparing with normal distributed corve with same mean and sd.png)
+
+![](C:/Users/qp/Pictures/we see it matches very well here with above code.png)
+
+![](C:/Users/qp/Pictures/this average and standard deviation has special name, ther are refered to as the expected value.png)
+
+![](C:/Users/qp/Pictures/and the standard error of variable S.png)
+
+![](C:/Users/qp/Pictures/specifically in our example we can show that S plus n follows binomial distribution.png)
+
+![](C:/Users/qp/Pictures/we'll then introduce an incredibly useful approximation.png)
+
+
+
+
+
+
+
+
+
+# Distributions versus Probability Distributions
+
+
+Before we continue, let's make a subtle, yet important distinction and connection between the distribution of a list of numbers, which we covered in our data visualization module and a probability distribution, which we're talking about here.  [][*Previously we described how any list of numbers, let's call it x1 through xn, has a distribution*].  The definition is quite straightforward.  We define capital F of a as a function that answers the question, what proportion of the list is less than or equal to a.  Because they are useful summaries, when the distribution is approximately normal, we define the average and the standard deviation.  These are defined with a straightforward operation of the list.  In r we simply compute the average and standard deviation this way, for example.  
+
+**A random variable x has a distribution function.  To define this, we do not need a list of numbers.  It's a theoretical concept**.  In this case, **to define the distribution, we define capital F of a as a function that answers the question, what is the probability that x is less than or equal to a.  There is no list of numbers**.  However, if x is defined by drawing from an urn with numbers in it, then there is a list, the list of numbers inside the urn.  In this case, the distribution of that list is the probability distribution of x and the average and standard deviation of that list are the expected value and standard errors of the random variable.  
+
+Another way to think about it that does not involve an urn is to run a Monte Carlo simulation and generate a very large list of outcomes of x.  These outcomes are a list of numbers.  The distribution of this list will be a very good approximation of the probability distribution of x.  The longer the list, the better the approximation.  The average and standard deviation of this list will approximate the expected value and standard error of the random variable.  
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on distributions versus probability distributions.
+https://rafalab.github.io/dsbook/random-variables.html#distributions-versus-probability-distributions
+
+
+[][Key points]
+
+    A random variable X has a probability distribution function F(a) that defines Pr(X<=a) over all values of a.
+[][    Any list of numbers has a distribution. The probability distribution function of a random variable is defined mathematically and does not depend on a list of numbers.]
+    The results of a Monte Carlo simulation with a large enough number of observations will approximate the probability distribution of X.
+    If a random variable is defined as draws from an urn:
+
+        The probability distribution function of the random variable is defined as the distribution of the list of values in the urn.
+        The expected value of the random variable is the average of values in the urn.
+        The standard error of one draw of the random variable is the standard deviation of the values of the urn.
+
+
+
+
+![](C:/Users/qp/Pictures/distribution of a list of numbers.png)
+
+![](C:/Users/qp/Pictures/probability distribution.png)
+
+![](C:/Users/qp/Pictures/previously we described how any list of numbers has a distribution.png)
+
+![what proportion of the list is less than or equal to a](C:/Users/qp/Pictures/we define capital F of a as a function that answers the question what proportion of the list is less that or equal to a.png)
+
+![](C:/Users/qp/Pictures/we can calculate the average and standard deviation in r this way.png)
+
+![](C:/Users/qp/Pictures/a random variable has a distribution function.png)
+
+![](C:/Users/qp/Pictures/what is the probability that X is less than or equal to a.png)
+
+
+
+
+
+
+
+
+
+# Notation for Random Variables
+
+
+Note that in statistical textbooks, capital letters are used to denote random variables and we follow this convention here.  Lower case letters are used for observed values.  You'll see some notation that includes both.  For example, you'll see events defined as capital X less than or equal than small cap x.  Here, x is a random variable, making it a random event.  And little x is an arbitrary value and not random.  So for example, capital X might represent the number on a die roll--
+that's a random value--
+and little x will represent an actual value we see.
+So in this case, the probability of capital X being equal to little x
+is 1 in 6 regardless of the value of little x.
+Note that this notation is a bit strange,
+because we ask questions about probability,
+since big x is not an observed quantity.
+Instead, it's a random quantity that we will see in the future.
+We can talk about what we expect it to be, what values are probable,
+but not what it is.
+But once we have the data, we do see a realization of big x,
+so data scientists talk about what could have been,
+but after we see what actually happened.
+
+
+
+
+
+
+![](C:/Users/qp/Pictures/usually you'll see we use notation with capital letter as the random variables and low case letters as the observed values.png)
+
+![](C:/Users/qp/Pictures/real case using capital letter and low case letter to represent.png)
+
+![in die row game, the probability of capital X being equal to letter x is 1 in 6 regardless of the value of little x.png](C:/Users/qp/Pictures/in die row game, the probability of capital X being equal to letter x is 1 in 6 regardless of the value of little x.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+dim(cars)
+
+#head(cars)
+
+
+cor(cars$speed, cars$dist)
+
+linearMod <- lm(dist ~ speed, data = cars)
+#linearMod
+print(linearMod)
+```
+
+```{r}
+# capture model summary
+modsummary <- summary(linearMod)
+modsummary
+```
+
+```{r}
+# model coefficient
+summary(linearMod)$coefficients
+print(" ")
+
+
+# get the beta estimate for speed
+beta.estimate <- summary(linearMod)$coefficients["speed", "Estimate"]
+beta.estimate
+
+# get the std.error for speed
+std.error <- modsummary$coefficients["speed", "Std. Error"]
+std.error
+
+# calc t statistic
+t_value <- beta.estimate/std.error
+t_value
+
+# calc p value
+p_value <- 2*pt(-abs(t_value), df=nrow(cars)-ncol(cars))
+p_value
+
+
+
+nrow(cars)-ncol(cars)
+```
 
 
 
