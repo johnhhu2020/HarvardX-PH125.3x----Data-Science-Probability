@@ -222,6 +222,7 @@ When R updated to version 3.6 in early 2019, the default method for setting the 
 
 [][*If you are running R 3.6 or later, you can revert to the original seed setting behavior by adding the argument sample.kind="Rounding". For example:*]
 
+
 set.seed(1)
 set.seed(1, sample.kind="Rounding")    # will make R 3.6 generate a seed as in R 3.5
 
@@ -4937,7 +4938,7 @@ data.frame(S=S) %>%
 
 Before we continue, let's make a subtle, yet important distinction and connection between the distribution of a list of numbers, which we covered in our data visualization module and a probability distribution, which we're talking about here.  [][*Previously we described how any list of numbers, let's call it x1 through xn, has a distribution*].  The definition is quite straightforward.  We define capital F of a as a function that answers the question, what proportion of the list is less than or equal to a.  Because they are useful summaries, when the distribution is approximately normal, we define the average and the standard deviation.  These are defined with a straightforward operation of the list.  In r we simply compute the average and standard deviation this way, for example.  
 
-**A random variable x has a distribution function.  To define this, we do not need a list of numbers.  It's a theoretical concept**.  In this case, **to define the distribution, we define capital F of a as a function that answers the question, what is the probability that x is less than or equal to a.  There is no list of numbers**.  However, if x is defined by drawing from an urn with numbers in it, then there is a list, the list of numbers inside the urn.  In this case, the distribution of that list is the probability distribution of x and the average and standard deviation of that list are the expected value and standard errors of the random variable.  
+**A random variable x has a distribution function.  To define this, we do not need a list of numbers.  It's a theoretical concept**.  In this case, [][**to define the distribution, we define capital F of a as a function that answers the question, what is the probability that x is less than or equal to a.  There is no list of numbers**](recall the casino roulette game, using -1 for red and 1 for other colors).  However, if x is defined by drawing from an urn with numbers in it, then there is a list, the list of numbers inside the urn.  In this case, the distribution of that list is the probability distribution of x and the average and standard deviation of that list are the expected value and standard errors of the random variable.  
 
 Another way to think about it that does not involve an urn is to run a Monte Carlo simulation and generate a very large list of outcomes of x.  These outcomes are a list of numbers.  The distribution of this list will be a very good approximation of the probability distribution of x.  The longer the list, the better the approximation.  The average and standard deviation of this list will approximate the expected value and standard error of the random variable.  
 
@@ -4987,23 +4988,19 @@ https://rafalab.github.io/dsbook/random-variables.html#distributions-versus-prob
 # Notation for Random Variables
 
 
-Note that in statistical textbooks, capital letters are used to denote random variables and we follow this convention here.  Lower case letters are used for observed values.  You'll see some notation that includes both.  For example, you'll see events defined as capital X less than or equal than small cap x.  Here, x is a random variable, making it a random event.  And little x is an arbitrary value and not random.  So for example, capital X might represent the number on a die roll--
-that's a random value--
-and little x will represent an actual value we see.
-So in this case, the probability of capital X being equal to little x
-is 1 in 6 regardless of the value of little x.
-Note that this notation is a bit strange,
-because we ask questions about probability,
-since big x is not an observed quantity.
-Instead, it's a random quantity that we will see in the future.
-We can talk about what we expect it to be, what values are probable,
-but not what it is.
-But once we have the data, we do see a realization of big x,
-so data scientists talk about what could have been,
-but after we see what actually happened.
+Note that in statistical textbooks, capital letters are used to denote random variables and we follow this convention here.  Lower case letters are used for observed values.  You'll see some notation that includes both.  For example, you'll see events defined as capital X less than or equal than small cap x.  Here, x is a random variable, making it a random event.  And little x is an arbitrary value and not random.  [][**So for example, capital X might represent the number on a die roll--that's a random value--and little x will represent an actual value we see.  So in this case, the probability of capital X being equal to little x is 1 in 6 regardless of the value of little x**].  Note that this notation is a bit strange, because we ask questions about probability, since big x is not an observed quantity.  Instead, it's a random quantity that we will see in the future.  We can talk about what we expect it to be, what values are probable, but not what it is.  But once we have the data, we do see a realization of big x, so data scientists talk about what could have been, but after we see what actually happened.  
 
 
+[][Textbook link]
 
+This video corresponds to the textbook section on notation for random variables.
+https://rafalab.github.io/dsbook/random-variables.html#notation-for-random-variables
+
+
+[][Key points]
+
+    Capital letters denote random variables (X) and lowercase letters denote observed values (x).
+    In the notation Pr(X=x), we are asking how frequently the random variable X is equal to the value x. For example, if x=6, this statement becomes Pr(X=6).
 
 
 
@@ -5012,6 +5009,458 @@ but after we see what actually happened.
 ![](C:/Users/qp/Pictures/real case using capital letter and low case letter to represent.png)
 
 ![in die row game, the probability of capital X being equal to letter x is 1 in 6 regardless of the value of little x.png](C:/Users/qp/Pictures/in die row game, the probability of capital X being equal to letter x is 1 in 6 regardless of the value of little x.png)
+
+
+
+
+
+
+
+
+
+# Central Limit Theorem
+
+
+**The Central Limit Theorem--or the CLT for short tells us that when the number of independent draws--also called sample size--is large, the probability distribution of the sum of these draws is approximately normal**.  Because sampling models are used for so many data generation processes, the CLT is considered one of the most important mathematical insights in history.  [][*Previously, we discussed that if we know that the distribution of a list of numbers is approximated by the normal distribution, all we need to describe the list are the average and the standard deviation.  We also know that the same applies to probability distributions.  If a random variable has a probability distribution that is approximated with the normal distribution, then all we need to describe that probability distribution are the average and the standard deviation.  Referred to as the expected value and the standard error*].  
+
+We have described sampling models for draws.  We will now go over the mathematical theory that lets us approximate the probability distribution for the sum of draws.  Once we do this, we will be able to help the Casino predict how much money they will make.  The same approach we use for sum of the draws will be useful for describing the distribution of averages and proportions, which we will need to understand, for example, how polls work.  The first important concept to learn is the [][*expected value*].  *In statistics books, it is common to use the letter capital E, like this, E of X equals mu, to denote that the expected value of the random variable X is mu*.  Mu is a Greek letter for M, which is the first letter in the word mean, which is a synonym with average.  A random variable will vary around an expected value in a way that if you take the average of many, many draws, the average of the draws will approximate the expected value.  Getting closer and closer the more draws you take.  A useful formula is that [][*the expected value of the random variables defined by one draw is the average of the numbers in the urn*].  
+
+For example, in our urn used to model betting on red on roulette, we have twenty 1's and 18 negative 1's.  So the expected value is E of X equals 20 plus negative 18 divided by 38.  Which is about $0.05.  It is a bit counterintuitive to say that X varies around 0.05 when the only values it takes is 1 and minus 1.  An intuitive way to think about the expected value is that if we play the game over and over, the Casino wins, on average, $0.05 per game.  Our Monte Carlo Simulation confirms this.  Here we run a million games and we see that the mean of X, which is a bunch of 0s and 1s, is about $0.05.  *In general, if the urn has just two possible outcomes-- say, a and b, with proportions p and 1 minus p respectively, the average is a times p plus b times 1 minus p*.  To see this, notice that if there are nb's in the urn, then we have npa's and n times 1 minus is pb's.  And because the average is the sum, we have n times a times p plus n times b times 1 minus p divided by the total, which is n.  And we get the formula that we just saw.  Now, the reason we define the expected value is because this mathematical definition turns out to be useful for approximating the probability distribution of sums, which in turn, is useful to describe the distribution of averages and proportions.  
+
+[][*The first useful fact is that the expected value of the sum of draws is the number of draws times the average of the numbers in the urn*].  So if 1,000 people play roulette, the Casino expects to win, on average, 1,000 times $0.05, which is $50.  But this is an expected value.  How different can one observation be from the expected value ?  The Casino really wants to know this.  What is the range of possibilities?  If negative numbers are too likely, we may not install the roulette wheels.  Statistical theory, once again, answers this question.  The standard error, or SE for short, gives us an idea of the size of the variation around the expected value.  In statistics books, it is common to use SE of X to know the standard error of the random variable X If our draws are independent--That's an important assumption-- *then the standard error of the sum is given by the equation, the square root of the number of draws, times the standard deviation of the numbers in the urn*.  Using the definition of standard deviation, we can derive with a bit of math, that if an urn contains two values--a and b, with proportions p and 1 minus p, respectively--the standard deviation is the absolute value of b minus a times the square root of p times 1 minus p.  
+
+So in our roulette example, the standard deviation of the values inside the urn is 1 minus minus 1 times the square root of 10/19 times 9/19.  Or 0.9986, so practically 1.  The standard error tells us the typical difference between a random variable and its expectation.  So because 1 draw is obviously the sum of 1 draw, we can use a formula to calculate that the random variable defined by 1 draw has an expected value of $0.05 and a standard error of about 1.  This makes sense since we either get a 1 or a minus 1 with 1 slightly favored over the minus 1.  Using the formula, the sum of 1,000 people playing has standard error of about $32.  So when 1,000 people bet on red, the Casino is expected to win $50 with a standard error of $32.  So it seems like a safe bet.  [][*But we still really can't answer the question--How likely is the Casino to lose money*]?  Here The Central Limit Theorem will help.  The central limit theorem tells us that the distribution of the sum of S is approximated by a normal distribution.  Using the formula, we know that the expected value and standard errors are $52 and $32, respectively.  Note that the theoretical values match those obtained with the Monte Carlo simulation we ran earlier.  Using the Central Limit Theorem, we can skip the Monte Carlo simulation and instead, compute the probability of the Casino losing money using the approximation.  We write the simple code using the pnorm function and we get the answer.  It's about 5%.  Which, is in very good agreement-- with the Monte Carlo simulation we ran.  
+
+
+[][Textbook links]
+
+This video corresponds to the textbook sections on expected value and standard error and the Central Limit Theorem.
+https://rafalab.github.io/dsbook/random-variables.html#the-expected-value-and-standard-error
+https://rafalab.github.io/dsbook/random-variables.html#central-limit-theorem
+
+
+[][Key points]
+
+[][*    The Central Limit Theorem (CLT) says that the distribution of the sum of a random variable is approximated by a normal distribution.*]
+[][*    The expected value of a random variable, E(X) = mu, is the average of the values in the urn. This represents the expectation of one draw. *]
+[][*    The standard error of one draw of a random variable is the standard deviation of the values in the urn.*]
+[][*    The expected value of the sum of draws is the number of draws times the expected value of the random variable. *]
+[][*    The standard error of the sum of independent draws of a random variable is the square root of the number of draws times the standard deviation of the urn. *]
+
+Equations
+
+These equations apply to the case where there are only two outcomes, a and b with proportions p and 1-p respectively. The general principles above also apply to random variables with more than two outcomes.
+
+Expected value of a random variable: 
+    ap + b(1-p)
+
+Expected value of the sum of n draws of a random variable: 
+    n * (ap + b(1-p))
+
+[][*Standard deviation of an urn with two values: *]
+    |b-a|sqrt(p(1-p))
+
+Standard error of the sum of n draws of a random variable:
+    sqrt(n)*|b-a|*sqrt(p(1-p))
+
+
+
+
+
+```{r}
+B <- 10^6
+
+X <- sample(c(1, -1), B, replace = TRUE, prob = c(10/19, 9/19))
+
+  
+mean(X)
+```
+
+```{r}
+mean(S<0)
+
+
+n <- 1000
+
+mu <- n*(20-18)/38
+se <- sqrt(n)*2*sqrt(90)/19    # =================================================================================
+
+pnorm(0, mu, se)
+```
+
+
+
+
+
+![](C:/Users/qp/Pictures/when the number of independent draws or the sample size is large, the sum of these independent draws is approximately normal.png)
+
+![](C:/Users/qp/Pictures/if a random variable has a probability distribution that is approximated with the normal distribution thenall we need to know to describe the probability distribution is.png)
+
+![](C:/Users/qp/Pictures/the first important concept to learn is expected value.png)
+
+![](C:/Users/qp/Pictures/in casino roulette games, the expected value of the random variables defined by one draw is the average number in the urn.png)
+
+![](C:/Users/qp/Pictures/here we run a monte carlo simulation to check the espected value is 0.05.png)
+
+![the expected value is this](C:/Users/qp/Pictures/if the uren has just 2 possible outcomes a and b, with proportion p and 1-p, the average is this.png)
+
+![](C:/Users/qp/Pictures/the first useful fact is that the expected value of the sum of draws is the number of of draw times the average of the number in the urn.png)
+
+![](C:/Users/qp/Pictures/the number of draws times the average of the number in the urn.png)
+
+![](C:/Users/qp/Pictures/so if 1000 people roulette, the casino expected to win on average 50 usd.png)
+
+![the standard error gives us an idea of the size of the variation around the expected value.png](C:/Users/qp/Pictures/the standard error gives us an idea of the size of the variation around the expected value.png)
+
+![](C:/Users/qp/Pictures/in statistics books its common to use SE of X to denote the standard error of the random variable X.png)
+
+![the standard error of the sum is given by this equation, the square root of the number of draws times the standard deviation of the numbers in the urn.png](C:/Users/qp/Pictures/the standard error of the sum is given by this equation, the square root of the number of draws times the standard deviation of the numbers in the urn.png)
+
+![](C:/Users/qp/Pictures/the standard deviation is the absolute value of b minus a times the square root of p times 1 minus p.png)
+
+![the standard errors tell us the typical difference between a random variable and its expectation](C:/Users/qp/Pictures/the standard deviation of the value inside the urn is this.png)
+
+![](C:/Users/qp/Pictures/so when 1000 people playing, the casino is expected to win 50 usd with standard error of 32.png)
+
+![](C:/Users/qp/Pictures/using the central limit theorem, we can skip the monte carlo simulation.png)
+
+![we can use the use central limit theorem to compute the casino losing money using the approximation.png](C:/Users/qp/Pictures/we can use the use central limit theorem to compute the casino losing money using the approximation.png)
+
+
+
+
+
+
+
+
+
+
+# DataCamp Assessment: Random Variables and Sampling Models
+
+
+Assessment due Jul 7, 2022 20:19 AWST
+
+This assessment covers the random variables and sampling models.
+
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+Assessment: Random Variables and Sampling Models (External resource) (7.5 points possible)
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
+
+
+## Exercise 1. American Roulette probabilities
+
+An American roulette wheel has 18 red, 18 black, and 2 green pockets. Each red and black pocket is associated with a number from 1 to 36. The two remaining green slots feature "0" and "00". Players place bets on which pocket they think a ball will land in after the wheel is spun. Players can bet on a specific number (0, 00, 1-36) or color (red, black, or green).
+
+What are the chances that the ball lands in a green pocket?
+Instructions
+100 XP
+
+    Define a variable p_green as the probability of the ball landing in a green pocket.
+    Print the value of p_green.
+
+```{r}
+# The variables `green`, `black`, and `red` contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green/(green + black + red)
+
+# Print the variable `p_green` to the console
+p_green
+```
+
+
+## Exercise 2. American Roulette payout
+
+In American roulette, the payout for winning on green is $17. This means that if you bet $1 and it lands on green, you get $17 as a prize.
+
+Create a model to predict your winnings from betting on green one time.
+Instructions
+100 XP
+
+    Use the sample function return a random value from a specified range of values.
+    Use the prob = argument in the sample function to specify a vector of probabilities for returning each of the values contained in the vector of values being sampled.
+    Take a single sample (n = 1).
+
+```{r}
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1, sample.kind="Rounding")
+
+
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1 - p_green
+
+# Create a model to predict the random variable `X`, your winnings from betting on green. Sample one time.
+X <- sample(c(green, black, red), 1)
+
+# Print the value of `X` to the console
+X
+
+```
+
+```{r}
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1, sample.kind="Rounding")
+
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1 - p_green
+
+# Create a model to predict the random variable `X`, your winnings from betting on green. Sample one time.
+X <- sample(c(1, -1), prob=c(p_green, p_not_green), 1)
+
+# Print the value of `X` to the console
+X
+
+```
+
+
+## Exercise 3. American Roulette expected value
+
+In American roulette, the payout for winning on green is $17. This means that if you bet $1 and it lands on green, you get $17 as a prize.In the previous exercise, you created a model to predict your winnings from betting on green.
+
+Now, compute the expected value of X, the random variable you generated previously.
+Instructions
+100 XP
+
+    Using the chances of winning $17 (p_green) and the chances of losing $1 (p_not_green), calculate the expected outcome of a bet that the ball will land in a green pocket.
+
+```{r}
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Calculate the expected outcome if you win $17 if the ball lands on green and you lose $1 if the ball doesn't land on green
+17*p_green+(-1)*p_not_green
+```
+
+
+## Exercise 4. American Roulette standard error
+
+The standard error of a random variable X tells us the difference between a random variable and its expected value. You calculated a random variable X in exercise 2 and the expected value of that random variable in exercise 3.
+
+Now, compute the standard error of that random variable, which represents a single outcome after one spin of the roulette wheel.
+Instructions
+100 XP
+
+    Compute the standard error of the random variable you generated in exercise 2, or the outcome of any one spin of the roulette wheel.
+    Recall that the payout for winning on green is $17 for a $1 bet.
+
+```{r}
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Compute the standard error of the random variable
+abs(17+1)*sqrt(p_green*p_not_green)
+```
+
+
+## Exercise 5. American Roulette sum of winnings
+
+You modeled the outcome of a single spin of the roulette wheel,X, in exercise 2.
+
+Now create a random variable S that sums your winnings after betting on green 1,000 times.
+Instructions
+100 XP
+
+    Use set.seed to make sure the result of your random operation matches the expected answer for this problem.
+    Specify the number of times you want to sample from the possible outcomes.
+    Use the sample function to return a random value from a vector of possible values.
+    Be sure to assign a probability to each outcome and to indicate that you are sampling with replacement.
+[][*    Do not use replicate as this changes the output of random sampling and your answer will not match the grader.*]
+
+```{r}
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling
+set.seed(1, sample.kind="Rounding")
+
+# Define the number of bets using the variable 'n'
+n <- 1000
+
+# Create a vector called 'X' that contains the outcomes of 1000 samples
+X <- sample(c(17, -1), prob=c(p_green, p_not_green), n, replace=T)
+
+# Assign the sum of all 1000 outcomes to the variable 'S'
+S <- sum(X)
+
+# Print the value of 'S' to the console
+S
+```
+
+
+## Exercise 6. American Roulette winnings expected value
+
+In the previous exercise, you generated a vector of random outcomes,S, after betting on green 1,000 times.
+
+What is the expected value of S?
+Instructions
+100 XP
+
+    Using the chances of winning $17 (p_green) and the chances of losing $1 (p_not_green), calculate the expected outcome of a bet that the ball will land in a green pocket over 1,000 bets.
+
+```{r}
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Define the number of bets using the variable 'n'
+n <- 1000
+
+# Calculate the expected outcome of 1,000 spins if you win $17 when the ball lands on green and you lose $1 when the ball doesn't land on green
+sqrt(n)*abs(17+1)*sqrt(p_green*p_not_green)
+
+# ====================================================================================================================
+# Read before you code, it asking you to calculate the expected value of 100 spins
+1000*(17*p_green+(-1)*p_not_green)
+```
+
+
+## Exercise 7. American Roulette winnings expected value
+
+You generated the expected value of
+
+, the outcomes of 1,000 bets that the ball lands in the green pocket, in the previous exercise.
+
+What is the standard error of
+
+?
+Instructions
+100 XP
+
+    Compute the standard error of the random variable you generated in exercise 5, or the outcomes of 1,000 spins of the roulette wheel.
+
+```{r}
+# The variables 'green', 'black', and 'red' contain the number of pockets for each color
+green <- 2
+black <- 18
+red <- 18
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- green / (green+black+red)
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Define the number of bets using the variable 'n'
+n <- 1000
+
+# Compute the standard error of the sum of 1,000 outcomes
+sqrt(n)*abs(17+1)*sqrt(p_green*p_not_green)
+```
+
+
+## End of Assessment: Random Variables and Sampling Models
+
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
+
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
+
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
+
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
+
+
+
+
+
+
+
+
+
+## Course  /  Section 3: Random Variables, Sampling Models, and the Central Limit Theorem  /  3.2 The Central Limit Theorem Continued
+
+
+# Averages and Proportions
+
+
+
+
+
+![](C:/Users/qp/Pictures/the expected value of the sum of random variables is the sum of the expected value of the individual random variables.png)
+
+![the expected value of a sum of random variables is the sum of the expected values of the individual random variables](C:/Users/qp/Pictures/the expected value of a sum of random variables is the sum of the expected values of the individual random variables.png)
+
+![](C:/Users/qp/Pictures/if the x are drawn from same urn, then they all have same expected value, mu, therefore the expected value of the sum is nmu.png)
+
+![](C:/Users/qp/Pictures/the expected value of a random variable times a non-random constant is the expected value times that non-random constant.png)
+
+![](C:/Users/qp/Pictures/expected value of a random variable times a non-random constant is the expected value times that non-random constant.png)
+
+![](C:/Users/qp/Pictures/the consequence of those two facts that we described is that the expected value of the average of draws from the same urn is the expected value of the urn.png)
+
+![](C:/Users/qp/Pictures/the square of the standard error of the sum of independent random variables is the sum of the square of the standard error of each random variable.png)
+
+![](C:/Users/qp/Pictures/the standard error of the sum of x is the square root of the sum of the standard error squared.png)
+
+![](C:/Users/qp/Pictures/and note that the square of the standard error is referred to as variance.png)
+
+![](C:/Users/qp/Pictures/the standard error of a random variable times a non-random constant is the standard error times the non-random constant.png)
+
+![](C:/Users/qp/Pictures/the standard error of random variable times a non-random constant is teh standard error times a non-random constant.png)
+
+![](C:/Users/qp/Pictures/a consequence of previous 2 properties is that the standard error of the average of independent draws form the same urn is the standard deviation of the urn devided by the square root of n.png)
+
+![](C:/Users/qp/Pictures/the standard error of the average of independent draws form the same urn is the standard deviation of the urn devided by the square root of n.png)
+
+
+
 
 
 
