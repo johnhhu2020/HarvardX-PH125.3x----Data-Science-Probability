@@ -4723,17 +4723,17 @@ x
 
 Many data-generation procedures, those that produce data that we study, can be modeled quite well as **draws from an urn**.  For example, we can model the process of polling likely voters as drawing 0's--Republicans-- and 1's--Democrats-- from an urn containing the 0 and 1 code for all likely voters.  We'll see that in more detail later.  In epidemiological studies, [][*we often assume that the subjects in our study are a random sample from the population of interest*].  The data related to a specific outcome can be modeled as a random sample from an urn containing the values for those outcomes for the entire population of interest.  
 
-Similarly, in experimental research, we often assume that the individual organisms we are studying-- for example, worms, flies, or mice--are a random sample from a larger population.  Randomized experiments can also be modeled by draws from urn, given the way individuals are assigned to groups.  When getting assigned, you draw your group at random.  Sampling models are therefore ubiquitous in data science.  Casino games offer a *plethora* (a large amount of) of examples of real-world situations in which sampling models are used to answer specific questions.  We will therefore start with such examples.  OK, let's start with this.  
+Similarly, in experimental research, we often assume that the individual organisms we are studying-- for example, worms, flies, or mice--are a random sample from a larger population.  [][Randomized experiments can also be modeled by draws from urn, given the way individuals are assigned to groups].  When getting assigned, you draw your group at random.  Sampling models are therefore ubiquitous in data science.  Casino games offer a *plethora* (a large amount of) of examples of real-world situations in which sampling models are used to answer specific questions.  We will therefore start with such examples.  OK, let's start with this.  
 
 Suppose a very small casino hires you to consult on whether they should set up a roulette wheel.  They want to know if they can make money off it, or if it's too risky and they might lose.  To keep the example simple, we will assume that 1,000 people will play, and that the only game you can play is to bet on red or black.  The casino wants to predict how much money they will make or lose.  They want a range of values that are possible, and in particular, [][*they want to know, what is the chance of losing money?*]  If this probability is too high, they will pass on installing roulette wheels, since they can't take the risk, given that they need to pay their employees and keep the lights on.  
 
-We're going to define a random variable, capital S, that will represent the casino's total winnings.  Let's start by constructing the urn, the urn we use for our sampling model.  A roulette wheel has 18 red pockets, 18 black pockets, and 2 green ones.  So playing a color in one game of roulette is equivalent to drawing from this urn.  Let's write some code.  There's 18 black, 18 red, and 2 green.  The 1,000 outcomes from 1,000 people playing are independent draws from this urn.  If red comes up, the gambler wins, and the casino loses $1, so we draw a negative 1.  Otherwise, the casino wins $1, and we draw a 1.  We can code 1,000 independent draws using the following code.  Here are the first 10 outcomes of these 1,000 draws.  Because we know the proportions of 1's and negative 1's, inside the urn, we can generate the draws with one line of code, without defining color.  Here's that line of code.  We call this approach a sampling model, since we are modeling the random behavior of a roulette with the sampling of draws from an urn.  
+***We're going to define a random variable, capital S, that will represent the casino's total winnings***.  Let's start by constructing the urn, the urn we use for our sampling model.  A roulette wheel has 18 red pockets, 18 black pockets, and 2 green ones.  So playing a color in one game of roulette is equivalent to drawing from this urn (*so in what situations it is not???* continue data and no category maybe).  Let's write some code.  There's 18 black, 18 red, and 2 green.  The 1,000 outcomes from 1,000 people playing are independent draws from this urn.  If red comes up, the gambler wins, and the casino loses $1, so we draw a negative 1.  Otherwise, the casino wins $1, and we draw a 1.  We can code 1,000 independent draws using the following code.  Here are the first 10 outcomes of these 1,000 draws.  [][***Because we know the proportions of 1's and negative 1's, inside the urn***], we can generate the draws with one line of code, without defining color.  Here's that line of code.  [][We call this approach a sampling model, since we are modeling the random behavior of a roulette with the sampling of draws from an urn].  
 
-[][*The total winnings, capital S, is simply the sum of these 1,000 independent draws*].  So here's a code that generates an example of S.  If you run that code over and over again, you see that S changes every time.  This is, of course, because S is a random variable.  A very important and useful concept is the probability distribution of the random variable.  The probability distribution of a random variable tells us the probability of the observed value falling in any given interval.  So for example, if we want to know the probability that we lose money, we're asking, what is the probability that S is in the interval S less than 0?  Note that if we can define a cumulative distribution function--let's call it f of a, which is equal to the probability of S being less than or equal to a--then we'll be able to answer any question related to the probability of events defined by a random variable S, including the event S less than 0.  We call f the random variable's distribution function.  We can estimate the distribution function for the random variable S by using a Monte Carlo simulation to generate many, many realizations of the random variable.  
+[][*The total winnings, capital S, is simply the sum of these 1,000 independent draws*].  So here's a code that generates an example of S.  If you run that code over and over again, you see that S changes every time.  This is, of course, [][because S is a random variable].  A very important and useful concept is the probability distribution of the random variable.  ***The probability distribution of a random variable tells us the probability of the observed value falling in any given interval***.  So for example, *if we want to know the probability that we lose money, we're asking, what is the probability that S is in the interval S less than 0*?  Note that if we can define a cumulative distribution function--let's call it f of a, which is equal to the probability of S being less than or equal to a--then we'll be able to answer any question related to the probability of events defined by a random variable S, including the event S less than 0.  *We call f the random variable's distribution function*.  We can estimate the distribution function for the random variable S by using a Monte Carlo simulation to generate many, many realizations of the random variable.  
 
-With the code we're about to write, we run the experiment of having 1,000 people play roulette over and over.  Specifically, we're going to do this experiment 10,000 times.  Here's the code.  So now we're going to ask, in our simulation, how often did we get sums smaller or equal to a?  We can get the answer by using this simple code.  This will be a very good approximation of f of a, our distribution function.  In fact, we can visualize the distribution by creating a histogram showing the probability f(b) minus f(a) for several intervals ab.  Here it is.  Now we can easily answer the casino's question, how likely is it that we lose money?  We simply ask, how often was S, out of the 10,000 simulations, smaller than 0?  And the answer is, it was only 4.6% of the time.  So it's quite low.  From the histogram, we also see that that distribution appears to be approximately normal.  If you make a Q-Q plot, you'll confirm that the normal approximation is close to perfect.  If, in fact, the distribution is normal, then all we need to define is the distribution's average and standard deviation.  Because we have the original values from which the distribution is created, we can easily compute these.  The average is 52.5, and the standard deviation is 31.75.  
+With the code we're about to write, [][*we run the experiment of having 1,000 people play roulette over and over*].  Specifically, we're going to do this experiment 10,000 times.  Here's the code.  So now we're going to ask, in our *simulation*, how often did we get sums smaller or equal to a?  We can get the answer by using this simple code.  This will be a very good approximation of f of a, our distribution function.  In fact, we can visualize the distribution by creating a histogram showing the probability f(b) minus f(a) for several intervals ab.  Here it is.  Now we can easily answer the casino's question, how likely is it that we lose money?  We simply ask, how often was S, out of the 10,000 simulations, smaller than 0?  And the answer is, it was only 4.6% of the time.  So it's quite low.  From the [][*histogram*] (*What is this hist??? Think how that 1000 gamblers involved*), we also see that that distribution appears to be approximately normal.  If you make a Q-Q plot, you'll confirm that the normal approximation is close to perfect.  If, in fact, the distribution is normal, then all we need to define is the distribution's average and standard deviation.  Because we have the original values from which the distribution is created, we can easily compute these.  The average is 52.5, and the standard deviation is 31.75.  
 
-If we add a normal density with this average and standard deviation to the histogram we created earlier, we see that it matches very well.  This average and this standard deviation have special names.  They are referred to as the expected value and the standard error of the random variable S.  We will say more about this in the next section.  It actually turns out that statistical theory provides a way to derive the distribution of a random variable defined as independent draws from an urn.  Specifically, in our example, we can show that S plus n divided by 2 follows what is known as a binomial distribution.  We therefore do not need to run Monte Carlo simulations, nor use the normal approximation, to know the probability distribution of S.  We did this for illustrative purposes.  We ran the simulation for illustrative purposes.  For the details of the binomial distribution, you can consult any probability book, or even Wikipedia.  However, we will discuss an incredibly useful approximation provided by mathematical theory that applies generally to sums of averages of draws from any urn, the central limit theorem.  
+*If we add a normal density with this average and standard deviation to the histogram we created earlier, we see that it matches very well.  This average and this standard deviation have special names.  They are referred to as the expected value and the standard error of the random variable S*.  We will say more about this in the next section.  It actually turns out that statistical theory provides a way to derive the distribution of a random variable defined as independent draws from an urn.  Specifically, in our example, we can show that S plus n divided by 2 follows what is known as a [][*binomial distribution*].  We therefore do not need to run Monte Carlo simulations, nor use the normal approximation, to know the probability distribution of S.  We did this for illustrative purposes.  We ran the simulation for illustrative purposes.  For the details of the binomial distribution, you can consult any probability book, or even Wikipedia.  However, we will discuss an incredibly useful approximation provided by mathematical theory that applies generally to sums of averages of draws from any urn, the central limit theorem.  
 
 
 [][Textbook link and additional information]
@@ -4747,11 +4747,11 @@ https://en.wikipedia.org/wiki/Binomial_distribution
 
 [][Key points]
 
-    A sampling model models the random behavior of a process as the sampling of draws from an urn.
+[][    A sampling model models the random behavior of a process as the sampling of draws from an urn.]
     The probability distribution of a random variable is the probability of the observed value falling in any given interval.
-    We can define a CDF F(a) = Pr(S<= a) to answer questions related to the probability of S being in any interval.
-    The average of many draws of a random variable is called its expected value.
-    The standard deviation of many draws of a random variable is called its standard error.
+[][    We can define a CDF F(a) = Pr(S<= a) to answer questions related to the probability of S being in any interval.]
+    *The average of many draws of a random variable is called its expected value.*
+    *The standard deviation of many draws of a random variable is called its standard error.*
 
 Monte Carlo simulation: Chance of casino losing money on roulette
 
@@ -4801,9 +4801,6 @@ data.frame (S = S) %>%    # make data frame of S for histogram
     ylab("Probability") +
     geom_line(data = normal_density, mapping = aes(s, f), color = "blue")
 ```
-
-
-
 
 
 
@@ -4866,10 +4863,6 @@ data.frame(S=S) %>%
   ylab("Probability") +
   geom_line(data=normal_den, mapping=aes(s, f), color='blue')
 ```
-
-
-
-
 
 
 
@@ -4936,28 +4929,32 @@ data.frame(S=S) %>%
 # Distributions versus Probability Distributions
 
 
-Before we continue, let's make a subtle, yet important distinction and connection between the distribution of a list of numbers, which we covered in our data visualization module and a probability distribution, which we're talking about here.  [][*Previously we described how any list of numbers, let's call it x1 through xn, has a distribution*].  The definition is quite straightforward.  We define capital F of a as a function that answers the question, what proportion of the list is less than or equal to a.  Because they are useful summaries, when the distribution is approximately normal, we define the average and the standard deviation.  These are defined with a straightforward operation of the list.  In r we simply compute the average and standard deviation this way, for example.  
+Before we continue, let's make a subtle, yet [][important distinction and connection between the distribution of a list of numbers, which we covered in our data visualization module and a probability distribution], which we're talking about here.  *Previously we described how any list of numbers, let's call it x1 through xn, has a distribution*.  The definition is quite straightforward.  We define capital F of a as a function that answers the question, what proportion of the list is less than or equal to a.  Because they are useful summaries, when the distribution is approximately normal, we define the average and the standard deviation.  These are defined with a straightforward operation of the list.  In r we simply compute the average and standard deviation this way, for example.  
 
-**A random variable x has a distribution function.  To define this, we do not need a list of numbers.  It's a theoretical concept**.  In this case, [][**to define the distribution, we define capital F of a as a function that answers the question, what is the probability that x is less than or equal to a.  There is no list of numbers**](recall the casino roulette game, using -1 for red and 1 for other colors).  However, if x is defined by drawing from an urn with numbers in it, then there is a list, the list of numbers inside the urn.  In this case, the distribution of that list is the probability distribution of x and the average and standard deviation of that list are the expected value and standard errors of the random variable.  
+# ===========================================================================================================
+**A random variable x has a distribution function.  To define this, we do not need a list of numbers.  It's a theoretical concept**.  In this case, [][**to define the distribution, we define capital F of a as a function that answers the question, what is the probability that x is less than or equal to a.  There is no list of numbers**].  However, if x is defined by drawing from an urn with numbers in it, then there is a list, the list of numbers inside the urn.  In this case, the distribution of that list is the probability distribution of x and the average and standard deviation of that list are the expected value and standard errors of the random variable.  
+# ===========================================================================================================
 
-Another way to think about it that does not involve an urn is to run a Monte Carlo simulation and generate a very large list of outcomes of x.  These outcomes are a list of numbers.  The distribution of this list will be a very good approximation of the probability distribution of x.  The longer the list, the better the approximation.  The average and standard deviation of this list will approximate the expected value and standard error of the random variable.  
+*Another way to think about it that does not involve an urn is to run a Monte Carlo simulation and generate a very large list of outcomes of x.  These outcomes are a list of numbers.  The distribution of this list will be a very good approximation of the probability distribution of x.  The longer the list, the better the approximation.  The average and standard deviation of this list will approximate the expected value and standard error of the random variable.  *
 
 
 [][Textbook link]
 
 This video corresponds to the textbook section on distributions versus probability distributions.
 https://rafalab.github.io/dsbook/random-variables.html#distributions-versus-probability-distributions
+# ================================================================================================================
+# You want read this, and understand this
 
 
 [][Key points]
 
-    A random variable X has a probability distribution function F(a) that defines Pr(X<=a) over all values of a.
-[][    Any list of numbers has a distribution. The probability distribution function of a random variable is defined mathematically and does not depend on a list of numbers.]
+[][*    A random variable X has a probability distribution function F(a) that defines Pr(X<=a) over all values of a.*]
+[][*    Any list of numbers has a distribution. The probability distribution function of a random variable is defined mathematically and does not depend on a list of numbers.*]
     The results of a Monte Carlo simulation with a large enough number of observations will approximate the probability distribution of X.
-    If a random variable is defined as draws from an urn:
+    ***If a random variable is defined as draws from an urn:***
 
-        The probability distribution function of the random variable is defined as the distribution of the list of values in the urn.
-        The expected value of the random variable is the average of values in the urn.
+[][        The probability distribution function of the random variable is defined as the distribution of the list of values in the urn.]
+[][*        The expected value of the random variable is the average of values in the urn.]
         The standard error of one draw of the random variable is the standard deviation of the values of the urn.
 
 
@@ -4999,8 +4996,8 @@ https://rafalab.github.io/dsbook/random-variables.html#notation-for-random-varia
 
 [][Key points]
 
-    Capital letters denote random variables (X) and lowercase letters denote observed values (x).
-    In the notation Pr(X=x), we are asking how frequently the random variable X is equal to the value x. For example, if x=6, this statement becomes Pr(X=6).
+[][    Capital letters denote random variables (X) and lowercase letters denote observed values (x).]
+[][    In the notation Pr(X=x), we are asking how frequently the random variable X is equal to the value x. For example, if x=6, this statement becomes Pr(X=6).]
 
 
 
@@ -5021,15 +5018,16 @@ https://rafalab.github.io/dsbook/random-variables.html#notation-for-random-varia
 # Central Limit Theorem
 
 
-**The Central Limit Theorem--or the CLT for short tells us that when the number of independent draws--also called sample size--is large, the probability distribution of the sum of these draws is approximately normal**.  Because sampling models are used for so many data generation processes, the CLT is considered one of the most important mathematical insights in history.  [][*Previously, we discussed that if we know that the distribution of a list of numbers is approximated by the normal distribution, all we need to describe the list are the average and the standard deviation.  We also know that the same applies to probability distributions.  If a random variable has a probability distribution that is approximated with the normal distribution, then all we need to describe that probability distribution are the average and the standard deviation.  Referred to as the expected value and the standard error*].  
+# ==================================================================================================================
+[][**The Central Limit Theorem--or the CLT for short tells us that when the number of independent draws--also called sample size--is large, the probability distribution of the sum of these draws is approximately normal**](So we need a list of numbers here? or mark those pockets with numbers in roulette wheel?).  Because sampling models are used for so many data generation processes, the CLT is considered one of the most important mathematical insights in history.  Previously, we discussed that if we know that the *distribution of a list of numbers is approximated by the normal distribution, all we need to describe the list are the average and the standard deviation*.  [][We also know that the same applies to probability distributions].  If a random variable has a probability distribution that is approximated with the normal distribution, then all we need to describe that probability distribution are the average and the standard deviation.  Referred to as the expected value and the standard error.  
 
-We have described sampling models for draws.  We will now go over the mathematical theory that lets us approximate the probability distribution for the sum of draws.  Once we do this, we will be able to help the Casino predict how much money they will make.  The same approach we use for sum of the draws will be useful for describing the distribution of averages and proportions, which we will need to understand, for example, how polls work.  The first important concept to learn is the [][*expected value*].  *In statistics books, it is common to use the letter capital E, like this, E of X equals mu, to denote that the expected value of the random variable X is mu*.  Mu is a Greek letter for M, which is the first letter in the word mean, which is a synonym with average.  A random variable will vary around an expected value in a way that if you take the average of many, many draws, the average of the draws will approximate the expected value.  Getting closer and closer the more draws you take.  A useful formula is that [][*the expected value of the random variables defined by one draw is the average of the numbers in the urn*].  
+We have described sampling models for draws.  We will now go over the mathematical theory that lets us approximate the probability distribution [][*for the sum of draws*](what is it???).  Once we do this, we will be able to help the Casino predict how much money they will make.  The same approach we use for sum of the draws will be useful for describing the distribution of averages and proportions, which we will need to understand, for example, how polls work.  The first important concept to learn is the [][*expected value*].  *In statistics books, it is common to use the letter capital E, like this, E of X equals mu, to denote that the expected value of the random variable X is mu*.  Mu is a Greek letter for M, which is the first letter in the word mean, which is a synonym with average.  A random variable will vary around an expected value in a way that if you take the average of many, many draws, the average of the draws will approximate the expected value.  Getting closer and closer the more draws you take.  A useful formula is that [][*the expected value of the random variables defined by one draw is the average of the numbers in the urn*].  
 
-For example, in our urn used to model betting on red on roulette, we have twenty 1's and 18 negative 1's.  So the expected value is E of X equals 20 plus negative 18 divided by 38.  Which is about $0.05.  It is a bit counterintuitive to say that X varies around 0.05 when the only values it takes is 1 and minus 1.  An intuitive way to think about the expected value is that if we play the game over and over, the Casino wins, on average, $0.05 per game.  Our Monte Carlo Simulation confirms this.  Here we run a million games and we see that the mean of X, which is a bunch of 0s and 1s, is about $0.05.  *In general, if the urn has just two possible outcomes-- say, a and b, with proportions p and 1 minus p respectively, the average is a times p plus b times 1 minus p*.  To see this, notice that if there are nb's in the urn, then we have npa's and n times 1 minus is pb's.  And because the average is the sum, we have n times a times p plus n times b times 1 minus p divided by the total, which is n.  And we get the formula that we just saw.  Now, the reason we define the expected value is because this mathematical definition turns out to be useful for approximating the probability distribution of sums, which in turn, is useful to describe the distribution of averages and proportions.  
+[][***For example, in our urn used to model betting on red on roulette, we have twenty 1's and 18 negative 1's.  So the expected value is E of X equals 20 plus negative 18 divided by 38***].  Which is about $0.05.  It is a bit counterintuitive to say that X varies around 0.05 when the only values it takes is 1 and minus 1.  An intuitive way to think about the expected value is that if we play the game over and over, the Casino wins, on average, $0.05 per game.  Our Monte Carlo Simulation confirms this.  Here we run a million games and we see that the mean of X, which is a bunch of 0s and 1s, is about $0.05.  [][*In general, if the urn has just two possible outcomes--say, a and b, with proportions p and 1 minus p respectively, the average is a times p plus b times 1 minus p*].  To see this, notice that if there are nb's in the urn, then we have npa's and n times 1 minus is pb's.  And because the average is the sum, we have n times a times p plus n times b times 1 minus p divided by the total, which is n.  And we get the formula that we just saw.  Now, the reason we define the expected value is because this mathematical definition turns out to be useful for approximating the probability distribution of sums, which in turn, is useful to describe the distribution of averages and proportions.  
 
 [][*The first useful fact is that the expected value of the sum of draws is the number of draws times the average of the numbers in the urn*].  So if 1,000 people play roulette, the Casino expects to win, on average, 1,000 times $0.05, which is $50.  But this is an expected value.  How different can one observation be from the expected value ?  The Casino really wants to know this.  What is the range of possibilities?  If negative numbers are too likely, we may not install the roulette wheels.  Statistical theory, once again, answers this question.  The standard error, or SE for short, gives us an idea of the size of the variation around the expected value.  In statistics books, it is common to use SE of X to know the standard error of the random variable X If our draws are independent--That's an important assumption-- *then the standard error of the sum is given by the equation, the square root of the number of draws, times the standard deviation of the numbers in the urn*.  Using the definition of standard deviation, we can derive with a bit of math, that if an urn contains two values--a and b, with proportions p and 1 minus p, respectively--the standard deviation is the absolute value of b minus a times the square root of p times 1 minus p.  
 
-So in our roulette example, the standard deviation of the values inside the urn is 1 minus minus 1 times the square root of 10/19 times 9/19.  Or 0.9986, so practically 1.  The standard error tells us the typical difference between a random variable and its expectation.  So because 1 draw is obviously the sum of 1 draw, we can use a formula to calculate that the random variable defined by 1 draw has an expected value of $0.05 and a standard error of about 1.  This makes sense since we either get a 1 or a minus 1 with 1 slightly favored over the minus 1.  Using the formula, the sum of 1,000 people playing has standard error of about $32.  So when 1,000 people bet on red, the Casino is expected to win $50 with a standard error of $32.  So it seems like a safe bet.  [][*But we still really can't answer the question--How likely is the Casino to lose money*]?  Here The Central Limit Theorem will help.  The central limit theorem tells us that the distribution of the sum of S is approximated by a normal distribution.  Using the formula, we know that the expected value and standard errors are $52 and $32, respectively.  Note that the theoretical values match those obtained with the Monte Carlo simulation we ran earlier.  Using the Central Limit Theorem, we can skip the Monte Carlo simulation and instead, compute the probability of the Casino losing money using the approximation.  We write the simple code using the pnorm function and we get the answer.  It's about 5%.  Which, is in very good agreement-- with the Monte Carlo simulation we ran.  
+So in our roulette example, the standard deviation of the values inside the urn is 1 minus minus 1 times the square root of 10/19 times 9/19.  Or 0.9986, so practically 1.  The standard error tells us the typical difference between a random variable and its expectation.  So because 1 draw is obviously the sum of 1 draw, we can use a formula to calculate that the random variable defined by 1 draw has an expected value of $0.05 and a standard error of about 1.  This makes sense since we either get a 1 or a minus 1 with 1 slightly favored over the minus 1.  Using the formula, the sum of 1,000 people playing has standard error of about $32.  So when 1,000 people bet on red, the Casino is expected to win $50 with a standard error of $32.  So it seems like a safe bet.  [][*But we still really can't answer the question--How likely is the Casino to lose money*]?  Here The Central Limit Theorem will help.  *The central limit theorem tells us that the distribution of the sum of S is approximated by a normal distribution*.  Using the formula, we know that the expected value and standard errors are $52 and $32, respectively.  Note that the theoretical values match those obtained with the Monte Carlo simulation we ran earlier.  Using the Central Limit Theorem, we can skip the Monte Carlo simulation and instead, compute the probability of the Casino losing money using the approximation.  We write the simple code using the pnorm function and we get the answer.  It's about 5%.  Which, is in very good agreement-- with the Monte Carlo simulation we ran.  
 
 
 [][Textbook links]
@@ -5091,14 +5089,13 @@ pnorm(0, mu, se)
 
 
 
-
 ![](C:/Users/qp/Pictures/when the number of independent draws or the sample size is large, the sum of these independent draws is approximately normal.png)
 
 ![](C:/Users/qp/Pictures/if a random variable has a probability distribution that is approximated with the normal distribution thenall we need to know to describe the probability distribution is.png)
 
 ![](C:/Users/qp/Pictures/the first important concept to learn is expected value.png)
 
-![](C:/Users/qp/Pictures/in casino roulette games, the expected value of the random variables defined by one draw is the average number in the urn.png)
+![Whay is this???](C:/Users/qp/Pictures/in casino roulette games, the expected value of the random variables defined by one draw is the average number in the urn.png)
 
 ![](C:/Users/qp/Pictures/here we run a monte carlo simulation to check the espected value is 0.05.png)
 
@@ -5112,7 +5109,7 @@ pnorm(0, mu, se)
 
 ![the standard error gives us an idea of the size of the variation around the expected value.png](C:/Users/qp/Pictures/the standard error gives us an idea of the size of the variation around the expected value.png)
 
-![](C:/Users/qp/Pictures/in statistics books its common to use SE of X to denote the standard error of the random variable X.png)
+![then we should define the random variable X](C:/Users/qp/Pictures/in statistics books its common to use SE of X to denote the standard error of the random variable X.png)
 
 ![the standard error of the sum is given by this equation, the square root of the number of draws times the standard deviation of the numbers in the urn.png](C:/Users/qp/Pictures/the standard error of the sum is given by this equation, the square root of the number of draws times the standard deviation of the numbers in the urn.png)
 
@@ -5430,6 +5427,65 @@ Possible Answers
 # Averages and Proportions
 
 
+There are some useful mathematical results, some of which we used previously, that are often used when working with data.  We're going to list them here.  The first, is that the expected value of a sum of random variables is the sum of the expected values of the individual random variables.  We can write it like this, using mathematical notation.  If the x are drawn from the same urn, then they all have the same expected value.  We call it mu here.  And therefore, the expected value of the sum is n times mu, which is another way of writing the result of the sum of draws.  
+
+A second property is that the expected value of random variables times a non-random constant is the expected value times that non-random constant.  This is easier to explain with mathematical symbols, which we show here.  To see why this is intuitive, think of a change of units.  If we change the units of the random variable, say from dollars to cents, the expectation should change in the same way.  A consequence of these two facts that we described is that the expected value of the average of draws from the same urn is the expected value of the urn, call it mu again.  Here is that result written out in mathematical formula.  So the expected value of the average is mu, the average of the values in the urn.  
+
+A third property is that the square of the standard error of the sum of independent random variables is the sum of the square of the standard error of each random variable.  This one is easier to understand in its math form.  The standard error of the sum of x is the square root of the sum of the standard error squared, as you can see here.  Note that the square of the standard error is referred to as a variance in statistical textbooks.  
+
+A fourth property is that the standard error of random variables times a non-random constant is the standard error times a non-random constant.  As with the expectation, we have the following formula.  To see why this is intuitive, again, think of change of units.  A consequence of these previous two properties is that the standard error of the average of independent draws from the same urn is the standard deviation of the urn-- let's call it sigma, this is the Greek letter for s.  --divided by the square root of n.  Here it is in the mathematical form.  And here we are using the properties we just described to derive that result.  
+
+The last property that we're going to talk about is that if x is a normally distributed random variable, then if a and b are non-random constants, then a times X plus b is also a normally distributed random variable.  Note that we are doing is changing the units of the random variable by multiplying by a and then shifting the center by adding b.  
+
+
+[][Error in video]
+
+Note that at 1:54 in the video that the last term should be SE[X_n]^2 , not E[X_n]^2.
+
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on the statistical properties of averages.
+https://rafalab.github.io/dsbook/random-variables.html#statistical-properties-of-averages
+
+
+
+Key points
+
+    Random variable times a constant
+
+      The expected value of a random variable multiplied by a constant is that constant times its original expected value:
+          E[aX] = a*mu
+      The standard error of a random variable multiplied by a constant is that constant times its original standard error:
+          SE[aX] = a*Sigma
+    Average of multiple draws of a random variable
+
+      The expected value of the average of multiple draws from an urn is the expected value of the urn (mu).
+      The standard deviation of the average of multiple draws from an urn is the standard deviation of the urn divided by the square root of the number of draws ( Sigma*sqrt(n) ).
+
+    The sum of multiple draws of a random variable
+
+          The expected value of the sum of
+draws of a random variable is
+
+times its original expected value:
+
+The standard error of the sum of
+draws of random variable is 
+
+times its original standard error:
+
+    The sum of multiple different random variables
+
+The expected value of the sum of different random variables is the sum of the individual expected values for each random variable:
+
+The standard error of the sum of different random variables is the square root of the sum of squares of the individual standard errors:
+
+    Transformation of random variables
+
+If
+is a normally distributed random variable and and are non-random constants, then is also a normally distributed random variable.
 
 
 
@@ -5437,9 +5493,9 @@ Possible Answers
 
 ![the expected value of a sum of random variables is the sum of the expected values of the individual random variables](C:/Users/qp/Pictures/the expected value of a sum of random variables is the sum of the expected values of the individual random variables.png)
 
-![](C:/Users/qp/Pictures/if the x are drawn from same urn, then they all have same expected value, mu, therefore the expected value of the sum is nmu.png)
+![if the x are drawn from same urn, then they all have same expected value, mu, therefore the expected value of the sum is nmu](C:/Users/qp/Pictures/if the x are drawn from same urn, then they all have same expected value, mu, therefore the expected value of the sum is nmu.png)
 
-![](C:/Users/qp/Pictures/the expected value of a random variable times a non-random constant is the expected value times that non-random constant.png)
+![think this as unit change from cent to dollar](C:/Users/qp/Pictures/the expected value of a random variable times a non-random constant is the expected value times that non-random constant.png)
 
 ![](C:/Users/qp/Pictures/expected value of a random variable times a non-random constant is the expected value times that non-random constant.png)
 
@@ -5453,11 +5509,725 @@ Possible Answers
 
 ![](C:/Users/qp/Pictures/the standard error of a random variable times a non-random constant is the standard error times the non-random constant.png)
 
-![](C:/Users/qp/Pictures/the standard error of random variable times a non-random constant is teh standard error times a non-random constant.png)
+![think of the change of units form cent to dallor](C:/Users/qp/Pictures/the standard error of random variable times a non-random constant is teh standard error times a non-random constant.png)
 
 ![](C:/Users/qp/Pictures/a consequence of previous 2 properties is that the standard error of the average of independent draws form the same urn is the standard deviation of the urn devided by the square root of n.png)
 
 ![](C:/Users/qp/Pictures/the standard error of the average of independent draws form the same urn is the standard deviation of the urn devided by the square root of n.png)
+
+![Think about it, why???](C:/Users/qp/Pictures/if X is a normally distributed random variable, then if a and b are non-random constants, aX+b is also normally distributed random variable.png)
+
+
+
+
+
+
+
+
+
+
+
+## Law of Large Numbers
+
+
+An important implication of the properties
+we described in the previous video is that the standard error
+of the average of draws becomes smaller and smaller as the number of draws n
+grows larger.
+When n is very large, then the standard error is practically 0,
+and the average of the draws converges to the average of the urn.
+This is known in statistical textbooks as the law of large numbers,
+or the law of averages.
+Note that the law of averages is sometimes misinterpreted.
+For example, if you toss a coin five times and you see heads each time,
+you might hear someone argue that the next toss is probably
+a tail because of the law of averages.
+On average, we should 50% heads and 50% tails,
+so we need more tails to make up.
+A similar argument would be to say that red is due on roulette
+after seeing black come up five times in a row.
+These events are independent.
+So the chance of a coin landing heads is 50%, regardless of the previous five.
+Similarly for the roulette outcome.
+The law of averages applies only when the number of draws
+is very, very large, not in small samples.
+After a million tosses, you will definitely see about 50% heads,
+regardless of what the first five were.
+Another somewhat funny misuse of the law of averages
+is in sports, where you sometimes hear TV announcers predict
+a player is about to succeed because they have failed a few times in a row,
+and they need successes to make up and match their average.
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on the law of large numbers.
+https://rafalab.github.io/dsbook/random-variables.html#law-of-large-numbers
+
+
+
+[][Key points]
+
+[][*    The law of large numbers states that as n increases, the standard error of the average of a random variable decreases. In other words, when n is large, the average of the draws converges to the average of the urn.*]
+    The law of large numbers is also known as the law of averages.
+    The law of averages only applies when n is very large and events are independent. It is often misused to make predictions about an event being "due" because it has happened less frequently than expected in a small sample size.
+
+
+
+![](C:/Users/qp/Pictures/An important implication of the properties we described earlier.png)
+
+![](C:/Users/qp/Pictures/the law of large numbers.png)
+
+![](C:/Users/qp/Pictures/remember when the chance are indepanednt of each event.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# How Large is Large in CLT?
+
+
+The central limit theorem works when the number of draws
+is large.
+But large is a relative term.
+How big is large?
+15, 100, a million?
+In many circumstances, as few as 30 draws is enough to make the CLT useful.
+In specific instances, as few as 10 is enough.
+However, these should not be considered general rules.
+Note for example, that when the probability of success is very small,
+we need larger sample sizes.
+Consider for example, the lottery.
+In the lottery, the chance of winning are less than 1 in a million.
+Thousands of people play, so the number of draws is very large.
+So the central limit should work.
+Yet, the number of winners, the sum of the draws,
+range between 0, and in very extreme cases, four.
+This sum is certainly not well approximated
+by the normal distribution.
+So the central limit theorem doesn't apply, even
+with a very large sample size.
+This is generally true when the probability of success is very low.
+In these cases, the Poisson distribution is more appropriate.
+We do not cover the theory here, but you can
+learn about the Poisson distribution in any probability textbook and even
+Wikipedia.
+
+
+[][Textbook links and further information]
+
+This video corresponds to the textbook section on sample size for CLT.
+https://rafalab.github.io/dsbook/random-variables.html#how-large-is-large-in-the-central-limit-theorem
+You can read more about the Poisson distribution here.
+https://en.wikipedia.org/wiki/Poisson_distribution
+
+
+
+[][Key points]
+
+    The sample size required for the Central Limit Theorem and Law of Large Numbers to apply differs based on the probability of success.
+            If the probability of success is high, then relatively few observations are needed.
+            As the probability of success decreases, more observations are needed.
+    If the probability of success is extremely low, such as winning a lottery, then the Central Limit Theorem may not apply even with extremely large sample sizes. The normal distribution is not a good approximation in these cases, and other distributions such as the Poisson distribution (not discussed in these courses) may be more appropriate.
+
+
+
+
+
+![](C:/Users/qp/Pictures/how big is large, 15, 100, million.png)
+
+![](C:/Users/qp/Pictures/in the extreme cases like lottery, the poisson distribution is more appropriate.png)
+
+
+
+
+
+
+
+
+
+
+# DataCamp Assessment: The Central Limit Theorem
+
+
+Assessment due Jul 7, 2022 20:19 AWST
+
+This assessment covers the central limit theorem.
+
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+Assessment: The Central Limit Theorem (External resource) (10.5 points possible)
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
+
+
+## Exercise 1. American Roulette probability of winning money
+
+The exercises in the previous chapter explored winnings in American roulette. In this chapter of exercises, we will continue with the roulette example and add in the Central Limit Theorem.
+
+In the previous chapter of exercises, you created a random variable
+
+that is the sum of your winnings after betting on green a number of times in American Roulette.
+
+What is the probability that you end up winning money if you bet on green 100 times?
+Instructions
+100 XP
+
+    Execute the sample code to determine the expected value avg and standard error se as you have done in previous exercises.
+    Use the pnorm function to determine the probability of winning money.
+
+```{r}
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- 2 / 38
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Define the number of bets using the variable 'n'
+n <- 100
+
+# Calculate 'avg', the expected outcome of 100 spins if you win $17 when the ball lands on green and you lose $1 when the ball doesn't land on green
+avg <- n * (17*p_green + -1*p_not_green)
+
+# Compute 'se', the standard error of the sum of 100 outcomes
+se <- sqrt(n) * (17 - -1)*sqrt(p_green*p_not_green)
+
+# Using the expected value 'avg' and standard error 'se', compute the probability that you win money betting on green 100 times.
+1-pnorm(0, avg, se)
+```
+
+
+## Exercise 2. American Roulette Monte Carlo simulation
+
+Create a Monte Carlo simulation that generates 10,000 outcomes of
+
+, the sum of 100 bets.
+
+Compute the average and standard deviation of the resulting list and compare them to the expected value (-5.263158) and standard error (40.19344) for
+
+that you calculated previously.
+Instructions
+100 XP
+
+    Use the replicate function to replicate the sample code for B <- 10000 simulations.
+    Within replicate, use the sample function to simulate n <- 100 outcomes of either a win (17) or a loss (-1) for the bet. Use the order c(17, -1) and corresponding probabilities. Then, use the sum function to add up the winnings over all iterations of the model. Make sure to include sum or DataCamp may crash with a "Session Expired" error.
+    Use the mean function to compute the average winnings.
+    Use the sd function to compute the standard deviation of the winnings.
+
+```{r}
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- 2 / 38
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1-p_green
+
+# Define the number of bets using the variable 'n'
+n <- 100
+
+# The variable `B` specifies the number of times we want the simulation to run. Let's run the Monte Carlo simulation 10,000 times.
+B <- 10000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1, sample.kind="Rounding")
+
+# Create an object called `S` that replicates the sample code for `B` iterations and sums the outcomes.
+S <- replicate(B, {
+    sum(sample(c(17, -1), prob=c(p_green, p_not_green), n, replace=T))
+})
+
+
+
+# Compute the average value for 'S'
+mean(S)
+
+# Calculate the standard deviation of 'S'
+sd(S)
+
+```
+
+
+## Exercise 3. American Roulette Monte Carlo vs CLT
+
+In this chapter, you calculated the probability of winning money in American roulette using the CLT.
+
+Now, calculate the probability of winning money from the Monte Carlo simulation. The Monte Carlo simulation from the previous exercise has already been pre-run for you, resulting in the variable S that contains a list of 10,000 simulated outcomes.
+Instructions
+100 XP
+
+    Use the mean function to calculate the probability of winning money from the Monte Carlo simulation, S.
+
+```{r}
+# Calculate the proportion of outcomes in the vector `S` that exceed $0
+mean(S>0)
+```
+
+
+## Exercise 4. American Roulette Monte Carlo vs CLT comparison
+
+The Monte Carlo result and the CLT approximation for the probability of losing money after 100 bets are close, but not that close. What could account for this?
+Instructions
+50 XP
+Possible Answers
+
+    10,000 simulations is not enough. If we do more, the estimates will match.
+    The CLT does not work as well when the probability of success is small.
+    The difference is within rounding error.
+    The CLT only works for the averages.
+
+```
+Incorrect submission
+Try again. The difference between the CLT and Monte Carlo estimates is a consequence of the odds associated with winning. 
+
+
+Incorrect submission
+Try again. The CLT works better under certain conditions. 
+
+
+not work well when probability of success is small
+```
+
+
+
+## Exercise 5. American Roulette average winnings per bet
+
+Now create a random variable Y that contains your average winnings per bet after betting on green 10,000 times.
+Instructions
+100 XP
+
+    Run a single Monte Carlo simulation of 10,000 bets using the following steps. (You do not need to replicate the sample code.)
+    Specify n as the number of times you want to sample from the possible outcomes.
+    Use the sample function to return n values from a vector of possible values: winning $17 or losing $1. Be sure to assign a probability to each outcome and indicate that you are sampling with replacement.
+    Calculate the average result per bet placed using the mean function.
+
+```{r}
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling.
+set.seed(1, sample.kind="Rounding")
+
+# Define the number of bets using the variable 'n'
+n <- 10000
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- 2 / 38
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1 - p_green
+
+# Create a vector called `X` that contains the outcomes of `n` bets
+X <- sample(c(17, -1), n, prob=c(p_green, p_not_green), replace=T)
+
+# Define a variable `Y` that contains the mean outcome per bet. Print this mean to the console.
+Y <- mean(X)
+Y
+```
+
+
+## Exercise 6. American Roulette per bet expected value
+
+What is the expected value of
+
+, the average outcome per bet after betting on green 10,000 times?
+Instructions
+100 XP
+
+    Using the chances of winning $17 (p_green) and the chances of losing $1 (p_not_green), calculate the expected outcome of a bet that the ball will land in a green pocket.
+    Use the expected value formula rather than a Monte Carlo simulation.
+    Print this value to the console (do not assign it to a variable).
+
+```{r}
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- 2 / 38
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1 - p_green
+
+# Calculate the expected outcome of `Y`, the mean outcome per bet in 10,000 bets
+10000*(17*p_green+(-1)*p_not_green)
+```
+Incorrect submission
+You are not providing a calculation that gives the correct answer. The expected outcome of a single spin is the sum of the individual outcomes for winning or losing multiplied by their chances of occurring. 
+
+```{r}
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- 2 / 38
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1 - p_green
+
+# Calculate the expected outcome of `Y`, the mean outcome per bet in 10,000 bets   ======================================
+(17*p_green+(-1)*p_not_green)
+```
+
+
+
+## Exercise 7. American Roulette per bet standard error
+
+What is the standard error of Y , the average result of 10,000 spins?
+Instructions
+100 XP
+
+    Compute the standard error of Y , the average result of 10,000 independent spins.
+
+```{r}
+# Define the number of bets using the variable 'n'
+n <- 10000
+
+# Assign a variable `p_green` as the probability of the ball landing in a green pocket
+p_green <- 2 / 38
+
+# Assign a variable `p_not_green` as the probability of the ball not landing in a green pocket
+p_not_green <- 1 - p_green
+
+# Compute the standard error of 'Y', the mean outcome per bet from 10,000 bets.
+sqrt(n)*abs(17-(-1))*sqrt(p_green*p_not_green)
+
+
+# Neet to figured where does this comes from
+# sqrt(n)*abs(17+1)*sqrt(p_green*p_not_green) =====================================================================
+```
+
+Incorrect submission
+You are not providing a calculation that gives the correct answer. Don't forget to divide by the square root of the number of bets. 
+
+
+## Exercise 8. American Roulette winnings per game are positive
+
+What is the probability that your winnings are positive after betting on green 10,000 times?
+Instructions
+100 XP
+
+    Execute the code that we wrote in previous exercises to determine the average and standard error.
+    Use the pnorm function to determine the probability of winning more than $0.
+
+```{r}
+# We defined the average using the following code
+avg <- 17*p_green + -1*p_not_green
+
+# We defined standard error using this equation
+se <- 1/sqrt(n) * (17 - -1)*sqrt(p_green*p_not_green)
+
+# Given this average and standard error, determine the probability of winning more than $0. Print the result to the console.
+1-pnorm(0, avg, se)
+```
+
+
+## Exercise 9. American Roulette Monte Carlo again
+
+Create a Monte Carlo simulation that generates 10,000 outcomes of S , the average outcome from 10,000 bets on green.
+
+Compute the average and standard deviation of the resulting list to confirm the results from previous exercises using the Central Limit Theorem.
+Instructions
+100 XP
+
+    Use the replicate function to model 10,000 iterations of a series of 10,000 bets.
+    Each iteration inside replicate should simulate 10,000 bets and determine the average outcome of those 10,000 bets. If you forget to take the mean, DataCamp will crash with a "Session Expired" error.
+    Find the average of the 10,000 average outcomes. Print this value to the console.
+    Compute the standard deviation of the 10,000 simulations. Print this value to the console.
+
+```{r}
+## Make sure you fully follow instructions, including printing values to the console and correctly running the `replicate` loop. If not, you may encounter "Session Expired" errors.
+
+# The variable `n` specifies the number of independent bets on green
+n <- 10000
+
+# The variable `B` specifies the number of times we want the simulation to run
+B <- 10000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random number generation
+set.seed(1)
+
+# Generate a vector `S` that contains the the average outcomes of 10,000 bets modeled 10,000 times
+S <- replicate(B, {
+    10000*mean(sample(c(17, -1), n, prob=c(p_green, p_not_green), replace=T))
+})
+
+
+
+
+# Compute the average of `S`
+mean(S)
+
+# Compute the standard deviation of `S`
+sd(S)
+```
+Incorrect submission
+You are not providing a calculation that gives the correct answer. Remember to average the results of 10,000 simulations. Print the result to the console. 
+
+```{r}
+## Make sure you fully follow instructions, including printing values to the console and correctly running the `replicate` loop. If not, you may encounter "Session Expired" errors.
+
+# The variable `n` specifies the number of independent bets on green
+n <- 10000
+
+# The variable `B` specifies the number of times we want the simulation to run
+B <- 10000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random number generation
+set.seed(1)
+
+# Generate a vector `S` that contains the the average outcomes of 10,000 bets modeled 10,000 times
+S <- replicate(B, {
+    mean(sample(c(17, -1), n, prob=c(p_green, p_not_green), replace=T))
+})
+
+
+
+
+# Compute the average of `S`
+mean(S)
+
+# Compute the standard deviation of `S`
+sd(S)
+```
+
+
+## Exercise 10. American Roulette comparison
+
+In a previous exercise, you found the probability of winning more than $0 after betting on green 10,000 times using the Central Limit Theorem. Then, you used a Monte Carlo simulation to model the average result of betting on green 10,000 times over 10,000 simulated series of bets.
+
+What is the probability of winning more than $0 as estimated by your Monte Carlo simulation? The code to generate the vector S that contains the the average outcomes of 10,000 bets modeled 10,000 times has already been run for you.
+Instructions
+100 XP
+
+    Calculate the probability of winning more than $0 in the Monte Carlo simulation from the previous exercise using the mean function.
+    You do not need to run another simulation: the results of the simulation are in your workspace as the vector S.
+
+```{r}
+# Compute the proportion of outcomes in the vector 'S' where you won more than $0
+mean(S>0)
+```
+
+
+## Exercise 11. American Roulette comparison analysis
+
+The Monte Carlo result and the CLT approximation are now much closer than when we calculated the probability of winning for 100 bets on green. What could account for this difference?
+Instructions
+50 XP
+Possible Answers
+
+    We are now computing averages instead of sums.
+    10,000 Monte Carlo simulations was not enough to provide a good estimate.
+    The CLT works better when the sample size is larger.
+    It is not closer. The difference is within rounding error.
+
+
+
+## End of Assessment: The Central Limit Theorem
+
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
+
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
+
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
+
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
+
+
+
+
+
+
+
+
+
+# Course  /  Section 3: Random Variables, Sampling Models, and the Central Limit Theorem  /  3.3 Assessment: Random Variables, Sampling Models, and the Central
+
+
+# Questions 1 and 2: SAT testing
+
+
+## Assessment due Jul 7, 2022 20:19 AWST
+
+The SAT is a standardized college admissions test used in the United States. The following two multi-part questions will ask you some questions about SAT testing.
+
+This is a 6-part question asking you to determine some probabilities of what happens when a student guessed for all of their answers on the SAT. Use the information below to inform your answers for the following questions.
+
+An old version of the SAT college entrance exam had a -0.25 point penalty for every incorrect answer and awarded 1 point for a correct answer. The quantitative test consisted of 44 multiple-choice questions each with 5 answer choices. Suppose a student chooses answers by guessing for all questions on the test.
+Question 1a
+1/1 point (graded)
+What is the probability of guessing correctly for one question?
+correct
+
+0.2
+Loading
+
+Explanation
+
+The following code can be used to calculate the probability:
+
+p <- 1/5 # one correct choice of 5 options
+p
+
+You have used 1 of 10 attempts 
+
+
+##  Question 1b
+1/1 point (graded)
+What is the expected value of points for guessing on one question?
+correct
+
+0
+Loading
+
+Explanation
+
+The following code can be used to calculate the expected value:
+
+          a <- 1
+b <- -0.25
+mu <- a*p + b*(1-p)
+mu
+        
+
+You have used 1 of 10 attempts Some
+
+# So the assumption here is that the SAT test is Single Choice instead of multiple choice, also 1 point for correct answer and -0.25 for a incorrect answer
+```{r}
+1*(1/5) -0.25*(4/5)
+```
+
+
+##  Question 1c
+1/1 point (graded)
+What is the expected score of guessing on all 44 questions?
+correct
+
+0
+Loading
+
+Explanation
+
+The following code can be used to calculate the expected score:
+
+          n <- 44
+n*mu
+        
+
+You have used 1 of 10 attempts Some
+
+
+##  Question 1d
+1/1 point (graded)
+What is the standard error of guessing on all 44 questions?
+correct
+
+3.32
+Loading
+
+Explanation
+
+The following code can be used to calculate the standard error:
+
+          sigma <- sqrt(n) * abs(b-a) * sqrt(p*(1-p))
+sigma
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+se <- sqrt(44) * abs(1 - (-0.25))*sqrt(1/5*4/5)
+
+se
+```
+
+
+##  Question 1e
+1/1 point (graded)
+Use the Central Limit Theorem to determine the probability that a guessing student scores 8 points or higher on the test.
+correct
+
+0.00793
+Loading
+
+Explanation
+
+The following code can be used to calculate the probability:
+
+          1-pnorm(8, mu, sigma)
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+1 - pnorm(8, 0, se)     # 7.75  0.009727058
+```
+
+
+##  Question 1f
+1/1 point (graded)
+
+Set the seed to 21, then run a Monte Carlo simulation of 10,000 students guessing on the test.
+
+(IMPORTANT! If you use R 3.6 or later, you will need to use the command set.seed(x, sample.kind = "Rounding") instead of set.seed(x). Your R version will be printed at the top of the Console window when you start RStudio.)
+What is the probability that a guessing student scores 8 points or higher?
+correct
+
+0.008
+Loading
+
+Explanation
+
+The following code can be used to calculate the probability:
+
+          set.seed(21, sample.kind = "Rounding")
+B <- 10000
+n <- 44
+p <- 0.2
+tests <- replicate(B, {
+  X <- sample(c(1, -0.25), n, replace = TRUE, prob = c(p, 1-p))
+  sum(X)
+})
+mean(tests >= 8)
+        
+
+You have used 1 of 10 attempts Some
+
+
+# My own code, I read the question statement and established my thoughts with this piece of code, people should definitelly study in the morning instead of night
+```{r}
+x <- 21
+
+set.seed(x, sample.kind = "Rounding")
+
+
+n <- 44
+B <- 10000
+
+
+S <- replicate(B, {
+  sum(sample(c(1, -0.25), n, prob=c(1/5, 4/5), replace=T))
+})
+
+
+
+mean(S>8)
+
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
