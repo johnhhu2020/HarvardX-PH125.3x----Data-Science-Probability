@@ -5063,8 +5063,6 @@ Standard error of the sum of n draws of a random variable:
 
 
 
-
-
 ```{r}
 B <- 10^6
 
@@ -5081,7 +5079,7 @@ mean(S<0)
 n <- 1000
 
 mu <- n*(20-18)/38
-se <- sqrt(n)*2*sqrt(90)/19    # =================================================================================
+se <- sqrt(n)*abs(1-(-1))*sqrt(90)/19    # =================================================================================
 
 pnorm(0, mu, se)
 ```
@@ -5095,6 +5093,7 @@ pnorm(0, mu, se)
 
 ![](C:/Users/qp/Pictures/the first important concept to learn is expected value.png)
 
+# ===============================================================================================================
 ![Whay is this???](C:/Users/qp/Pictures/in casino roulette games, the expected value of the random variables defined by one draw is the average number in the urn.png)
 
 ![](C:/Users/qp/Pictures/here we run a monte carlo simulation to check the espected value is 0.05.png)
@@ -5513,6 +5512,8 @@ is a normally distributed random variable and and are non-random constants, then
 
 ![](C:/Users/qp/Pictures/a consequence of previous 2 properties is that the standard error of the average of independent draws form the same urn is the standard deviation of the urn devided by the square root of n.png)
 
+# ========================================================================================================
+# ========================================================================================================
 ![](C:/Users/qp/Pictures/the standard error of the average of independent draws form the same urn is the standard deviation of the urn devided by the square root of n.png)
 
 ![Think about it, why???](C:/Users/qp/Pictures/if X is a normally distributed random variable, then if a and b are non-random constants, aX+b is also normally distributed random variable.png)
@@ -5590,17 +5591,10 @@ https://rafalab.github.io/dsbook/random-variables.html#law-of-large-numbers
 
 
 
-
-
 # How Large is Large in CLT?
 
 
-The central limit theorem works when the number of draws
-is large.
-But large is a relative term.
-How big is large?
-15, 100, a million?
-In many circumstances, as few as 30 draws is enough to make the CLT useful.
+The central limit theorem works when the number of draws is large.  But large is a relative term.  How big is large?  15, 100, a million?  In many circumstances, as few as 30 draws is enough to make the CLT useful.
 In specific instances, as few as 10 is enough.
 However, these should not be considered general rules.
 Note for example, that when the probability of success is very small,
@@ -6218,6 +6212,357 @@ S <- replicate(B, {
 mean(S>8)
 
 ```
+
+
+
+The SAT was recently changed to reduce the number of multiple choice options from 5 to 4 and also to eliminate the penalty for guessing.
+
+In this two-part question, you'll explore how that affected the expected values for the test.
+
+
+##  Question 2a
+1/1 point (graded)
+
+Suppose that the number of multiple choice options is 4 and that there is no penalty for guessing - that is, an incorrect question gives a score of 0.
+What is the expected value of the score when guessing on this new test?
+correct
+
+11
+Loading
+
+Explanation
+
+The following code can be used to calculate the expected value:
+
+          p <- 1/4
+a <- 1
+b <- 0
+n <- 44
+mu <- n * a*p + b*(1-p)
+mu
+        
+
+You have used 2 of 10 attempts Some
+
+
+# Read carefully to properly understand teh question for us to solve, he's asking the expected value of the score in this test
+```{r}
+44*(1*(1/4)+0*(3/4))
+```
+
+
+##  Question 2b
+1/1 point (graded)
+
+Consider a range of correct answer probabilities p <- seq(0.25, 0.95, 0.05) representing a range of student skills.
+What is the lowest p such that the probability of scoring over 35 exceeds 80%?
+correct
+
+0.85
+Loading
+
+Explanation
+
+The following code can be used to calculate the value for p:
+
+# ============================================================================================================
+```{r}
+p <- seq(0.25, 0.95, 0.05)
+
+
+exp_val <- sapply(p, function(x){
+  mu <- n * a*x + b*(1-x)
+  sigma <- sqrt(n) * abs(b-a) * sqrt(x*(1-x))
+  1-pnorm(35, mu, sigma)
+})
+
+min(p[which(exp_val > 0.8)])
+```
+# ============================================================================================================
+        
+
+You have used 4 of 10 attempts Some
+
+
+```{r}
+p <- seq(0.25, 0.95, 0.05)
+# Whose guessing skill can make a 95% accuracy in a test, that must be God
+
+p
+
+mu <- 44*(1*p + 0*(1-p))
+se <- sqrt(44)*abs(1-0)*sqrt(p*(1-p))
+
+mu
+se
+
+
+pnorm(35, mu, se)
+# Compute the standard error of 'Y', the mean outcome per bet from 10,000 bets.
+# sqrt(n)*abs(17-(-1))*sqrt(p_green*p_not_green)
+```
+
+
+
+
+
+
+
+
+
+# Question 3: Betting on Roulette
+
+
+Assessment due Jul 7, 2022 20:19 AWST
+
+A casino offers a House Special bet on roulette, which is a bet on five pockets (00, 0, 1, 2, 3) out of 38 total pockets. The bet pays out 6 to 1. In other words, a losing bet yields -$1 and a successful bet yields $6. A gambler wants to know the chance of losing money if he places 500 bets on the roulette House Special.
+
+The following 7-part question asks you to do some calculations related to this scenario.
+
+
+##  Question 3a
+1/1 point (graded)
+What is the expected value of the payout for one bet?
+correct
+
+-0.0789
+Loading
+
+Explanation
+
+The expected value can be calculated using the following code:
+
+          
+p <- 5/38
+a <- 6
+b <- -1
+mu <- a*p + b*(1-p)
+mu
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+# What is the expected value of the payout for one bet?
+# ==============================================================================================
+
+
+6*5/38-1*(1-5/38)
+```
+
+
+##  Question 3b
+1/1 point (graded)
+What is the standard error of the payout for one bet?
+correct
+
+2.37
+Loading
+
+Explanation
+
+The standard error can be calculated using the following code:
+
+          sigma <- abs(b-a) * sqrt(p*(1-p))
+sigma
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+p <- 5/38
+
+
+
+mu <- (6*p + (-1)*(1-p))
+se <- sqrt(1)*abs(6-(-1))*sqrt(p*(1-p))
+
+
+mu
+se
+```
+
+
+##  Question 3c
+1/1 point (graded)
+What is the expected value of the average payout over 500 bets?
+
+Remember there is a difference between expected value of the average and expected value of the sum.
+correct
+
+-0.0789
+Loading
+
+Explanation
+
+The expected value can be calculated using the following code:
+
+mu
+
+You have used 3 of 10 attempts Some
+
+
+```{r}
+p <- 5/38
+n <- 500
+
+
+mu <- n*(6*p + 0*(1-p))
+se <- sqrt(n)*abs(6+1)*sqrt(p*(1-p))
+
+
+mu
+se
+```
+
+
+##  Question 3d
+1/1 point (graded)
+What is the standard error of the average payout over 500 bets?
+
+Remember there is a difference between the standard error of the average and standard error of the sum.
+correct
+
+0.106
+Loading
+
+Explanation
+
+The standard error can be calculated using the following code:
+
+          n <- 500
+sigma/sqrt(n)
+        
+
+You have used 4 of 10 attempts Some
+
+
+# ==================================================================================================================
+# ==================================================================================================================
+```{r}
+p <- 5/38
+n <- 500
+
+
+mu <- 500*(6*p + (-1)*(1-p))
+se <- abs(6+1)*sqrt(p*(1-p))/sqrt(n)
+# ========================================================================================================
+
+
+mu
+se
+```
+
+
+##  Question 3e
+1/1 point (graded)
+What is the expected value of the sum of 500 bets?
+correct
+
+-39.5
+Loading
+
+Explanation
+
+The expected value can be calculated using the following code:
+
+          n*mu
+        
+
+You have used 2 of 10 attempts Some
+
+
+##  Question 3f
+1/1 point (graded)
+What is the standard error of the sum of 500 bets?
+correct
+
+52.9
+Loading
+
+Explanation
+
+The standard error can be calculated using the following code:
+
+          sqrt(n) * sigma
+        
+
+##  Question 3g
+1/1 point (graded)
+Use pnorm() with the expected value of the sum and standard error of the sum to calculate the probability of losing money over 500 bets,
+.
+correct
+
+0.772
+Loading
+
+Explanation
+
+The standard error can be calculated using the following code:
+
+          pnorm(0, n*mu, sqrt(n)*sigma)
+        
+
+You have used 1 of 10 attempts Some
+
+
+```{r}
+p <- 5/38
+n <- 500
+
+
+mu <- 500*(6*p + (-1)*(1-p))
+se <- sqrt(n)*abs(6+1)*sqrt(p*(1-p))
+
+
+pnorm(0, mu, se)
+```
+
+
+
+
+
+
+
+
+
+# Questions on Assessment: Random Variables and Sampling Models?
+
+
+
+
+Ask your questions about the random variables, sampling models, and the CLT assessment here. Remember to search the discussion board before posting to see if someone else has asked the same thing before asking a new question! You're also encouraged to answer each other's questions to help further your own learning.
+
+Some reminders:
+
+        Please be specific in the title and body of your post regarding which question you're asking about to facilitate answering your question.
+        Posting snippets of code is okay, but posting full code solutions is not.
+        If you do post snippets of code, please format it as code for readability. If you're not sure how to do this, there are instructions in a pinned post in the general discussion forum.
+
+Discussion: Random variables, sampling models, and the CLT assessment
+Topic: Section 3 / Assessment: Random variables, sampling models, and the CLT
+Filter:
+Sort:
+
+    unanswered question
+    What question 2b is asking?
+    What is the lowest p such that the probability of scoring over 35 exceeds 80%? Sorry, I tried to fetch each mu and se, then apply qnorm() function, but failed. Please help
+        Following 
+    1 comments
+    discussion
+    (S+n)/2
+    Hi, I don't understand why S(the sum of the dollars of 10000 trials) is added to n(the 1000 people) and then divided by 2.
+
+
+
+
+
+
+
+
+
 
 
 
