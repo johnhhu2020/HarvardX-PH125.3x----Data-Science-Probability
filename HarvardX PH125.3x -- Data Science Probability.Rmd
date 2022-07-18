@@ -6318,6 +6318,9 @@ exp_val <- sapply(p, function(x){
   1-pnorm(35, mu, sigma)
 })
 
+
+exp_val
+
 min(p[which(exp_val > 0.8)])
 ```
 # ============================================================================================================
@@ -6342,6 +6345,10 @@ se
 pnorm(35, mu, se)
 # Compute the standard error of 'Y', the mean outcome per bet from 10,000 bets.
 # sqrt(n)*abs(17-(-1))*sqrt(p_green*p_not_green)
+
+
+1-pnorm(35, mu, se)
+
 ```
 
 
@@ -6648,6 +6655,353 @@ We encourage you to use R to interactively test out your answers and further you
 # The Big Short: Interest Rates Explained
 
 
+In a way, the sampling models we've been talking about
+are also used by banks to decide interest rates.
+Let's see how this could be.
+Suppose you run a small bank that has a history of identifying
+potential homeowners that can be trusted to make payments.
+In fact, historically in a given year only 2%
+of your customers default, meaning that they don't pay back the money
+you lent them.
+However, note that if you simply loan money to everybody without interest,
+you'll end up losing money due to this 2%.
+Although you know 2% of your clients will probably default,
+you don't know which ones.
+However, by charging everybody just a bit extra
+you can make up for the losses incurred due to the 2%,
+and also pay the employees at work to make these loans happen.
+You can also make a profit, but if you set the interest rate too high
+your clients will go to another bank.
+We use all these facts and some probability theory
+to decide what interest rates we should charge.
+Suppose your bank will give out 1,000 loans for 180,000 this year.
+Also suppose that your bank loses, after adding up
+all the costs, $200,000 per foreclosure.
+For simplicity, we assume that that includes all operational costs.
+A sampling model for this scenario is coded like this.
+We either default and lose money, or not default and not lose money.
+If we run the simulation we see that we lose $2.8 millions.
+Note that the total loss defined by the final sum is a random variable.
+Every time you run the code you get a different answer.
+This is because it's a probability of defaulting.
+It's not going to happen for sure.
+We can easily construct a Monte Carlo simulation
+to get an idea of the distribution of this random variable.
+Here's the distribution.
+You can see that we're going to lose money because of these people
+that default. And here's the distribution of how much money we're
+going to lose in millions.
+We don't really need a Monte Carlo simulation though.
+Using what we've learned, the CLT tells us
+that because our losses are a sum of independent draws,
+its distribution is approximately normal with expected
+value and standard deviation given by the following formula.
+We can now set an interest rate to guarantee that on average, we
+break even.
+Basically, we need to add a quantity x to each loan, which in this case
+are represented by draws, so that the expected value is zero.
+That means breaking even.
+If we define l to be the loss per foreclosure,
+we need to set x so that the following formula holds,
+which implies that x can be calculated using this R code, which gives us
+about 4,081.
+This is an interest rate of about 2%.
+We still have a problem though.
+Although this interest rate guarantees that on average we break even,
+there's a 50% chance that we will lose money.
+If our bank loses money, we have to close it down.
+So we need to pick an interest rate that makes it unlikely for this to happen.
+At the same time, if the interest rate is too high
+our clients will go to another bank.
+So we must be willing to take some risks.
+So, let's they say that we want our chances
+of losing money to be one in 100.
+What does x have to be now?
+This one is a bit harder.
+We want the sum-- let's call it capital S-- to have the probability
+of S less than zero to be 0.01.
+We know that S is approximately normal.
+The expected value of S is given by this formula,
+with n the number of draws, which in this case
+represents the number of loans.
+The standard error is given by this formula.
+Because x is positive and l is negative, we
+know that the absolute value of x minus l is x minus l.
+Note that these are just the formulas we showed earlier,
+but using more compact symbols.
+Now we're going to use a mathematical trick that
+is very common in statistics.
+We're going to add and subtract the same quantities to both sides of the event S
+less than zero so that the probability does not change,
+and we end up with a standard normal random variable
+on the left, which will then permit us to write down an equation with only
+x as an unknown.
+Here it goes.
+We want the probability of S being less than zero to be 0.01.
+So what we're going to do now is we're going
+to subtract the expected value of S and divide by the standard error of S
+on both sides of the equation.
+All we did was add and divide by the same quantity on both sides.
+We did this because now the term on the left
+is a standard normal random variable, which we will rename as capital Z.
+Now, we will fill in the blanks with the actual formula for expected value
+and standard error.
+The formula now looks like this.
+We have a Z on the left.
+That's good, that's going to make things easier later.
+The right looks complicated, but remember
+that l, p, and n are all known amounts, so eventually we'll
+turn them into numbers.
+Now, because the term on the left side is a normal random variable
+with expected value of zero and standard error one,
+it means that the quantity on the right must
+be equal to qnorm of 0.01, which is negative 2.32.
+Then the equation above will hold true.
+Remember that if we set little z to be qnorm of 0.01,
+this will give you a value of little z for which the following formula is
+true.
+The probability of big Z, less than or equal to little z, equal 0.01.
+So this means that the right side of the complicated equation
+must be equal to qnorm 0.01.
+So we have this formula.
+The trick works, because we end up with an expression containing
+x that we know has to be equal to an quantity depending on things we know.
+Solving for x is now simply, algebra.
+If we do it, we get that the x has to be about 6,249,
+which is an interest rate of about 3%, which is still pretty good.
+Note also that by choosing this interest rate,
+we now have an expected profit per loan of about $2,124,
+which is a total expected profit of about $2 million.
+We can run a Monte Carlo simulation and check our theoretical approximation.
+We do that, and we indeed get that value again.
+And again, the probability of profit being less than zero
+according to the Monte Carlo simulation is about 1%.
+
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on interest rates.
+https://rafalab.github.io/dsbook/random-variables.html#interest-rates-explained-with-chance-model
+
+
+[][Correction]
+
+At 2:35, the displayed results of the code are incorrect. Here are the correct values:
+
+n*(p*loss_per_foreclosure + (1-p)*0)
+[1] -4e+06
+sqrt(n)*abs(loss_per_foreclosure)*sqrt(p*(1-p))
+[1] 885438
+
+[][Key points]
+
+    Interest rates for loans are set using the probability of loan defaults to calculate a rate that minimizes the probability of losing money.
+    We can define the outcome of loans as a random variable. We can also define the sum of outcomes of many loans as a random variable.
+    The Central Limit Theorem can be applied to fit a normal distribution to the sum of profits over many loans. We can use properties of the normal distribution to calculate the interest rate needed to ensure a certain probability of losing money for a given probability of default.
+
+Code: Interest rate sampling model
+
+n <- 1000
+loss_per_foreclosure <- -200000
+p <- 0.02
+defaults <- sample( c(0,1), n, prob=c(1-p, p), replace = TRUE)
+sum(defaults * loss_per_foreclosure)
+
+Code: Interest rate Monte Carlo simulation
+
+B <- 10000
+losses <- replicate(B, {
+    defaults <- sample( c(0,1), n, prob=c(1-p, p), replace = TRUE) 
+  sum(defaults * loss_per_foreclosure)
+})
+
+Code: Plotting expected losses
+
+library(tidyverse)
+data.frame(losses_in_millions = losses/10^6) %>%
+    ggplot(aes(losses_in_millions)) +
+    geom_histogram(binwidth = 0.6, col = "black")
+
+Code: Expected value and standard error of the sum of 1,000 loans
+
+n*(p*loss_per_foreclosure + (1-p)*0)    # expected value 
+sqrt(n)*abs(loss_per_foreclosure)*sqrt(p*(1-p))    # standard error
+
+[][Code: Calculating interest rates for expected value of 0] ===================================================
+
+We can calculate the amount x to add to each loan so that the expected value is 0 using the equation lp + x(1-p) = 0. Note that this equation is the definition of expected value given a loss per foreclosure l with foreclosure probability p and profit x if there is no foreclosure (probability 1-p).
+
+We solve for x = lp/(1-p) and calculate x:
+
+x = - loss_per_foreclosure*p/(1-p)
+x
+
+On a $180,000 loan, this equals an interest rate of:
+
+x/180000
+
+[][Equations: Calculating interest rate for 1% probability of losing money] ====================================
+
+We want to calculate the value of x for which Pr(S<0) = 0.01. The expected value E[S] of the sum of n = 1000 loans given our definitions of x, l, and p is:
+    mu*S = (lp + x(1-p))*n
+
+And the standard error of the sum of n loans, SE[S], is:
+    Sigma_s = |x-1|*sqrt(np(1-p))
+
+Because we know the definition of a Z-score is Z = (x-mu)/Sigma, we know that Pr(S < 0) = Pr(Z < -mu/Sigma). Thus Pr(S < 0) = 0.01, equals:
+    Pr((Z < -{lp + x(1-p)}n)/(x-1)*sqrt(np*(1-p))) = 0.01
+
+z<-qnorm(0.01) gives us the value of z for which Pr(Z <= z) = 0.01, meaning:
+    z = (-{lp + x(1-p)}n)(x-1)*sqrt(np(1-p))
+
+Solving for x gives:
+    x = -l* (np - z*sqrt(np*(1-p)))/(n*(1-p) + z*sqrt(np*(1-p)))
+
+Code: Calculating interest rate for 1% probability of losing money
+
+l <- loss_per_foreclosure
+z <- qnorm(0.01)
+x <- -l*( n*p - z*sqrt(n*p*(1-p)))/ ( n*(1-p) + z*sqrt(n*p*(1-p)))\x
+x/180000    # interest rate
+loss_per_foreclosure*p + x*(1-p)    # expected value of the profit per loan
+n*(loss_per_foreclosure*p + x*(1-p)) # expected value of the profit over n loans
+
+
+Code: Monte Carlo simulation for 1% probability of losing money
+
+Note that your results will vary from the video because the seed is not set.
+
+B <- 100000
+profit <- replicate(B, {
+    draws <- sample( c(x, loss_per_foreclosure), n, 
+                        prob=c(1-p, p), replace = TRUE) 
+    sum(draws)
+})
+mean(profit)    # expected value of the profit over n loans
+mean(profit<0)    # probability of losing money
+
+![](C:/Users/qp/Pictures/the formulas used in this interest rate.png)
+
+
+
+```{r}
+n <- 1000
+
+lose_per_foreclosure <- 200000
+
+p <- 0.02
+
+
+defaults <- sample(c(0, 1), n, prob=c(1-p, p), replace=T)
+
+sum(defaults*lose_per_foreclosure)
+```
+
+```{r}
+B <- 10000
+n <- 1000
+lose_per_foreclosure <- 200000
+
+
+loses <- replicate(B, {
+  defaults <- sample(c(0, 1), n, prob=c(1-p, p), replace=T)
+  sum(defaults*lose_per_foreclosure)
+})
+
+
+mean(loses)
+
+
+hist(loses, 30)
+```
+
+```{r}
+mu <- n*(p*lose_per_foreclosure + (1-p)*0)
+se <- sqrt(n)*abs(lose_per_foreclosure-0)*sqrt(p*(1-p))
+
+
+mu
+se
+```
+
+
+
+
+
+![](C:/Users/qp/Pictures/only 2% of your customers default.png)
+
+![](C:/Users/qp/Pictures/suppose your bank will give 1000 loans for 180000 usd this year.png)
+
+![](C:/Users/qp/Pictures/also suppose that your bank loses after adding up all the cost 200000 per foreclosure.png)
+
+![](C:/Users/qp/Pictures/a sampling model for this scenario is coded like this, we either default and lose money or not.png)
+
+![](C:/Users/qp/Pictures/we can easily construct a monte carlo simulation to get an idea of the distribution of this random variable.png)
+
+![](C:/Users/qp/Pictures/here is the distribution of this random variable, you can see that we are going to lose money because of these people that default.png)
+
+![](C:/Users/qp/Pictures/and here is the distribution of how much money we are going to lose.png)
+
+![](C:/Users/qp/Pictures/the clt tells us that because our loses are a sum of independent draws, its distribution is approximately normal with expected value and standard deviation given by this.png)
+
+![This is the equation of expected value of those loans](C:/Users/qp/Pictures/we can now set an interest rate to guarantee that on average our bank break even, think about this equation.png)
+
+![This is the interest rate of about 2 percent](C:/Users/qp/Pictures/then x can be calculated as this way.png)
+
+![We want the sum S to have the probability of less than 0 to be 0.01](C:/Users/qp/Pictures/lets say we want our chance of losing money to be 1 in 100, what does x have to be now, this one is a bit harder.png)
+
+![](C:/Users/qp/Pictures/the expected value of S is given by this formula with n the number of draws.png)
+
+![](C:/Users/qp/Pictures/and the standard error is given be this formula, becuase x is positive and l is negative.png)
+
+![](C:/Users/qp/Pictures/we want the probability of S being less than 0 to be 0.01.png)
+
+![](C:/Users/qp/Pictures/subtract the expected value of S and divide by the standard error of S.png)
+
+![](C:/Users/qp/Pictures/we'll rename whats on the left as capital Z.png)
+
+![](C:/Users/qp/Pictures/we then fill in with the expected value and standard error, now the formula looks like this.png)
+
+![](C:/Users/qp/Pictures/because the term on the lfet is a normal random variable with expected value of 0 and atandard error 1, it means the quantity on the right must be equal qnorm of 0.01.png)
+
+![](C:/Users/qp/Pictures/if we set teh little z for which the following formula is true.png)
+
+![](C:/Users/qp/Pictures/then we have this formula with little z.png)
+
+![](C:/Users/qp/Pictures/we then end up with an expression containing x that we know has to be equal to quantity depending on things we know.png)
+
+![](C:/Users/qp/Pictures/solving this we get that x has to be about this number.png)
+
+![](C:/Users/qp/Pictures/by choosing this interest rate we now has an expected profit per loan about this value.png)
+
+![](C:/Users/qp/Pictures/we can run this monte carlo simulation to check out our approximation.png)
+
+
+
+# =================================================================================================================
+```{r}
+|X_bar - p| <= 0.01
+-0.01 <= X_bar - p <= 0.01
+p - 0.01 <= X_bar <= 0.01 + p
+
+
+
+Pr(X_bar <= p + 0.01) - Pr(X_bar <= p - 0.01)
+
+
+Pr((X_bar - E[X])/SE[X] <= (p + 0.01 - E[X])/SE[X]) - Pr((X_bar - E[X])/SE[X] <= (p - 0.01 - E[X])/SE[X]) 
+
+Pr(Z <= (p + 0.01 - E[X])/SE[X]) - Pr(Z <= (p - 0.01 - E[X])/SE[X])
+
+
+
+# But in our example we use S for the sum of loans, and also we are calculating that the Pr(S<0) = 0.01
+# ========================================================================================================
+
+
+
+```
 
 
 
@@ -6662,6 +7016,211 @@ We encourage you to use R to interactively test out your answers and further you
 
 
 
+# The Big Short
+
+
+One of our employees points out
+that since the bank is making about $2,000 per loan,
+that you should give out more loans.
+Why just n?
+You explain that finding those n clients was hard.
+You need a group that is predictable, and that keeps the chances of defaults
+low.
+He then points out that even if the probability of default
+is higher, as long as your expected value is positive,
+you can minimize your chances of losing money
+by increasing n, the number of loans, and relying
+on the law of large numbers.
+He claims that even if the default rate is twice as high, say 4%,
+if we set the rate just a bit higher so that this happens,
+you will get a positive expected value.
+So if we set the interest rate at 5%, we are
+guaranteed a positive expected value of $640 per loan.
+And we can minimize our chances of losing money
+by simply increasing the number of loans, since the probability of S
+being less than 0 is equal to the probability of Z
+being less than negative expected value of S divided by standard error S,
+with Z a standard normal random variable, as we saw earlier.
+And if we do the math, we will see that we can pick an n so
+that this probability is 1 in 100.
+Let's see how. If we define mu and sigma to be the expected value and standard
+deviation of the urn, that is of a single loan,
+we have that using the formulas above, E of S, the expected value of S,
+is n times mu.
+And the standard error of S is the square root of n times sigma.
+So if we define little z to be the q norm of 0.01,
+we have the following formula, which tells us
+that if n is bigger than z squared times sigma squared divided by mu squared,
+we are guaranteed to have a probability of less than 0.01 of losing money.
+The implication is that as long as mu, the expected value, is positive,
+we can find an n, a number of loans, that
+minimizes the probability of a loss.
+This is a form of the Law of Large Numbers.
+When n is large, our average earning per loan
+converges to the expected earning, mu.
+With x fixed, now we can ask what n do we need for the probability to be 0.01?
+In our example, we use the following formula.
+And we get that n has to be 22,163 loans.
+This is the number of loans we need so that our probability of losing
+is about 1%.
+And furthermore, we are expected to earn a total of about $14 million.
+We can confirm this with a Monte Carlo simulation.
+We run the Monte Carlo simulation, and we get the probability of losing money
+is about 1%.
+This seems like a no brainer.
+Your colleague decides to leave your bank,
+and start his own high-risk mortgage company.
+A few months later, your colleague's bank has gone bankrupt.
+A book is written about it and eventually, a movie
+made relating to the mistake your friend and many others made.
+What happened?
+Your friend's scheme was based in part on the following mathematical formula--
+by making n large, we minimize the standard error of our per-loan profit.
+However, for this rule to hold, the X's must be independent draws.
+The fact that one person defaults must be independent
+of other people defaulting.
+Note that, for example, that in the extreme of averaging
+the same event over and over, an event is certainly not independent.
+In that case, we get a much higher standard error.
+It's the square root of n larger.
+To construct a more realistic simulation than the original one your friend ran,
+let's assume there could be a global event that
+affects everybody with high-risk mortgages,
+and changes their probability.
+We will assume that with a 50-50 chance, all the probabilities go up or down
+slightly to somewhere between 0.03 and 0.05.
+But it happens to everybody at once, not just one person.
+These draws are no longer independent.
+Let's use a Monte Carlo simulation to see what happens under this model.
+Note that our expected profit is still large.
+We're expected to make about $14 million.
+However, the probability of the bank having negative earning
+shoots way up to almost 35%.
+Even scarier is the probability of losing more than $10 million,
+which is 24%.
+To understand how this happens, we can look at the distribution
+of our random variable.
+It doesn't look normal at all.
+The theory completely breaks down, and our random variable has much more
+variability than expected.
+The financial meltdown of 2007 was due, among other things,
+to financial experts assuming independence when there was none.
+
+
+[][Textbook link]
+
+This video corresponds to the textbook section on The Big Short.
+https://rafalab.github.io/dsbook/random-variables.html#the-big-short
+
+
+
+[][Key points]
+
+    The Central Limit Theorem states that the sum of independent draws of a random variable follows a normal distribution. However, when the draws are not independent, this assumption does not hold.
+    If an event changes the probability of default for all borrowers, then the probability of the bank losing money changes.
+    Monte Carlo simulations can be used to model the effects of unknown changes in the probability of default.
+
+Code: Expected value with higher default rate and interest rate
+
+p <- .04
+loss_per_foreclosure <- -200000
+r <- 0.05
+x <- r*180000
+loss_per_foreclosure*p + x*(1-p)
+
+Equations: Probability of losing money
+
+We can define our desired probability of losing money, z, as:
+    Pr(S < 0) = Pr(Z < -E(S)/SE(S)) = Pr(Z < z)
+![](C:/Users/qp/Pictures/the formula about Z and little z.png)
+
+If mu is the expected value of the urn (one loan) and Sigma is the standard deviation of the urn (one loan), then E[S] = nmu  and SE[S] = sqrt(n) * Sigma.
+
+As in the previous video, we define the probability of losing money z = 0.01. In the first equation, we can see that:
+    z = -E[S]/SE[S]
+
+It follows that:
+    z = nmu/sqrt(n)*Sigma = sqrt(n)mu/Sigma
+![](C:/Users/qp/Pictures/sigma and mu of one draw.png)
+
+To find the value of n for which z is less than or equal to our desired value, we take z <= -sqrt(n)mu/Sigma and solve for n:
+    n >= z^2 * Sigma^2/mu^2
+![](C:/Users/qp/Pictures/final n formula with this equation.png)
+    
+Code: Calculating number of loans for desired probability of losing money
+
+The number of loans required is:
+
+z <- qnorm(0.01)
+l <- loss_per_foreclosure
+n <- ceiling((z^2*(x-l)^2*p*(1-p))/(l*p + x*(1-p))^2)
+n    # number of loans required
+n*(loss_per_foreclosure*p + x * (1-p))    # expected profit over n loans
+
+Code: Monte Carlo simulation with known default probability
+
+This Monte Carlo simulation estimates the expected profit given a known probability of default p = 0.04. Note that your results will differ from the video because the seed is not set.
+
+B <- 10000
+p <- 0.04
+x <- 0.05 * 180000
+profit <- replicate(B, {
+    draws <- sample( c(x, loss_per_foreclosure), n, 
+                        prob=c(1-p, p), replace = TRUE) 
+    sum(draws)
+})
+mean(profit)
+
+Code: Monte Carlo simulation with unknown default probability
+
+This Monte Carlo simulation estimates the expected profit given an unknown probability of default 0.03 < p < 0.05, modeling the situation where an event changes the probability of default for all borrowers simultaneously. Note that your results will differ from the video because the seed is not set.
+
+p <- 0.04
+x <- 0.05*180000
+profit <- replicate(B, {
+    new_p <- 0.04 + sample(seq(-0.01, 0.01, length = 100), 1)
+    draws <- sample( c(x, loss_per_foreclosure), n, 
+                        prob=c(1-new_p, new_p), replace = TRUE)
+    sum(draws)
+})
+mean(profit)    # expected profit
+mean(profit < 0)    # probability of losing money
+mean(profit < -10000000)    # probability of losing over $10 million
+
+
+
+
+![](C:/Users/qp/Pictures/even the default ratw is twice as higher, say 4%, if we set the interest at 5 percent.png)
+
+![??????](C:/Users/qp/Pictures/the probability of S being less than 0 is equal to this one, can you figured out why.png)
+
+![](C:/Users/qp/Pictures/if we define mu and sigma to be the expected value and standard deviation of the urn, that is of single loan, we have those formula, E of S.png)
+
+![](C:/Users/qp/Pictures/and if we defind lityle z to be the qnorm of 0.01, we have following formula.png)
+
+![](C:/Users/qp/Pictures/and this formula tells us if n is bigger than this.png)
+
+![](C:/Users/qp/Pictures/When n is large, our average earning per loan converges to the expected earning mu.png)
+
+![](C:/Users/qp/Pictures/is our formula, thta n has to be this value.png)
+
+![](C:/Users/qp/Pictures/and further more, we are expected to earn about 14 million usd.png)
+
+![](C:/Users/qp/Pictures/we can comfirm this 14 million with monte carlo simulation.png)
+
+![](C:/Users/qp/Pictures/those schema is based on part of those mathematical formula.png)
+
+![](C:/Users/qp/Pictures/the one person deault mush be independent to others.png)
+
+![](C:/Users/qp/Pictures/the same event over and over an event is certainly not independent we get a much higher standard error.png)
+
+![](C:/Users/qp/Pictures/assuming with 50-50 chance all the probabilities goes up or down and it happened to everyone at once.png)
+
+![](C:/Users/qp/Pictures/our expected profit it still large.png)
+
+![](C:/Users/qp/Pictures/but the paobability of losing money goes up to 35 percent.png)
+
+![](C:/Users/qp/Pictures/by looking at the distribution of our random variable, we see this.png)
 
 
 
@@ -6672,6 +7231,253 @@ We encourage you to use R to interactively test out your answers and further you
 
 
 
+
+
+
+# DataCamp Assessment: The Big Short
+
+
+
+Assessment due Jul 19, 2022 01:07 AWST
+
+This assessment covers the big short and interest rates.
+
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy. Note that you might need to disable your pop-up blocker, or allow "www.datacamp.com" in your pop-up blocker allowed list. When you have completed the exercises, return to edX to continue your learning.
+Assessment: The Big Short (External resource) (7.0 points possible)
+By clicking OK, you agree to DataCamp's privacy policy: https://www.datacamp.com/privacy-policy.
+
+
+
+## Exercise 1. Bank earnings
+
+Say you manage a bank that gives out 10,000 loans. The default rate is 0.03 and you lose $200,000 in each foreclosure.
+
+Create a random variable
+
+that contains the earnings of your bank. Calculate the total amount of money lost in this scenario.
+Instructions
+100 XP
+
+    Using the sample function, generate a vector called defaults that contains n samples from a vector of c(0,1), where 0 indicates a payment and 1 indicates a default
+    Multiply the total number of defaults by the loss per foreclosure.
+
+```{r}
+# Assign the number of loans to the variable `n`
+n <- 10000
+
+# Assign the loss per foreclosure to the variable `loss_per_foreclosure`
+loss_per_foreclosure <- -200000
+
+# Assign the probability of default to the variable `p_default`
+p_default <- 0.03
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling
+set.seed(1)
+
+# Generate a vector called `defaults` that contains the default outcomes of `n` loans
+defaults <- sample(c(0, 1), n, prob=c(1-p_default, p_default), replace=T)
+
+# Generate `S`, the total amount of money lost across all foreclosures. Print the value to the console.
+S <- sum(loss_per_foreclosure*defaults)
+S
+
+```
+
+
+
+## Exercise 2. Bank earnings Monte Carlo
+
+Run a Monte Carlo simulation with 10,000 outcomes for
+
+, the sum of losses over 10,000 loans. Make a histogram of the results.
+Instructions
+100 XP
+
+    Within a replicate loop with 10,000 iterations, use sample to generate a list of 10,000 loan outcomes: payment (0) or default (1). Use the outcome order c(0,1) and probability of default p_default.
+    Still within the loop, use the function sum to count the number of foreclosures multiplied by loss_per_foreclosure to return the sum of all losses across the 10,000 loans. If you do not take the sum inside the replicate loop, DataCamp may crash with a "Session Expired" error.
+    Plot the histogram of values using the function hist.
+
+```{r}
+# Assign the number of loans to the variable `n`
+n <- 10000
+
+# Assign the loss per foreclosure to the variable `loss_per_foreclosure`
+loss_per_foreclosure <- -200000
+
+# Assign the probability of default to the variable `p_default`
+p_default <- 0.03
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling
+set.seed(1)
+
+# The variable `B` specifies the number of times we want the simulation to run
+B <- 10000
+
+# Generate a list of summed losses 'S'. Replicate the code from the previous exercise over 'B' iterations to generate a list of summed losses for 'n' loans.  Ignore any warnings for now.
+S <- replicate(B, {
+    defaults <- sample(c(0, 1), n, prob=c(1-p_default, p_default), replace=T)
+    sum(defaults*loss_per_foreclosure)
+})
+
+
+
+
+# Plot a histogram of 'S'.  Ignore any warnings for now.
+hist(S)
+```
+
+
+## Exercise 3. Bank earnings expected value
+
+What is the expected value of
+
+, the sum of losses over 10,000 loans? For now, assume a bank makes no money if the loan is paid.
+Instructions
+100 XP
+
+    Using the chances of default (p_default), calculate the expected losses over 10,000 loans.
+
+```{r}
+# Assign the number of loans to the variable `n`
+n <- 10000
+
+# Assign the loss per foreclosure to the variable `loss_per_foreclosure`
+loss_per_foreclosure <- -200000
+
+# Assign the probability of default to the variable `p_default`
+p_default <- 0.03
+
+# Calculate the expected loss due to default out of 10,000 loans
+n*p_default*loss_per_foreclosure
+```
+
+
+
+## Exercise 4. Bank earnings standard error
+
+What is the standard error of S?
+Instructions
+100 XP
+
+    Compute the standard error of the random variable S you generated in the previous exercise, the summed outcomes of 10,000 loans.
+
+
+```{r}
+# Assign the number of loans to the variable `n`
+n <- 10000
+
+# Assign the loss per foreclosure to the variable `loss_per_foreclosure`
+loss_per_foreclosure <- -200000
+
+# Assign the probability of default to the variable `p_default`
+p_default <- 0.03
+
+# Compute the standard error of the sum of 10,000 loans
+sqrt(n)*abs(loss_per_foreclosure-0)*sqrt(p_default*(1-p_default))
+```
+
+
+
+## Exercise 5. Bank earnings interest rate - 1
+
+So far, we've been assuming that we make no money when people pay their loans and we lose a lot of money when people default on their loans. Assume we give out loans for $180,000. How much money do we need to make when people pay their loans so that our net loss is $0?
+
+In other words, what interest rate do we need to charge in order to not lose money?
+Instructions
+100 XP
+
+    If the amount of money lost or gained equals 0, the probability of default times the total loss per default equals the amount earned per probability of the loan being paid.
+    Divide the total amount needed per loan by the loan amount to determine the interest rate.
+
+```{r}
+# Assign the loss per foreclosure to the variable `loss_per_foreclosure`
+loss_per_foreclosure <- -200000
+
+# Assign the probability of default to the variable `p_default`
+p_default <- 0.03
+
+# Assign a variable `x` as the total amount necessary to have an expected outcome of $0
+x <- -loss_per_foreclosure*p_default/(1-p_default)
+
+# Convert `x` to a rate, given that the loan amount is $180,000. Print this value to the console.
+x/180000
+```
+
+
+
+## Exercise 6. Bank earnings interest rate - 2
+
+With the interest rate calculated in the last example, we still lose money 50% of the time. What should the interest rate be so that the chance of losing money is 1 in 20?
+
+In math notation, what should the interest rate be so that Pr(S<0) = 0.05?
+
+Remember that we can add a constant to both sides of the equation to get:
+    Pr((S-E[S])/SE[S] < -E[S]/SE[S])
+
+which is
+    Pr(Z < (-[lp + x(1-p)]n)/((x-l)sqrt(np(1-p))) = 0.05
+
+Let z = qnorm(0.05) give us the value of z for which:
+    Pr(Z < z) = 0.05
+    
+Instructions
+100 XP
+![](C:/Users/qp/Pictures/question datacamp 6.png)
+    Use the qnorm function to compute a continuous variable at given quantile of the distribution to solve for z.
+    In this equation, l, p, and n are known values. Once you've solved for z, solve for x.
+    Divide x by the loan amount to calculate the rate.
+
+```{r}
+# Assign the number of loans to the variable `n`
+n <- 10000
+
+# Assign the loss per foreclosure to the variable `loss_per_foreclosure`
+loss_per_foreclosure <- -200000
+
+# Assign the probability of default to the variable `p_default`
+p_default <- 0.03
+
+# Generate a variable `z` using the `qnorm` function
+z <- qnorm(0.05)
+
+# Generate a variable `x` using `z`, `p_default`, `loss_per_foreclosure`, and `n`
+x <- -loss_per_foreclosure*(n*p_default-z*sqrt(n*p_default*(1-p_default)))/(n*(1-p_default) + z*sqrt(n*p_default*(1-p_default)))
+
+# Convert `x` to an interest rate, given that the loan amount is $180,000. Print this value to the console.
+x/180000
+```
+
+
+## Exercise 7. Bank earnings - minimize money loss
+
+The bank wants to minimize the probability of losing money. Which of the following achieves their goal without making interest rates go up?
+Instructions
+50 XP
+Possible Answers
+
+    A smaller pool of loans
+    A larger probability of default
+    A reduced default rate
+    A larger cost per loan default
+
+
+## End of Assessment: The Big Short
+
+This is the end of the programming assignment for this section. Please DO NOT click through to additional assessments from this page. Please DO answer the question on this page. If you do click through, your scores may NOT be recorded.
+
+Click on "Awesome" to get the "points" for this question and then return to the course on edX.
+
+You can close this window and return to Data Science: Probability.
+Answer the question
+50XP
+Possible Answers
+
+    Awesome
+    press
+    1
+    Nope
+    press
+    2
 
 
 
@@ -6737,1082 +7543,6 @@ p_value
 
 nrow(cars)-ncol(cars)
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
