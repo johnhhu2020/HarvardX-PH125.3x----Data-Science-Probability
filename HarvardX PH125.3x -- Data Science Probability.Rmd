@@ -18,21 +18,19 @@ output: html_document
 
 Section 1 introduces you to Discrete Probability. Section 1 is divided into three parts:
 
-[][*        Introduction to Discrete Probability*]
-            *A discrete probability distribution counts occurrences that have countable or finite outcomes.*
-[][*        Combinations and Permutations*]
-            *When the order doesn't matter, it is a Combination. When the order does matter it is a Permutation*]
-[][*        Addition Rule and Monty Hall*]
-            *https://www.varsitytutors.com/hotmath/hotmath_help/topics/addition-rule-of-probability*
-            *https://www.mathgoodies.com/lessons/vol6/addition_rules*
-            *Google Monty Hall problem*
+        Introduction to Discrete Probability
+        A discrete probability distribution counts occurrences that have countable or finite outcomes. 
+        Combinations and Permutations 
+        When the order doesn't matter, it is a Combination. When the order does matter it is a Permutation
+        Addition Rule and Monty Hall
+        
 
 After completing Section 1, you will be able to:
 
         apply basic probability theory to categorical data.
         perform a Monte Carlo simulation to approximate the results of repeating an experiment over and over, including simulating the outcomes in the Monty Hall problem.
-        distinguish between: sampling with and without replacement, events that are and are not independent, and combinations and permutations.
-        apply the multiplication and addition rules, as appropriate, to calculate the probably of multiple events occurring.
+[][*        distinguish between: sampling with and without replacement, events that are and are not independent, and combinations and permutations. *]
+[][*        apply the multiplication and addition rules, as appropriate, to calculate the probably of multiple events occurring. *]
         use sapply() instead of a for loop to perform element-wise operations on a function.
 
 There are 3 assignments that use the DataCamp platform for you to practice your coding skills. There are also some quick probability calculations for you to perform directly on the edX platform as well, and there is a longer set of problems at the end of section 1.
@@ -41,6 +39,9 @@ This section corresponds to the following section of the course textbook.
 https://rafalab.github.io/dsbook/probability.html#discrete-probability
 
 We encourage you to use R to interactively test out your answers and further your learning.
+
+
+
 
 
 
@@ -58,10 +59,10 @@ We start by covering some basic principles related to categorical data.  This su
 
 For example, if I have two red beads and three blue beads inside an urn and I pick one at random, what is the probability of picking a red one?  Our intuition tells us that the answer is 2/5, or 40%.  A precise definition can be given by noting that ***there are five possible outcomes of which two satisfy the condition necessary for the event "pick a red bead."***  Because each of the five outcomes has the same chance of occurring, we conclude that the probability is 0.4 for red and 0.6 for blue.  
 
-[][*A more tangible way to think about the probability of an event is as a proportion of times the event occurs when we repeat the experiment over and over independently and under the same conditions*].  Before we continue, let's introduce some notation.  We use the notation probability of A to denote the probability of an event A happening.  We use the very general term event to refer to things that can happen when something happens by chance.  
+A more tangible way to think about the probability of an event is as a proportion of times the event occurs when we repeat the experiment over and over independently and under the same conditions.  Before we continue, let's introduce some notation.  We use the notation probability of A to denote the probability of an event A happening.  We use the very general term event to refer to things that can happen when something happens by chance.  
 
-For example, in our previous example, the event was picking a red bead.  In a political poll, in which we call 100 likely voters
-at random, an example of an event is calling 48 Democrats and 52 Republicans.  [][***In data science applications, we will often deal with continuous variables*].  In these cases, events will often be things like, ***is this person taller than 6 feet?***  In this case, we write events in a more mathematical form.  For example, x greater than 6.  We'll see more of these examples later.  Here, we focus on categorical data and discrete probability.
+For example, in our previous example, the event was picking a red bead.  In a political poll, in which we call 100 likely voters at random, an example of an event is calling 48 Democrats and 52 Republicans.  [][***In data science applications, we will often deal with continuous variables*].  In these cases, events will often be things like, ***is this person taller than 6 feet?***  In this case, we write events in a more mathematical form.  For example, x greater than 6.  We'll see more of these examples later.  Here, we focus on categorical data and discrete probability.
+
 
 
 [][Textbook link]
@@ -72,9 +73,12 @@ https://rafalab.github.io/dsbook/probability.html#discrete-probability
 
 [][Key points]
 
-    The probability of an event is the proportion of times the event occurs when we repeat the experiment independently under the same conditions.
+[][    The probability of an event is the proportion of times the event occurs when we repeat the experiment independently under the same conditions. ]
+    
     Pr(A) = probability of event A
+    
     An event is defined as an outcome that can occur when when something happens by chance.
+    
     We can determine probabilities related to discrete variables (picking a red bead, choosing 48 Democrats and 52 Republicans from 100 likely voters) and continuous variables (height over 6 feet).
 
 
@@ -109,18 +113,22 @@ https://rafalab.github.io/dsbook/probability.html#discrete-probability
 
 
 
+
+
 # Monte Carlo Simulations
 
 
 Computers provide a way to actually perform the simple random experiments, such as the one we did before.  Pick a bead at random from a bag or an urn with 3 blue beads and 2 red ones.  [][*Random number generators*] permit us to mimic the process of picking at random.  An example in R is the sample() function.  We demonstrate its use showing you some code.  First, use the rep() function to generate the urn.  We create an urn with 2 red and 3 blues.  You can see when we type beads we see this.  Now, we can use a sample() function to pick one at random.  If we type sample beads comma 1, in this case, we get a blue.  This line of code produces one random outcome.  Now, we want to repeat this experiment over and over.  
 
-However, it is, of course, impossible to repeat forever.  Instead, we repeat the experiment a large enough number of times to make the results practically equivalent to doing it over and over forever.  [][*This is an example of a Monte Carlo simulation*].  Note that much of what mathematical and theoretical statisticians study--something we do not cover in this course--relates to providing rigorous definitions of *practically equivalent*, as well as studying how close a large number of experiment gets us to what happens in the limit, the limit meaning if we did it forever.  [][********Later in this module, we provide a practical approach to deciding what is large enough********].  
+However, it is, of course, impossible to repeat forever.  Instead, we repeat the experiment a large enough number of times to make the results practically equivalent to doing it over and over forever.  [][*This is an example of a Monte Carlo simulation*].  Note that much of what mathematical and theoretical statisticians study--something we do not cover in this course--relates to providing rigorous definitions of *practically equivalent*, as well as studying how close a large number of experiment gets us to what happens in the limit, the limit meaning if we did it forever.  Later in this module, we provide a practical approach to deciding what is large enough.  
 
+# ======================================================================================================================
 To perform our first Monte Carlo simulation, we use the replicate() function.  This permits us to repeat the same task any number of times we want.  Here, we repeat the random event 10,000 times.  We set B to be 10,000, then we use the replicate() function to sample from the beads 10,000 times.  We can now see if, in fact, our definition is in agreement with this Monte Carlo simulation approximation.  *We can use table(), for example, to see the distribution.  And then we can use prop.table() to give us the proportions*.  And we see that, in fact, the Monte Carlo simulation gives a very good approximation with 0.5962 for blue and 0.4038 for red.  We didn't get exactly 0.6 and exactly 0.4, but statistical theory tells us that, if we make B large enough, we can get as close as we want to those numbers.  We just covered a simple and not very useful example of Monte Carlo simulations.  
 
 But we will use Monte Carlo simulation to estimate probabilities in cases in which it is harder to compute the exact ones.  Before we go into more complex examples, we still use simple ones to demonstrate the computing tools available in R.  Let's start by noting that we don't actually have to use replicate() in this particular example.  This is because the function sample() has an argument that permits us to pick more than one element from the urn.  However, by default, this selection occurs without replacement.  After a bead is selected, it is not put back in the urn.  Note what happens when we ask to randomly select 5 beads.  Let's do it over and over again.  Let's do it three times.  This results in a rearrangement that always has three blue and two red beads.  If we asked for six beads, then we get an error.  It tells us you don't have enough beads in here to get six.  
 
-This is because it's doing it without replacement.  However, this function, the sample function, can be used directly--again, without the replicate--to repeat the same experiment of picking 1 out of 5 beads over and over under the same conditions.  To do this, we sample with replacement.  After we pick the bead we put it back in the urn.  We can tell sample to do this by changing the *replace = * argument which defaults to false to true.  We do it like this.  And when we do this, we see that we get very similar answers to what  we got using the replicate function.  
+This is because it's doing it without replacement.  However, this function, the sample function, can be used directly--again, without the replicate--to repeat the same experiment of picking 1 out of 5 beads over and over under the same conditions.  To do this, we sample with replacement.  After we pick the bead we put it back in the urn.  We can tell sample to do this by changing the *replace = * argument which defaults to false to true.  We do it like this.  And when we do this, we see that we get very similar answers to what we got using the replicate function.  
+
 
 
 [][Textbook link]
@@ -131,7 +139,7 @@ https://rafalab.github.io/dsbook/probability.html#monte-carlo-simulations
 
 [][Key points]
 
-    Monte Carlo simulations model the probability of different outcomes by repeating a random process a large enough number of times that the results are similar to what would be observed if the process were repeated forever.
+[][    Monte Carlo simulations model the probability of different outcomes by repeating a random process a large enough number of times that the results are similar to what would be observed if the process were repeated forever. ]
 
     The sample() function draws random outcomes from a set of options.
     The replicate() function repeats lines of code a set number of times. It is used with sample() and similar functions to run Monte Carlo simulations.
@@ -140,8 +148,8 @@ Video code
 
 Note that your exact outcome values from the Monte Carlo simulation will differ because the sampling is random.
 
-beads <- rep(c("red", "blue"), times = c(2,3))    # create an urn with 2 red, 3 blue
-beads    # view beads object
+beads <- rep(c("red", "blue"), times = c(2, 3))    # create an urn with 2 red, 3 blue
+beads               # view beads object
 sample(beads, 1)    # sample 1 bead at random
 
 B <- 10000    # number of times to draw 1 bead
@@ -153,13 +161,14 @@ prop.table(tab)    # view table of outcome proportions
 
 
 ```{r}
-beads = rep(c("red", "blue"), times = c(2, 3) )
+beads = rep(c("red", "blue"), times = c(2, 3) )   # =================================================================
 
 
 sample(beads, 100, replace = T)
 
 
 tab = table(sample(beads, 10000, replace = T))
+
 prop.table(tab)
 ```
 
@@ -191,6 +200,10 @@ prop.table(tab)
 ![](C:/Users/qp/Pictures/and now we don't have enough beads in urn.png)
 
 ![](C:/Users/qp/Pictures/now check what happens on your own what happends if we change default replace arg from FALSE to T.png)
+
+
+
+
 
 
 
@@ -245,6 +258,10 @@ set.seed(1986, sample.kind="Rounding")
 
 
 
+
+
+
+
 # Using the mean Function for Probability
 
 
@@ -254,12 +271,14 @@ An important application of the mean() function
 
 Suppose you have the vector beads from a previous video:
 
+# ========================================================================================================================
 beads <- rep(c("red", "blue"), times = c(2,3))
 beads
 [1] "red" "red" "blue" "blue" "blue"
 
 To find the probability of drawing a blue bead at random, you can run:
 
+# ========================================================================================================================
 mean(beads == "blue")
 [1] 0.6
 
@@ -278,19 +297,27 @@ The mean of the zeros and ones thus gives the proportion of TRUE values. As we h
 
 
 
+
+
+
+
+
+
 # Probability Distributions
 
 
-[][***Defining a distribution for categorical outcomes is relatively straight forward***].  We simply assign a probability to each category.  In cases that can be thought of as beads in an urn, for each bead type, the proportion defines the distribution.  Another example comes from polling.  If you're are randomly calling likely voters from a population that has 44% Democrat, 44% Republican, 10% undecided, and 2% green, these proportions define the probability for each group.  For this example, the probability distribution is simply these four proportions.  
+# ========================================================================================================================
+[][*Defining a distribution for categorical outcomes is relatively straight forward*].  We simply assign a probability to each category.  In cases that can be thought of as beads in an urn, for each bead type, the proportion defines the distribution.  Another example comes from polling.  If you're are randomly calling likely voters from a population that has 44% Democrat, 44% Republican, 10% undecided, and 2% green, these proportions define the probability for each group.  For this example, the probability distribution is simply these four proportions.  
+# ========================================================================================================================
 
-Again, categorical data makes it easy to define probability distributions.  However, later in applications that are more common in data science,  we will learn about probability distributions for continuous variables.  In this case, it'll get a little bit more complex.  But for now, we're going to stick to discrete probabilities before we move on.  
+Again, **categorical data makes it easy to define probability distributions**.  However, later in applications that are more common in data science,  we will learn about probability distributions for continuous variables.  In this case, it'll get a little bit more complex.  But for now, we're going to stick to discrete probabilities before we move on.  
+
 
 
 [][Textbook link]
 
 This video corresponds to the textbook section on probability distributions.
 https://rafalab.github.io/dsbook/probability.html#discrete-probability-distributions
-
 
 
 [][Key points]
@@ -303,8 +330,10 @@ https://rafalab.github.io/dsbook/probability.html#discrete-probability-distribut
 ![for each bead type, the proportion defines the distribution](C:/Users/qp/Pictures/beads in a urn for each bead type.png)
 
 ![categorical data makes it easy to define probability distribution](C:/Users/qp/Pictures/this proportion defines the probability for each group.png)
-
 (  *A discrete probability distribution counts occurrences that have countable or finite outcomes. This is in contrast to a continuous distribution, where outcomes can fall anywhere on a continuum. Common examples of discrete distribution include the binomial, Poisson, and Bernoulli distributions.*  )
+
+
+
 
 
 
@@ -317,17 +346,21 @@ https://rafalab.github.io/dsbook/probability.html#discrete-probability-distribut
 # Independence
 
 
-We say that two events are independent if the outcome of one does not affect the other.  This classic example are coin tosses.  Every time we toss a fair coin, the probability of seeing heads is one half, regardless of what previous tosses have revealed.  The same is true when we pick beads from an urn, with replacement.  In the example we saw earlier, the probability of red was 0.40, regardless of previous draws.  Many examples of events that are not independent come from card games.  When we deal the first card, the probability of getting, say a King, is 1 in 13.  This is because there are 13 possibilities.  You can get an ace, a two, a three, a four, et cetera, 10, Jack, Queen, or King.  Now, if we deal a King for the first card, and I don't replace it, then the probability of getting a King in the second card is less, because there are only three Kings left.  The probability is 3 out of not 52, because we already dealt one card, but out of 51.  These events are, therefore, not independent.  
+**We say that two events are independent if the outcome of one does not affect the other**.  This classic example are coin tosses.  Every time we toss a fair coin, the probability of seeing heads is one half, regardless of what previous tosses have revealed.  The same is true when we pick beads from an urn, with replacement.  In the example we saw earlier, the probability of red was 0.40, regardless of previous draws.  Many examples of events that are not independent come from card games.  When we deal the first card, the probability of getting, say a King, is 1 in 13.  This is because there are 13 possibilities.  You can get an ace, a two, a three, a four, et cetera, 10, Jack, Queen, or King.  Now, if we deal a King for the first card, and I don't replace it, then the probability of getting a King in the second card is less, because there are only three Kings left.  The probability is 3 out of not 52, because we already dealt one card, but out of 51.  These events are, therefore, not independent.  
 
 [][*The first outcome affects the second*].  To see an extreme case of non-independent events, consider an example of drawing five beads at random, without replacement, from an urn.  Three are blue, two are red.  I'm going to generate data like this using the sample() function and assign it to x.  You can't see the outcomes.  Now, if I ask you to guess the color of the first bead, what do you guess?  Since there's more blue beads, there's actually a 0.6 chance of seeing blue.  That's probably what you guess.  **But now I'm going to show you the outcomes of the other four**.  The second, third, fourth, and fifth outcomes you can see here.  You can see that the three blue beads have already come out.  This affects the probability of the first.  They are not independent.  So would you still guess blue?  Of course not.  Now you know that the probability of red is 1.  
+# ======================================================================================================================
 
-These events are not independent.  The probabilities change once you see the other outcomes.  When events are not independent, conditional probabilities are useful and necessary to make correct calculations.  We already saw an example of a conditional probability.  We computed the probability that a second dealt card is a King, given that the first was a King.  In probability, we use the following notation.  We use this dash like this as a shorthand for given that or conditional on, these are synonyms.  Note that, [][*when two events, say A and B, are independent, we have the following equation.  The probability of A given B is equal to the probability of A*].  It doesn't matter what B is.  The probability A is unchanged.  This is the mathematical way of saying it.  And in fact, this can be considered the mathematical definition of independence.  
+These events are not independent.  The probabilities change once you see the other outcomes.  When events are not independent, conditional probabilities are useful and necessary to make correct calculations.  We already saw an example of a conditional probability.  We computed the probability that a second dealt card is a King, given that the first was a King.  In probability, we use the following notation.  We use this dash like this as a shorthand for given that or conditional on, these are synonyms.  Note that, [][*when two events, say A and B, are independent, we have the following equation.  The probability of A given B is equal to the probability of A*].  It doesn't matter what B is.  The probability A is unchanged (independent from B happening or not).  This is the mathematical way of saying it.  And in fact, this can be considered the mathematical definition of independence.  
 
+# ======================================================================================================================
 All right now, if we want to know the probability of two events, say A and B, occurring, we can use the multiplication rule.  **So the probability of A and B is equal to the probability of A multiplied by the probability of B, given that A already happened**.  Let's use blackjack as an example.  In blackjack, you get assigned to random cards, without replacement.  Then you can ask for more.  The goal is to get closer to 21 than the dealer, without going over.  Face cards are worth 10 points, so is the 10 card, that's worth 10 points too.  And aces are worth either 11 or 1.  So if you get an ace and a face card, you win automatically.  
 
-So, in blackjack, to calculate the chances of getting 21 in the following way, first we get an ace.  And then we get a face card or a 10.  We compute the probability of the first being an ace.  And then multiply by the probability of a face card or a 10, given that the first card was an ace.  The calculation is 1 over 13 chance of getting an ace, times chance of getting a card with value 10, given that we already saw an ace, which is 16 out of 51.  We've already taken one card out.  This is approximately 2%.  The multiplicative rule also applies to more than two events.  We can use induction to expand for more than two.  So the probability of A and B and C is equal to the probability of A times our probability of B, given that A happen, times the probability of C, that A and B happen.  
+# =======================================================================================================================
+So, in blackjack, to calculate the chances of getting 21 in the following way, first we get an ace.  And then we get a face card or a 10.  We compute the probability of the first being an ace.  And then multiply by the probability of a face card or a 10, given that the first card was an ace.  [][The calculation is 1 over 13 chance of getting an ace, times chance of getting a card with value 10, given that we already saw an ace, which is 16 out of 51].  We've already taken one card out.  This is approximately 2%.  The multiplicative rule also applies to more than two events.  We can use induction to expand for more than two.  *So the probability of A and B and C is equal to the probability of A times our probability of B, given that A happen, times the probability of C, that A and B happen*.  
 
 When we have independent events, the multiplication rule becomes simpler.  We simply multiply of three probabilities.  But we have to be very careful when we use the multiplicative rule in practice.  We're assuming independence.  And this can result in very different and incorrect probability calculations when we don't actually have independence.  This can have dire consequences.  For example, in a trial, if an expert doesn't really know the multiplication rule and how to use it.  So let's use an example.  This is loosely based on something that actually happened.  Imagine a court case in which the suspect was described to have a mustache and a beard.  And the prosecution brings in an expert to argue that because 1 in 10 men have beards, and 1 in 5 men has mustaches, using the multiplication rule, this means that only 2% of men have both beards and mustaches, 1/10 times 1/5.  2% is a pretty unlikely event.  However, to multiply like this, we need to assume independence.  And in this case, it's clearly not true.  The conditional probability of a man having a mustache, conditional on them having a beard, is quite high.  It's about 95%.  So the correct calculation actually gives us a much higher probability.  It's 9%, so there's definitely reasonable doubt.  
+
 
 
 [][Textbook link]
@@ -336,25 +369,24 @@ This video corresponds to the textbook section on independence, conditional prob
 https://rafalab.github.io/dsbook/probability.html#independence
 
 
-
 [][Key points]
 
     Conditional probabilities compute the probability that an event occurs given information about dependent events. For example, the probability of drawing a second king given that the first draw is a king is:
     
 [][       Pr(Card 2 is kind | Card 1 is king) = 3/51]
     
-[][       If two events A and B are independent, Pr(A|B) = Pr(A)]
-    .
+[][       If two events A and B are independent, Pr(A|B) = Pr(A)] (as event A happening does not depend on B)
+    
     To determine the probability of multiple events occurring, we use the multiplication rule.
+
 
 Equations
 
-
-The **multiplication rule for independent events** is:
+The *multiplication rule for independent events* is:
 
 [][       Pr(A and B and C) = Pr(A) x Pr(B) x Pr(c)]
 
-The multiplication rule for dependent events considers the conditional probability of both events occurring:
+The multiplication rule *for dependent events considers the conditional probability of both events occurring*:
 
 [][       Pr(A and B) = Pr(A) x Pr(B|A)]
 
@@ -424,7 +456,7 @@ This post is visible to everyone.
 
     less than a minute ago
 
-# =================================================================================================================================
+# ======================================================================================================================
 I see, so the conditionally probability means a situation change: both Numerator and Denominator was changed due to the first event have happened.
 Thus the Pr(mustache | beard) must be given, and only then we can calculate the Pr(mustache and beard), and this Pr(mustache and beard) means the probability of guy met both conditions in the first condition - the Numerator and Denominator haven't changed. Anyone willing to help please write something, especially the instructor
 
@@ -436,8 +468,12 @@ Thus the Pr(mustache | beard) must be given, and only then we can calculate the 
 
 
 
-# Assessment: Introduction to Discrete Probability
 
+
+
+
+
+# Assessment: Introduction to Discrete Probability
 
 
 Assessment due Jun 15, 2022 10:43 AWST
@@ -508,6 +544,7 @@ Topic: Section 1 / Assessment: Introduction to discrete probability
 
 
 
+# ======================================================================================================================
 a box containing: 3 cyan balls, 5 magenta balls, and 7 yellow balls. 
 
 # What is the probability that the first draw is cyan and that the second draw is not cyan?
@@ -535,6 +572,9 @@ Pr(A and B) = Pr(A) x Pr(B|A)
 
 
 
+
+
+
 # Introduction to DataCamp
 
 
@@ -542,7 +582,7 @@ DataCamp
 
 You are about the take the first DataCamp assessment. In this course we will be using the DataCamp platform for some assessments. DataCamp provides an R console and and a script editor right here on your browser. Here we give a brief DataCamp tutorial. If you are already familiar with DataCamp you can skip this section and proceed to the next section
 
-To start a DataCamp assessment, you will click on the button that says [][Click here to start the assessment], which looks like this: *Click here to start the assessment* picture of start the assessment button. You will see a button like this one in the next section: [][*Assessment: Introduction to Discrete Probability*].
+To start a DataCamp assessment, you will click on the button that says Click here to start the assessment, which looks like this: *Click here to start the assessment* picture of start the assessment button. You will see a button like this one in the next section: [][*Assessment: Introduction to Discrete Probability*].
 
 The DataCamp interface has four panels. They are:
 
@@ -578,8 +618,10 @@ After submit answer on the platform
 
 
 
-# DataCamp Assessment: Introduction to Discrete Probability
 
+
+
+# DataCamp Assessment: Introduction to Discrete Probability
 
 
 Assessment due Jun 15, 2022 10:43 AWST
@@ -607,7 +649,6 @@ Some reminders:
 
 Discussion: DataCamp Assessment: Introduction to discrete probability
 Topic: Section 1 / DataCamp Assessment: Introduction to discrete probability
-
 
 
 ## Exercise 1. Probability of cyan - generalized
@@ -640,7 +681,6 @@ p <- cyan/(cyan + magenta + yellow)
 # Print the variable `p` to the console
 p
 ```
-
 
 
 ## Exercise 2. Probability of not cyan - generalized
@@ -677,14 +717,6 @@ cyan <- 3
 magenta <- 5
 yellow <- 7
 
-# The variable `p_1` is the probability of choosing a cyan ball from the box on the first draw.
-p_1 <- cyan / (cyan + magenta + yellow)
-
-# Assign a variable `p_2` as the probability of not choosing a cyan ball on the second draw without replacement.
-
-# Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
-
-
 
 # The variable `p_1` is the probability of choosing a cyan ball from the box on the first draw.
 p_1 <- cyan / (cyan + magenta + yellow)
@@ -694,6 +726,7 @@ p_1
 p_2 <- (magenta + yellow)/(cyan + magenta + yellow - 1)
 p_2
 
+# =======================================================================================================================
 # Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
 p_1 * p_2
 ```
@@ -726,7 +759,7 @@ p_1 * p_2
 
 ```
 ```{r}
-# Solution =====================================================================================================================
+# Solution ============================================================================================================
 cyan <- 3
 magenta <- 5
 yellow <- 7
@@ -740,7 +773,6 @@ p_2 <- 1 - (cyan) / (cyan + magenta + yellow)
 # Calculate the probability that the first draw is cyan and the second draw is not cyan using `p_1` and `p_2`.
 p_1 * p_2
 ```
-
 
 
 ## End of Assessment: Introduction to Discrete Probability
@@ -769,22 +801,33 @@ Possible Answers
 
 
 
+
+
+
+
+
+
 ## Course  /  Section 1: Discrete Probability  /  1.2 Combinations and Permutations
 
 
 # Combinations and Permutations
 
 
-In our very first example, we imagine an urn with 5 beads--3 blue, 2 red.  To review, to compute the probability distribution of 1 draw, we simply listed out all the possibilities-- there were 5--and then for each event, we counted how many of these possibilities were associated with that event.  So for example, for the blue beads the probability is 0.6.  **For more complicated examples, however, these computations are not necessarily straightforward**.  [][*For example, what does the probability that if I draw 5 cards without replacement, I get all cards of the same suit, what is called a flush in poker?*]  
+In our very first example, we imagine an urn with 5 beads--3 blue, 2 red.  To review, to compute the probability distribution of 1 draw, we simply listed out all the possibilities--there were 5--and then for each event, we counted how many of these possibilities were associated with that event.  So for example, for the blue beads the probability is 0.6.  For more complicated examples, however, these computations are not necessarily straightforward.  [][*For example, what does the probability that if I draw 5 cards without replacement, I get all cards of the same suit, what is called a flush in poker?*]  
+# =======================================================================================================================
 
-Discrete probability teaches us how to make these computations using mathematics.  Here we focus on how to use R code.  So we're going to use card games as examples.  So let's start by constructing a deck of cards using R.  For this, we will use the function [][expand.grid()] and the function [][Paste()].  We *use Paste to create strings by joining smaller strings*.  For example, if we have the number and the suit for a card, in 2 different variables we can create the card name using Paste like this.  It also works on pairs of vectors.  It performs the operation element-wise.  So if we type this line of code, we get the following result.  *The function expand.grid gives us all the combinations of 2 lists* ([][*the outcome of expand.grid() function is a data.frame, be careful with this*]).  So for example, if you have blue and black pants and white, gray, and plaid shirt, all your combinations can be computed using the expand.grid function like this.  You can see all 6 combinations.  
+# =========================================================================================================================
+Discrete probability teaches us how to make these computations using mathematics.  Here we focus on how to use R code.  So we're going to use card games as examples.  So let's start by constructing a deck of cards using R.  For this, we will use the function [][expand.grid()] and the function [][Paste()].  We use Paste to create strings by joining smaller strings.  For example, if we have the number and the suit for a card, in 2 different variables we can create the card name using Paste like this.  It also works on pairs of vectors.  It performs the operation element-wise.  So if we type this line of code, we get the following result.  *The function expand.grid gives us all the combinations of 2 lists* (the outcome of expand.grid() function is a data.frame, be careful with this).  So for example, if you have blue and black pants and white, gray, and plaid shirt, all your combinations can be computed using the expand.grid function like this.  You can see all 6 combinations.  
 
-So here's how we generate a deck of cards.  We define the four suits, we define the 13 numbers, and then we create the deck using expand.grid() and then pasting together the 2 columns that expand.grid() creates.  Now that we have a deck constructed, we can now start answering questions about probability.  Let's start by doing something simple.  *Let's double-check that the probability of a king in the first card is 1 in 13 with R code*.  We simply [][*compute the proportion of possible outcomes that satisfy our condition*].  So we create a vector that contains the four ways we can get a king.  That's going to be the kings variable.  And then we simply check what proportion of the deck is one of these cards and we get the answer that we expect--0.076 dot dot dot, which is 1 in 13.  
+# =======================================================================================================================
+So here's how we generate a deck of cards.  We define the four suits, we define the 13 numbers, and then we create the deck using expand.grid() and then pasting together the 2 columns that expand.grid() creates.  Now that we have a deck constructed, we can now start answering questions about probability.  Let's start by doing something simple.  *Let's double-check that the probability of a king in the first card is 1 in 13 with R code*.  We simply compute the proportion of possible outcomes that satisfy our condition.  So we create a vector that contains the four ways we can get a king.  That's going to be the kings variable.  And then we simply check what proportion of the deck is one of these cards and we get the answer that we expect--0.076 dot dot dot, which is 1 in 13.  
 
-Now, ******how about the conditional probability of the second card being a king, given that the first was a king?******  Earlier we deduced that if 1 king is already out, then there's 51 left.  So the probability is 3 in 51.  But let's confirm by listing out all possible outcomes.  To do this, we're going to use [][the combinations() and permutations() functions that are available from the gtools package].  The permutations function computes for any list of size n all the different ways we can select R items.  So here's an example--here all the ways we can choose 2 numbers from the list 1, 2, 3, 4, 5.  *Notice that the order matters with the permutations() function*.  So 3, 1 is different than 1, 3, So it appears in our permutations.  Also notice that 1, 1; 2, 2; and 3, 3 don't appear, because once we pick a number, it can't appear again (no replacement).  Optionally for this function permutations, we can add a vector.  So for example, if you want to see 5 random 7-digit phone numbers out of all possible phone numbers, you could type code like this.  Here we're defining a vector of digits that goes from 0 to 9 rather than 1 through 10.  So these four lines of code generate all phone numbers, picks 5 at random, and then shows them to you.  
+# =====================================================================================================================
+Now, ***how about the conditional probability of the second card being a king, given that the first was a king?***  Earlier we deduced that if 1 king is already out, then there's 51 left.  So the probability is 3 in 51.  But let's confirm by listing out all possible outcomes.  To do this, we're going to use the combinations() and permutations() functions that are available from the gtools package.  The permutations function computes for any list of size n all the different ways we can select R items.  So here's an example--here all the ways we can choose 2 numbers from the list 1, 2, 3, 4, 5.  *Notice that the order matters with the permutations() function*.  So 3, 1 is different than 1, 3, So it appears in our permutations.  Also notice that 1, 1; 2, 2; and 3, 3 don't appear, because once we pick a number, it can't appear again (no replacement).  Optionally for this function permutations, we can add a vector.  So for example, if you want to see 5 random 7-digit phone numbers out of all possible phone numbers, you could type code like this.  Here we're defining a vector of digits that goes from 0 to 9 rather than 1 through 10.  So these four lines of code generate all phone numbers, picks 5 at random, and then shows them to you.  
 
-***To compute all possible ways that we can choose 2 cards when the order matters***, we simply type the following piece of code.  [][**Here we use permutations() function.  There's 52 cards, we're going to choose 2, and we're going to select them out of the vector that includes our card names, which we called deck earlier**].  This is going to be a matrix with 2 dimensions, 2 columns, and in this case, it's going to have 2,652 rows (*possibilities*).  Those are all the permutations.  Now, we're going to define the first card and the second card by grabbing the first and second columns using this simple piece of code.  And now we can, *for example, check how many cases have a first card that is a king--that's 204*.  [][***And now to find the conditional probability, we ask what fraction of these 204 have also a king in the second card***].  So this case we type the following piece of code.  We add all the cases that have king in the first, king in the second,  and divide by the cases that have a king in the first.  
-# ======================================== Read it, Read it, Read it ================================================================================
+# =====================================================================================================================
+To compute all possible ways that we can choose 2 cards when the order matters, we simply type the following piece of code.  [][**Here we use permutations() function.  There's 52 cards, we're going to choose 2, and we're going to select them out of the vector that includes our card names, which we called deck earlier**].  This is going to be a matrix with 2 dimensions, 2 columns, and in this case, it's going to have 2,652 rows.  Those are all the permutations.  Now, we're going to define the first card and the second card by grabbing the first and second columns using this simple piece of code.  And now we can, *for example, check how many cases have a first card that is a king--that's 204*.  [][***And now to find the conditional probability, we ask what fraction of these 204 have also a king in the second card***].  So this case we type the following piece of code.  We add all the cases that have king in the first, king in the second,  and divide by the cases that have a king in the first.  
+# ======================================== Read it, Read it, Read it ==================================================
 
 And now we get the answer 0.058 dot dot dot, which is exactly 3 out of 51, which we had already deduced.  Note that the code we just saw is equivalent to this piece of code where we compute the proportions instead of the totals.  And this also gives us the answer that we want, 3 out of 51.  This is an R version of the multiplication rule, which tells us the probability of B, given A, is equal to proportion of A and B, or the probability of A and B, divided by the proportion of A or the probability of A.  [][*Now, what if the order does not matter?*]  For example, in blackjack, if you get an ace and a face card or a 10, it's called a natural 21, and you win automatically.  If we want to compute the probability of this happening, we want to enumerate the combinations, not permutations,  since the order doesn't matter.  So if we get an A and a king, king and an A, it's still a 21.  We don't want to count that twice.  So **notice the difference between the permutations functions**, which lists all permutations, and the combination function, where order does not matter.  
 
@@ -803,9 +846,13 @@ https://rafalab.github.io/dsbook/probability.html#combinations-and-permutations
 [][Key points]
 
     paste() joins two strings and inserts a space in between.
+    
     expand.grid() gives the combinations of 2 vectors or lists.
+    
     permutations(n,r) from the gtools package lists the different ways that r items can be selected from a set of n options when order matters.
+    
     combinations(n,r) from the gtools package lists the different ways that r items can be selected from a set of n options when order does not matter.
+
 
 Code: Introducing paste() and expand.grid()
 
@@ -897,25 +944,49 @@ paste(number, suit)
 
 
 paste(letters[1:5], as.character(1:5))
+
+# Now you know what paste() function does
+# =======================================================================================================================
+paste(c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"), c("Heart", "Dimond", "Square", "Black"))
 ```
 
 ```{r}
 expand.grid(pants = c("blue", "black"), shirt = c("white", "gray", "plaid"))
 ```
 
+```{r}
+deck <- expand.grid(c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"), c("Heart", "Dimond", "Square", "Black"))
+deck 
+
+
+possibilities <- paste(deck$Var1, deck$Var2)
+possibilities
+
+
+kings <- expand.grid("K", c("Heart", "Dimond", "Square", "Black"))
+
+kings <- paste(kings$Var1, kings$Var2)
+
+kings 
+
+
+# =======================================================================================================================
+mean(possibilities==kings)
+1/13
+```
+
+
 # This is cool, we can image what we want and applying our thought into code, R or Python, no difference
-# ===================================================================================================================================
+# ======================================================================================================================
 ```{r}
 suits <- c("Diamonds", "Clubs", "Hearts", "Spades")
 numbers <- c("Ace", "Deuce", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King")
 
 
 deck <- expand.grid(suit = suits, number = numbers)
-length(deck[, 1])
 head(deck)
 
 deck <- paste(deck$suit, deck$number)
-length(deck)
 
 
 deck
@@ -933,7 +1004,7 @@ mean(deck %in% kings)
 
 
 # this is how I think calculating probability of second card being king given that the first card is already a king
-# ============================================================================================================================
+# ==============================================================================================================
 mean((length(kings)-1)/(length(deck)-1))
 ```
 
@@ -941,11 +1012,23 @@ mean((length(kings)-1)/(length(deck)-1))
 library(gtools)
 
 
-head(permutations(5, 2))
-length(permutations(52, 2)[, 1])    # Dont forget after permutation or combinations, you'll have two dimensional df =================================
+permutations(5, 2)
+
+combinations(5, 2)
+# =============================================================================================================
+
+
+
+length(permutations(52, 2)[, 1])    # after permutation or combinations, you'll have two dimensional df ======
 length(combinations(52, 2)[, 1])
 
-data.frame(permutations(52, 2, v = deck))
+permutations <- data.frame(permutations(52, 2, v = deck))
+permutations
+
+
+sum(permutations[, 1] == kings)
+mean(permutations[, 1] == kings)
+1/13
 
 
 all_phone_numbers <- permutations(10, 7, v=0:9)
